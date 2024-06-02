@@ -23,4 +23,4 @@ namespace TSport.Api.Services.Services
 
         public ITokenService TokenService => _tokenService.Value;
     }
-}
+}   

@@ -10,7 +10,7 @@ namespace TSport.Api.Repositories.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly TsportDbContext _context;
+        protected readonly TsportDbContext _context;
 
         public GenericRepository(TsportDbContext context)
         {

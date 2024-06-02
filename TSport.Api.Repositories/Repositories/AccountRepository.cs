@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TSport.Api.Models.Entities;
+using TSport.Api.Models.ResponseModels.Cart;
 using TSport.Api.Repositories.Interfaces;
 
 namespace TSport.Api.Repositories.Repositories
@@ -12,5 +13,7 @@ namespace TSport.Api.Repositories.Repositories
         public AccountRepository(TsportDbContext context) : base(context)
         {
         }
+       
+
     }
 }
