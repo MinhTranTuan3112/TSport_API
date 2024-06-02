@@ -16,5 +16,7 @@ namespace TSport.Api.Services.Interfaces
         IOrderService OrderService { get; }
 
         IDeliveryService DeliveryService { get; }
+        
+        IAccountService AccountService { get; }
     }
 }

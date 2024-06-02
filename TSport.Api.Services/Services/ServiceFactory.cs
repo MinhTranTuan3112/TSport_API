@@ -15,6 +15,7 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IShirtService> _shirtService;
         private readonly Lazy<IOrderService> _orderService;
         private readonly Lazy<IDeliveryService> _deliveryService;
+        private readonly Lazy<IAccountService> _accountService;
 
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
@@ -23,6 +24,7 @@ namespace TSport.Api.Services.Services
             _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork));
             _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
             _deliveryService = new Lazy<IDeliveryService>(() => new DeliveryService());
+            _accountService = new Lazy<IAccountService>(() => new AccountService(unitOfWork));  
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -34,5 +36,7 @@ namespace TSport.Api.Services.Services
         public IOrderService OrderService => _orderService.Value;
 
         public IDeliveryService DeliveryService => _deliveryService.Value;
+        
+        public IAccountService AccountService => _accountService.Value;
     }
 }

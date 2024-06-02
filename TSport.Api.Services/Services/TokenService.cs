@@ -35,7 +35,7 @@ namespace TSport.Api.Services.Services
                 issuer: _configuration["JwtAuth:Issuer"],
                 audience: _configuration["JwtAuth:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(10),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: credentials
             );
 
