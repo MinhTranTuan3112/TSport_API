@@ -18,7 +18,7 @@ namespace TSport.Api.Services.Services
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
-            _shirtService = new Lazy<IShirtService>(() => new ShirtService());
+            _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork));
         }
 
         public IAuthService AuthService => _authService.Value;

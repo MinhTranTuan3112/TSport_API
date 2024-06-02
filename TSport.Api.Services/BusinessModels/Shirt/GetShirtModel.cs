@@ -2,8 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TSport.Api.Services.BusinessModels.Image;
 
-namespace TSport.Api.Services.BusinessModels
+namespace TSport.Api.Services.BusinessModels.Shirt
 {
     public class GetShirtModel
     {
@@ -29,6 +30,6 @@ namespace TSport.Api.Services.BusinessModels
 
         public int? ModifiedAccountId { get; set; }
 
-        // public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<GetImageModel> Images { get; set; } = [];
     }
 }
