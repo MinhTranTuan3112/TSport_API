@@ -12,5 +12,7 @@ namespace TSport.Api.Repositories.Interfaces
         IAccountRepository AccountRepository { get; }
 
         IShirtRepository ShirtRepository { get; }
+
+        IOrderRespository OrderRepository { get; }
     }
 }

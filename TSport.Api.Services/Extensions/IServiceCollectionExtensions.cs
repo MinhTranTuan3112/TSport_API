@@ -17,6 +17,7 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IShirtService, ShirtService>();
+            services.AddScoped<IOrderService, OrderService>();
             
             return services;
         }
