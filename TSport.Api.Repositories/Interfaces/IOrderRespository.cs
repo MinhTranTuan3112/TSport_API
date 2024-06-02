@@ -8,6 +8,6 @@ namespace TSport.Api.Repositories.Interfaces
 {
     public interface IOrderRespository : IGenericRepository<Order>
     {
-        Task<Order?> GetOrderInfoWithCustomerInfo(int orderId);
+        
     }
 }

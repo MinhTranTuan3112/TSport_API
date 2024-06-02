@@ -15,12 +15,6 @@ namespace TSport.Api.Repositories.Repositories
         {
             _context = context;
         }
-
-        public async Task<Order?> GetOrderInfoWithCustomerInfo(int orderId)
-        {
-            return await _context.Orders
-                                    .Include(o => o.CreatedAccount)
-                                    .SingleOrDefaultAsync(o => o.Id == orderId);
-        }
+        
     }
 }

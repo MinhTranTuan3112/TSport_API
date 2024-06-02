@@ -23,7 +23,7 @@ namespace TSport.Api.Services.Services
 
         public async Task CreateOrder(int orderId, ClaimsPrincipal claims)
         {
-            var order = await _unitOfWork.OrderRepository.GetOrderInfoWithCustomerInfo(orderId);
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
             if (order is null)
             {
                 throw new NotFoundException($"Can't find any orders with id {orderId}");
@@ -46,7 +46,6 @@ namespace TSport.Api.Services.Services
             }
 
             
-
 
 
 
