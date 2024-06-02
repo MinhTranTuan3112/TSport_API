@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Mapster;
+using TSport.Api.Models.Entities;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Models.ResponseModels.Auth;
@@ -80,9 +81,20 @@ namespace TSport.Api.Services.Services
             return hashedPassword;
         }
 
-        public Task Register(RegisterRequest request)
+        public async Task RegisterAccount(RegisterRequest request)
         {
-            throw new NotImplementedException();
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.Email == request.Email);
+
+            if (account is not null)
+            {
+                throw new BadRequestException("Account with this email already exists");
+            }
+            
+            
+            var newAccount = request.Adapt<Account>();
+            newAccount.Password = HashPassword(request.Password);
+            await _unitOfWork.AccountRepository.AddAsync(newAccount);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
