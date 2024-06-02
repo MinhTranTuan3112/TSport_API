@@ -42,7 +42,7 @@ public partial class TsportDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0732BBB1F7");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC077F758435");
 
             entity.ToTable("Account");
 
@@ -62,7 +62,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC07EA26A2AF");
+            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC07D28050B9");
 
             entity.ToTable("Club");
 
@@ -86,21 +86,21 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC0746AA6AB3");
+            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC079F30E15E");
 
             entity.ToTable("Image");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
 
-            entity.HasOne(d => d.ImageNavigation).WithMany(p => p.Images)
-                .HasForeignKey(d => d.ImageId)
+            entity.HasOne(d => d.Shirt).WithMany(p => p.Images)
+                .HasForeignKey(d => d.ShirtId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Image__ImageId__68487DD7");
+                .HasConstraintName("FK__Image__ShirtId__68487DD7");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC0772144B92");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07B8921C81");
 
             entity.ToTable("Order");
 
@@ -125,7 +125,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EE248F396");
+            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EE2AC4F32");
 
             entity.ToTable("OrderDetail");
 
@@ -146,7 +146,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC072398C853");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC0748C9885F");
 
             entity.ToTable("Payment");
 
@@ -175,7 +175,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC075FDE5786");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC072FDB4070");
 
             entity.ToTable("Player");
 
@@ -204,7 +204,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Season>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC079180C91A");
+            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC0773FF701E");
 
             entity.ToTable("Season");
 
@@ -231,7 +231,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<SeasonPlayer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07135F20C6");
+            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07E637FE34");
 
             entity.ToTable("SeasonPlayer");
 
@@ -248,7 +248,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Shirt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC070E403D68");
+            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC0715E0EEF0");
 
             entity.ToTable("Shirt");
 
@@ -282,7 +282,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<ShirtEdition>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07238BCC2F");
+            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC0766A383C7");
 
             entity.ToTable("ShirtEdition");
 

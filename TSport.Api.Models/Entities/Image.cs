@@ -9,7 +9,7 @@ public partial class Image
 
     public string? Url { get; set; }
 
-    public int ImageId { get; set; }
+    public int ShirtId { get; set; }
 
-    public virtual Shirt ImageNavigation { get; set; } = null!;
+    public virtual Shirt Shirt { get; set; } = null!;
 }

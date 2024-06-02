@@ -211,10 +211,10 @@ create table [Image]
 (
   Id int not null,
   [Url] nvarchar(max),
-  ImageId int not null,
+  ShirtId int not null,
 
   primary key (Id),
-  foreign key (ImageId) references dbo.Shirt(Id)
+  foreign key (ShirtId) references dbo.Shirt(Id)
 );
 
 ---- Insert data into Account table
