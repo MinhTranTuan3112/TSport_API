@@ -10,10 +10,8 @@ namespace TSport.Api.Repositories.Repositories
 {
     public class ShirtRepository : GenericRepository<Shirt>, IShirtRepository
     {
-        private readonly TsportDbContext _context;
         public ShirtRepository(TsportDbContext context) : base(context)
         {
-            _context = context;
         }
     }
 }

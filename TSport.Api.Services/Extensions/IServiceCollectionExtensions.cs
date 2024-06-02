@@ -14,6 +14,7 @@ namespace TSport.Api.Services.Extensions
         {
             services.AddScoped<IServiceFactory, ServiceFactory>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IShirtService, ShirtService>();
             services.AddScoped<ITokenService, TokenService>();
             
             return services;

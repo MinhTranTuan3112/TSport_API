@@ -9,6 +9,8 @@ namespace TSport.Api.Services.Interfaces
     {
         IAuthService AuthService { get; }
 
+        IShirtService ShirtService { get; }
+
         ITokenService TokenService { get; }
     }
 }
