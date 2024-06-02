@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using TSport.Api.Models.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
 
@@ -15,6 +16,7 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<IServiceFactory, ServiceFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IShirtService, ShirtService>();
             
             return services;
         }
