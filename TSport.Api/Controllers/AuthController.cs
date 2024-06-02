@@ -30,12 +30,11 @@ namespace TSport.Api.Controllers
 
 
         [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<ActionResult> RegisterAccount([FromBody] RegisterRequest request)
         {
-            await _serviceFactory.AuthService.Register(request);
+            await _serviceFactory.AuthService.RegisterAccount(request);
             return Ok();
         }
-
 
         [HttpGet("who-am-i"), Authorize]
         public async Task<ActionResult<GetAccountResponse>> WhoAmI()

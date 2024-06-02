@@ -12,5 +12,7 @@ namespace TSport.Api.Services.Interfaces
         ITokenService TokenService { get; }
 
         IShirtService ShirtService { get; }
+
+        IAccountService AccountService { get; }
     }
 }

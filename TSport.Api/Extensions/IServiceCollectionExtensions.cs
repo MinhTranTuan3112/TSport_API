@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using TSport.Api.Repositories;
+using TSport.Api.Shared;
 
 namespace TSport.Api.Extensions
 {
@@ -84,6 +85,7 @@ namespace TSport.Api.Extensions
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                options.SerializerSettings.Converters.Add(new DateOnlyJsonConverter());
             });
             return services;
         }
