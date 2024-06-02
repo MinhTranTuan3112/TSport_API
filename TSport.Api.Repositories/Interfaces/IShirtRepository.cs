@@ -7,7 +7,7 @@ using TSport.Api.Models.Entities;
 
 namespace TSport.Api.Repositories.Interfaces
 {
-    public interface IShirtRepository
+    public interface IShirtRepository : IGenericRepository<Shirt>
     {
         Task<Shirt?> GetShirtDetailById(int id);
     }
