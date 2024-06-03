@@ -18,7 +18,7 @@ namespace TSport.Api.Repositories.Repositories
 
 
 
-        public async Task<List<CartResponse>> GetItemsDetail(int AccountId)
+        public async Task<List<CartResponse>> GetCartByID(int AccountId)
         {
 
             var items =  await _context.Orders

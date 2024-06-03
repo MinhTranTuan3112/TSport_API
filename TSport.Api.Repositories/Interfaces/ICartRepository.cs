@@ -9,5 +9,6 @@ namespace TSport.Api.Repositories.Interfaces
 {
     public interface ICartRepository : IGenericRepository<CartResponse>
     {
+        Task<List<CartResponse>> GetCartByID(int id);
     }
 }
