@@ -10,6 +10,8 @@ using TSport.Api.Models.ResponseModels.Shirt;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Shared.Exceptions;
+using Mapster;
+
 
 namespace TSport.Api.Services.Services
 {
@@ -34,20 +36,19 @@ namespace TSport.Api.Services.Services
                 throw new BadRequestException("User Unauthorized");
             }
 
-            Shirt shirt = CreateShirtRequest.Adapt<Shirt>();
+            Shirt shirt = createShirtRequest.Adapt<Shirt>();
             shirt.Status = "Active";
             shirt.CreatedAccountId = int.Parse(userId);
             shirt.CreatedDate = DateTime.Now;
-            shirt.Id = CountShirt() + 1;  // tui thu bo cai nay r nhung ma chay api len no tra ve loi Id = null khong add vao DB duoc
 
-            await _unitOfWork.GetShirtRepository().AddAsync(shirt);
+            await _unitOfWork.ShirtRepository.AddAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
 
-            return (await _unitOfWork.GetShirtRepository().GetByIdAsync(CountShirt())).Adapt<CreateShirtResponse>();
+            return (await _unitOfWork.ShirtRepository.GetByIdAsync(CountShirt())).Adapt<CreateShirtResponse>();
         }
         private int CountShirt()
         {
-            return _unitOfWork.GetShirtRepository().Entities.Count();
+            return _unitOfWork.ShirtRepository.Entities.Count();
         }
     }
 }
