@@ -8,7 +8,7 @@ namespace TSport.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CartController : Controller
+    public class CartController : ControllerBase
     {
         private readonly IServiceFactory _serviceFactory;
 
@@ -34,10 +34,10 @@ namespace TSport.Api.Controllers
           {
               return Created(nameof(Login), await _serviceFactory.AuthService.Login(request));
           }*/
-
+/*
         public IActionResult Index()
         {
             return View();
-        }
+        }*/
     }
 }
