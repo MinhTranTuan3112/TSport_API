@@ -19,17 +19,17 @@ namespace TSport.Api.Models.RequestModels
         public string? Description { get; set; }
 
         [Required]
-        [RegularExpression("^\\d+$\r\n", ErrorMessage = "Invalid number")]
+        [RegularExpression("^\\d+$", ErrorMessage = "Invalid number")]
         public int? Quantity { get; set; }
 
         public string? Status { get; set; } = "Active";
 
         [Required]
-        [RegularExpression("^\\d+$\r\n", ErrorMessage = "Invalid id")]
+        [RegularExpression("^\\d+$", ErrorMessage = "Invalid id")]
         public int ShirtEditionId { get; set; }
 
         [Required]
-        [RegularExpression("^\\d+$\r\n", ErrorMessage = "Invalid id")]
+        [RegularExpression("^\\d+$", ErrorMessage = "Invalid id")]
         public int SeasonPlayerId { get; set; }
     }
 }
