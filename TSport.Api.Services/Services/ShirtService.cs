@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Shirt;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
 {
@@ -20,7 +21,12 @@ namespace TSport.Api.Services.Services
         }
         public async Task<GetShirtDetailResponse> GetShirtDetailById(int id)
         {
-            return (await _unitOfWork.ShirtRepository.GetShirtDetailById(id)).Adapt<GetShirtDetailResponse>();
+            var shirt = await _unitOfWork.ShirtRepository.GetShirtDetailById(id);
+            if (shirt is null)
+            {
+                throw new NotFoundException("Shirt not found");
+            }
+            return shirt.Adapt<GetShirtDetailResponse>();
         }
     }
 }

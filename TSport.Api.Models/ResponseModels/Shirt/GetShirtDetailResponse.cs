@@ -31,16 +31,12 @@ namespace TSport.Api.Models.ResponseModels.Shirt
 
         public int? ModifiedAccountId { get; set; }
 
-        public virtual Entities.Account CreatedAccount { get; set; } = null!;
+        public virtual ICollection<Image>? Images { get; set; } = new List<Image>();
 
-        public virtual ICollection<Image> Images { get; set; } = new List<Image>();
+        public virtual ICollection<OrderDetail>? OrderDetails { get; set; } = new List<OrderDetail>();
 
-        public virtual Entities.Account? ModifiedAccount { get; set; }
+        public virtual SeasonPlayer? SeasonPlayer { get; set; } = null!;
 
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
-
-        public virtual SeasonPlayer SeasonPlayer { get; set; } = null!;
-
-        public virtual ShirtEdition ShirtEdition { get; set; } = null!;
+        public virtual ShirtEdition? ShirtEdition { get; set; } = null!;
     }
 }
