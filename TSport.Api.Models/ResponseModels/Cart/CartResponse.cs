@@ -31,7 +31,8 @@ namespace TSport.Api.Models.ResponseModels.Cart
             public int? Quantity { get; set; }
 
             public string? Status { get; set; }*/
-        public List<CartItemResponse> Items { get; set; }
+        // public List<CartItemResponse> OrderDetail { get; set; }
+        public virtual ICollection<CartItemResponse> OrderDetail { get; set;}
 
     }
     public class CartItemResponse

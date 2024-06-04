@@ -21,14 +21,7 @@ namespace TSport.Api.Controllers
         [HttpGet("getCart")]
         public async Task<ActionResult<CartResponse>> getCartbyId(int userid)
         {
-            try
-            {
                 return Ok( await _serviceFactory.cartService.GetCartInfo(userid));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
         /*  public async Task<ActionResult<AuthTokensResponse>> Login([FromBody] LoginRequest request)
           {

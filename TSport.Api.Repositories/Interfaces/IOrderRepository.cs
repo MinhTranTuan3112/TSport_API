@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TSport.Api.Models.Entities;
 using TSport.Api.Models.ResponseModels.Cart;
 
 namespace TSport.Api.Repositories.Interfaces
 {
-    public interface ICartRepository : IGenericRepository<CartResponse>
+    public interface IOrderRepository : IGenericRepository<Order>
     {
-        Task<List<CartResponse>> GetCartByID(int id);
+        Task<Order?> GetCartByID(int id);
     }
 }

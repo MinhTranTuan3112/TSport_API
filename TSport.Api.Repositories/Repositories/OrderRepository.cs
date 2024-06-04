@@ -10,28 +10,36 @@ using TSport.Api.Repositories.Interfaces;
 
 namespace TSport.Api.Repositories.Repositories
 {
-    public class CartRepository : GenericRepository<CartResponse>, ICartRepository
+    public class OrderRepository : GenericRepository<Order>, IOrderRepository
     {
-        public CartRepository(TsportDbContext context) : base(context)
+        public OrderRepository(TsportDbContext context) : base(context)
         {
         }
 
 
 
-        public async Task<List<CartResponse>> GetCartByID(int AccountId)
+        public async Task<Order?> GetCartByID(int AccountId)
         {
 
             var items =  await _context.Orders
                 .AsNoTracking()
                 .Include(o =>o.OrderDetails)
-                .ThenInclude(b => b.Shirt)
-                .ThenInclude(b => b.ShirtEdition)
-                .ThenInclude(b => b.Season)
+                    .ThenInclude(b => b.Shirt)
+                        .ThenInclude(b => b.ShirtEdition)
+                            .ThenInclude(b => b.Season)
                 .ThenInclude(b => b.SeasonPlayers)
-                .ThenInclude(b=> b.Player)
-                .Where(o => o.CreatedAccountId == AccountId && o.Status == "Pending").ToListAsync();
+                .Include(b => b.OrderDetails)
+                .ThenInclude(b => b.Shirt)
+                .ThenInclude(b=> b.SeasonPlayer)
+                .ThenInclude(b=>b.Player)
+                .ThenInclude( b=> b.Club)
+                .Where(o => o.CreatedAccountId == AccountId && o.Status == "Pending").FirstOrDefaultAsync();
 
-            var response = items.Select(order => new CartResponse
+            return items;
+            //Iqueryable
+
+
+           /* var response = items.Select(order => new CartResponse
             {
                 OrderId = order.Id,
                 CreatedAccountId = order.CreatedAccountId,
@@ -62,7 +70,7 @@ namespace TSport.Api.Repositories.Repositories
                 }).ToList()
             }).ToList();
 
-            return response;
+            return response;*/
         }
 
     }

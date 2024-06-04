@@ -9,7 +9,7 @@ using TSport.Api.Models.ResponseModels.Cart;
 
 namespace TSport.Api.Services.Interfaces
 {
-    public interface  ICartService
+    public interface IOrderService
     {
         Task<CartResponse> GetCartInfo(int id );
 

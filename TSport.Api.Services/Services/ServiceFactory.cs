@@ -13,7 +13,7 @@ namespace TSport.Api.Services.Services
     {
         private readonly Lazy<IAuthService> _authService;
         private readonly Lazy<ITokenService> _tokenService;
-        private readonly Lazy<ICartService> _cartService;
+        private readonly Lazy<IOrderService> _cartService;
 
 
 
@@ -22,7 +22,7 @@ namespace TSport.Api.Services.Services
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
 
-            _cartService = new Lazy<ICartService>(() => new CartService(unitOfWork, this));
+            _cartService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
 
 
         }
@@ -31,6 +31,6 @@ namespace TSport.Api.Services.Services
 
         public ITokenService TokenService => _tokenService.Value;
 
-        public ICartService cartService => _cartService.Value;
+        public IOrderService cartService => _cartService.Value;
     }
 }   
