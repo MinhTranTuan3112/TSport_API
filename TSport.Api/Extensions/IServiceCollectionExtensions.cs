@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Filters;
 using TSport.Api.Repositories;
 using TSport.Api.Shared;
@@ -86,6 +87,9 @@ namespace TSport.Api.Extensions
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new DateOnlyJsonConverter());
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver{
+                    NamingStrategy = new KebabCaseNamingStrategy()
+                };
             });
             return services;
         }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TSport.Api.Models.Entities;
+namespace TSport.Api.Repositories.Entities;
 
-public partial class Season
+public partial class Payment
 {
     public int Id { get; set; }
 
     public string? Code { get; set; }
 
-    public string? Name { get; set; }
+    public string? PaymentMethod { get; set; }
 
-    public int? ClubId { get; set; }
+    public string? PaymentName { get; set; }
+
+    public string Status { get; set; } = null!;
+
+    public int? OrderId { get; set; }
 
     public DateTime CreatedDate { get; set; }
 
@@ -21,13 +25,9 @@ public partial class Season
 
     public int? ModifiedAccountId { get; set; }
 
-    public virtual Club? Club { get; set; }
-
     public virtual Account CreatedAccount { get; set; } = null!;
 
     public virtual Account? ModifiedAccount { get; set; }
 
-    public virtual ICollection<SeasonPlayer> SeasonPlayers { get; set; } = new List<SeasonPlayer>();
-
-    public virtual ICollection<ShirtEdition> ShirtEditions { get; set; } = new List<ShirtEdition>();
+    public virtual Order? Order { get; set; }
 }

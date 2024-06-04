@@ -5,8 +5,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
-using TSport.Api.Models.Entities;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
 

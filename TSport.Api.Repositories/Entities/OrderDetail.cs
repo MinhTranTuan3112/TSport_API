@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TSport.Api.Models.Entities;
+namespace TSport.Api.Repositories.Entities;
 
 public partial class OrderDetail
 {

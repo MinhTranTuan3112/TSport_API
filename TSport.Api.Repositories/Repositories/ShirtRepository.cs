@@ -4,9 +4,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TSport.Api.Models.Entities;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
 

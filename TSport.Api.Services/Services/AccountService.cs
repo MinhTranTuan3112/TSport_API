@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
-using TSport.Api.Models.Entities;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
