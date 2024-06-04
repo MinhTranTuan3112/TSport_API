@@ -29,7 +29,7 @@ namespace TSport.Api.Services.Services
 
         public async Task<CreateShirtResponse> AddShirt(CreateShirtRequest createShirtRequest, ClaimsPrincipal user)
         {
-            string? userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string? userId = user.FindFirst(c => c.Type == "aid")?.Value;
 
             if (userId is null)
             {
@@ -38,7 +38,7 @@ namespace TSport.Api.Services.Services
 
             Shirt shirt = createShirtRequest.Adapt<Shirt>();
             shirt.Status = "Active";
-            shirt.CreatedAccountId = int.Parse(userId);
+            shirt.CreatedAccountId = Int32.Parse(userId);
             shirt.CreatedDate = DateTime.Now;
 
             await _unitOfWork.ShirtRepository.AddAsync(shirt);

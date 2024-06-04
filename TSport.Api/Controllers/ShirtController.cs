@@ -19,7 +19,7 @@ namespace TSport.Api.Controllers
         [HttpPost]
         public async Task<CreateShirtResponse> CreateShirt([FromBody] CreateShirtRequest createShirtRequest)
         {
-            var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, User);
+            var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);
             return result;
         }
     }
