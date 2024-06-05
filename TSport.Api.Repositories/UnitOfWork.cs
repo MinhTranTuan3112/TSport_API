@@ -20,6 +20,8 @@ namespace TSport.Api.Repositories
             _context = context;
             _accountRepository = new Lazy<IAccountRepository>(() => new AccountRepository(context));
             _OrderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(context));
+            _orderdetailsRepository = new Lazy<IOrderDetailsRepository>(() => new OrderDetailsRepository(context));
+
         }
 
         public IAccountRepository AccountRepository => _accountRepository.Value;

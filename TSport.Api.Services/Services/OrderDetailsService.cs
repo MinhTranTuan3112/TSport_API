@@ -21,7 +21,10 @@ namespace TSport.Api.Services.Services
         }
 
 
-        public async Task cAddToCart(int Userid, OrderDetail OrderDetails)
+
+
+    
+        public async Task AddToCart(int Userid, int ShirtId, int quantity)
         {
             var ExsitingCart = await _unitOfWork.OrderDetailsRepository.ExistingCart(Userid);
 
@@ -39,6 +42,7 @@ namespace TSport.Api.Services.Services
 
                 };
                 _unitOfWork.OrderRepository.AddAsync(newCart);
+                _unitOfWork.SaveChangesAsync();
             }
             int totalOrderDetails = await _unitOfWork.OrderDetailsRepository.TotalOrderDetails();
 
@@ -46,21 +50,28 @@ namespace TSport.Api.Services.Services
             string newOrderDetailCode = "OD" + (totalOrderDetails + 1).ToString("D3");
 
 
-            decimal? pricePerProduct = await _unitOfWork.OrderDetailsRepository.getDiscountPrice(OrderDetails.ShirtId);
+            decimal? pricePerProduct = await _unitOfWork.OrderDetailsRepository.getDiscountPrice(ShirtId);
 
 
-            decimal? subtotal = pricePerProduct * OrderDetails.Quantity;
+            decimal? subtotal = pricePerProduct * quantity;
 
             var AddShirt = new OrderDetail
             {
                 Code = newOrderDetailCode,
                 OrderId = Userid,
-                ShirtId = OrderDetails.ShirtId,//FE tra ve
-                Quantity = OrderDetails.Quantity, //Fe tra ve
+                ShirtId = ShirtId,//FE tra ve
+                Quantity = quantity, //Fe tra ve
                 Subtotal = subtotal,
                 Status = "Pending"
             };
             _unitOfWork.OrderDetailsRepository.AddAsync(AddShirt);
+
+            var currentOrder = await _unitOfWork.OrderRepository.GetCartByID(Userid);
+            currentOrder.Total += AddShirt.Subtotal;
+
+
+
+            _unitOfWork.SaveChangesAsync();
 
 
 

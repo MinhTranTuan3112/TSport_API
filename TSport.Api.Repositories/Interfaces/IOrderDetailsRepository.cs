@@ -11,6 +11,7 @@ namespace TSport.Api.Repositories.Interfaces
     {
         Task<bool> ExistingCart(int userId);
         Task<int> GetCartId(int id);
+
         Task<int> TotalOrderDetails();
         Task<decimal?> getDiscountPrice(int shirtId);
     }

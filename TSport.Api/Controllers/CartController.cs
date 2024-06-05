@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Models.Entities;
+using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Auth;
 using TSport.Api.Models.ResponseModels.Cart;
 using TSport.Api.Repositories.Interfaces;
@@ -26,9 +27,9 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPost("add-to-cart")]
-        public async  Task<ActionResult> AddtoCart( int userid,[FromBody] OrderDetail orderDetail)
+        public async  Task<ActionResult> AddtoCart([FromBody] AddToCartRequest request )
         {
-            await _serviceFactory.OrderDetailsService.AddToCart(userid, orderDetail);
+            await _serviceFactory.OrderDetailsService.AddToCart(request.UserId, request.ShirtId,request.Quantity.Value );
             return Ok();
         }
 
