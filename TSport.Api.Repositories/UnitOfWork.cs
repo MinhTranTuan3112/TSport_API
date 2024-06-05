@@ -12,18 +12,21 @@ namespace TSport.Api.Repositories
     {
         private readonly TsportDbContext _context;
         private readonly Lazy<IAccountRepository> _accountRepository;
-        private readonly Lazy<IOrderRepository> _CartRepository;
+        private readonly Lazy<IOrderRepository> _OrderRepository;
+        private readonly Lazy<IOrderDetailsRepository> _orderdetailsRepository;
 
         public UnitOfWork(TsportDbContext context)
         {
             _context = context;
             _accountRepository = new Lazy<IAccountRepository>(() => new AccountRepository(context));
-            _CartRepository = new Lazy<IOrderRepository>(() => new OrderRepository(context));
+            _OrderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(context));
         }
 
         public IAccountRepository AccountRepository => _accountRepository.Value;
 
-        public IOrderRepository CartRepository => _CartRepository.Value;
+        public IOrderRepository OrderRepository => _OrderRepository.Value;
+
+        public IOrderDetailsRepository OrderDetailsRepository => _orderdetailsRepository.Value;
 
         public async Task<int> SaveChangesAsync()
         {

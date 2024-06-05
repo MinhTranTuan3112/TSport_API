@@ -13,7 +13,9 @@ namespace TSport.Api.Services.Services
     {
         private readonly Lazy<IAuthService> _authService;
         private readonly Lazy<ITokenService> _tokenService;
-        private readonly Lazy<IOrderService> _cartService;
+        private readonly Lazy<IOrderService> _orderService;
+        private readonly Lazy<IOrderDetailsService> _orderdetailsService;
+
 
 
 
@@ -21,9 +23,8 @@ namespace TSport.Api.Services.Services
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
-
-            _cartService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
-
+            _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
+            _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork, this));
 
         }
 
@@ -31,6 +32,8 @@ namespace TSport.Api.Services.Services
 
         public ITokenService TokenService => _tokenService.Value;
 
-        public IOrderService cartService => _cartService.Value;
+        public IOrderService OrderService => _orderService.Value;
+
+        public IOrderDetailsService OrderDetailsService => _orderdetailsService.Value;
     }
 }   

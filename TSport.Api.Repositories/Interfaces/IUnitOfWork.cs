@@ -10,6 +10,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<int> SaveChangesAsync();
 
         IAccountRepository AccountRepository { get; }
-        IOrderRepository CartRepository { get; }
+        IOrderRepository OrderRepository { get; }
+        IOrderDetailsRepository OrderDetailsRepository { get; } 
     }
 }

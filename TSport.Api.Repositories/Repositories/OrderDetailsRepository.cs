@@ -1,0 +1,74 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using TSport.Api.Models.Entities;
+using TSport.Api.Repositories.Interfaces;
+
+namespace TSport.Api.Repositories.Repositories
+{
+    public class OrderDetailsRepository : GenericRepository<OrderDetail>, IOrderDetailsRepository
+    {
+        public OrderDetailsRepository(TsportDbContext context) : base(context)
+        {
+        }
+        public async Task<bool> ExistingCart(int userID)
+        {
+            var ExistingCart = await _context.Orders
+                .AsNoTracking()
+                .Where(p => p.CreatedAccountId == userID && p.Status == "InCart").FirstOrDefaultAsync();
+
+
+            if (ExistingCart == null)
+            {
+                return false;
+
+            }
+            else
+            {
+
+                return true;
+            }
+
+        }
+        public async Task<int> GetCartId(int userId)
+        {
+            var GetCartId = await _context.Orders
+                           .AsNoTracking()
+                           .Include(od => od.OrderDetails)
+                           .Where(p => p.CreatedAccountId == userId && p.Status == "InCart").FirstOrDefaultAsync();
+            return GetCartId.Id;
+
+        }
+
+        public async Task<int> TotalOrderDetails()
+        {
+            var totalAmount = await _context.Orders
+        .AsNoTracking()
+        .Include(od => od.OrderDetails)
+        .SelectMany(od => od.OrderDetails) // Flatten the collection
+        .CountAsync();
+            return (int)totalAmount;
+        }
+
+        public async Task<decimal?> getDiscountPrice(int shirtId)
+        {
+            var Product = await _context.Orders
+                .AsNoTracking()
+                .Include(od => od.OrderDetails)
+                .ThenInclude(od => od.Shirt)
+                .ThenInclude(od => od.ShirtEdition)
+                .FirstOrDefaultAsync(od => od.Id == shirtId);
+
+            var ProductPrice = Product?.OrderDetails.FirstOrDefault();
+
+
+            return ProductPrice.Shirt.ShirtEdition.DiscountPrice;
+        }
+    }
+
+
+
+}

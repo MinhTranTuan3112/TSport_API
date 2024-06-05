@@ -23,11 +23,12 @@ namespace TSport.Api.Services.Services
             _serviceFactory = serviceFactory;
         }
 
-   
+
+     
 
         public async Task<CartResponse> GetCartInfo(int id)
         {
-            var order = await _unitOfWork.CartRepository.GetCartByID(id);
+            var order = await _unitOfWork.OrderRepository.GetCartByID(id);
 
 
 

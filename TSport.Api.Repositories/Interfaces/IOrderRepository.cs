@@ -11,5 +11,7 @@ namespace TSport.Api.Repositories.Interfaces
     public interface IOrderRepository : IGenericRepository<Order>
     {
         Task<Order?> GetCartByID(int id);
+
+
     }
 }
