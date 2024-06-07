@@ -26,5 +26,12 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.ShirtService.GetPagedShirts(request);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteShirt(int id)
+        {
+            await _serviceFactory.ShirtService.DeleteShirt(id);
+            return NoContent();
+        }
     }
 }

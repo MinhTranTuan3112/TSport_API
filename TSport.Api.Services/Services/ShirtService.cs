@@ -8,6 +8,8 @@ using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
+using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
 {
@@ -20,9 +22,21 @@ namespace TSport.Api.Services.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task DeleteShirt(int id)
+        {
+            var shirt = await _unitOfWork.ShirtRepository.GetByIdAsync(id);
+            if (shirt is null)
+            {
+                throw new NotFoundException("Shirt not found!");
+            }
+            shirt.Status = ShirtStatus.Deleted.ToString();
+            await _unitOfWork.SaveChangesAsync();
+        }
+
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request)
         {
             return (await _unitOfWork.ShirtRepository.GetPagedShirts(request)).Adapt<PagedResultResponse<GetShirtModel>>();
         }
+        
     }
 }
