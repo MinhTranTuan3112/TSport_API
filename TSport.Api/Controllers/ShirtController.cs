@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Shirt;
 using TSport.Api.Services.Interfaces;
@@ -17,10 +18,11 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<CreateShirtResponse> CreateShirt([FromBody] CreateShirtRequest createShirtRequest)
+        [Authorize]
+        public async Task<ActionResult<CreateShirtResponse>> CreateShirt([FromBody] CreateShirtRequest createShirtRequest)
         {
             var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);
-            return result;
+            return Created(nameof(CreateShirt),result);
         }
     }
 }
