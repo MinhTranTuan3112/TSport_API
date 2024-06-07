@@ -11,8 +11,8 @@ namespace TSport.Api.Services.Services
     public class ServiceFactory : IServiceFactory
     {
         private readonly Lazy<IAuthService> _authService;
-        private readonly Lazy<ITokenService> _tokenService;
         private readonly Lazy<IShirtService> _shirtService;
+        private readonly Lazy<ITokenService> _tokenService;
         private readonly Lazy<IAccountService> _accountService;
 
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration)
@@ -25,9 +25,9 @@ namespace TSport.Api.Services.Services
 
         public IAuthService AuthService => _authService.Value;
 
-        public ITokenService TokenService => _tokenService.Value;
-
         public IShirtService ShirtService => _shirtService.Value;
+
+        public ITokenService TokenService => _tokenService.Value;
 
         public IAccountService AccountService => _accountService.Value;
     }

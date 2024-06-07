@@ -21,7 +21,6 @@ namespace TSport.Api.Repositories
         }
 
         public IAccountRepository AccountRepository => _accountRepository.Value;
-
         public IShirtRepository ShirtRepository => _shirtRepository.Value;
 
         public async Task<int> SaveChangesAsync()

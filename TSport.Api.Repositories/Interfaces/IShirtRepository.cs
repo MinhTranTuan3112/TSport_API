@@ -11,5 +11,7 @@ namespace TSport.Api.Repositories.Interfaces
     public interface IShirtRepository : IGenericRepository<Shirt>
     {
         Task<PagedResultResponse<Shirt>> GetPagedShirts(QueryPagedShirtsRequest request);   
+        Task<Shirt?> GetShirtDetailById(int id);
     }
 }
+  
