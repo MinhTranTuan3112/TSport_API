@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TSport.Api.Models.ResponseModels.Shirt;
+using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.Interfaces;
 
 namespace TSport.Api.Controllers
@@ -16,7 +16,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetShirtDetailResponse>> ViewShirtDetail(int id)
+        public async Task<ActionResult<ShirtDetailModel>> ViewShirtDetail(int id)
         {
             return await _serviceFactory.ShirtService.GetShirtDetailById(id);
         }

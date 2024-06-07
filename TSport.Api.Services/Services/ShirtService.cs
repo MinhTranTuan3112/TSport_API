@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TSport.Api.Models.ResponseModels.Shirt;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Shared.Exceptions;
 
@@ -19,14 +19,14 @@ namespace TSport.Api.Services.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<GetShirtDetailResponse> GetShirtDetailById(int id)
+        public async Task<ShirtDetailModel> GetShirtDetailById(int id)
         {
             var shirt = await _unitOfWork.ShirtRepository.GetShirtDetailById(id);
             if (shirt is null)
             {
                 throw new NotFoundException("Shirt not found");
             }
-            return shirt.Adapt<GetShirtDetailResponse>();
+            return shirt.Adapt<ShirtDetailModel>();
         }
     }
 }

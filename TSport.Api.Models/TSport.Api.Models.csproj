@@ -10,6 +10,7 @@
     <Folder Include="Entities\" />
     <Folder Include="ResponseModels\" />
     <Folder Include="RequestModels\" />
+    <Folder Include="ResponseModels\Shirt\" />
   </ItemGroup>
 
   <ItemGroup>

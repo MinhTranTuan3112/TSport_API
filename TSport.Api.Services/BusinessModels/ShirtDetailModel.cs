@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.Entities;
+using TSport.Api.Models.ResponseModels.Account;
 
-namespace TSport.Api.Models.ResponseModels.Shirt
+namespace TSport.Api.Services.BusinessModels
 {
-    public class GetShirtDetailResponse
+    public class ShirtDetailModel
     {
         public int Id { get; set; }
 
@@ -31,16 +32,16 @@ namespace TSport.Api.Models.ResponseModels.Shirt
 
         public int? ModifiedAccountId { get; set; }
 
-//        public virtual Entities.Account? CreatedAccount { get; set; } bi stackoverflow do goi account lai co created shirt roi shirt lai co accont
+        public GetAccountResponse CreatedAccount { get; set; } = null!; 
 
-        public virtual ICollection<Image>? Images { get; set; }
+        public ICollection<ImageModel> Images { get; set; } = [];
 
-//        public virtual Entities.Account? ModifiedAccount { get; set; }
+        public virtual GetAccountResponse? ModifiedAccount { get; set; } = null;
 
-        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
+        public ICollection<OrderDetailModel> OrderDetails { get; set; } = [];
 
-//        public virtual SeasonPlayer? SeasonPlayer { get; set; }
+        public SeasonPlayerModel? SeasonPlayer { get; set; }
 
-//        public virtual ShirtEdition? ShirtEdition { get; set; }
+        public ShirtEditionModel? ShirtEdition { get; set; }
     }
 }
