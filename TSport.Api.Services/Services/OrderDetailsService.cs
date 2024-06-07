@@ -67,9 +67,13 @@ namespace TSport.Api.Services.Services
             _unitOfWork.OrderDetailsRepository.AddAsync(AddShirt);
 
             var currentOrder = await _unitOfWork.OrderRepository.GetCartByID(Userid);
+            if (currentOrder == null) {
+                throw new Exception("Can  not found Account");
+            
+            }
             currentOrder.Total += AddShirt.Subtotal;
 
-
+            _unitOfWork.OrderRepository.UpdateAsync(currentOrder);
 
             _unitOfWork.SaveChangesAsync();
 

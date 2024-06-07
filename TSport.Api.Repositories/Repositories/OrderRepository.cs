@@ -34,7 +34,7 @@ namespace TSport.Api.Repositories.Repositories
                 .ThenInclude(b=> b.SeasonPlayer)
                 .ThenInclude(b=>b.Player)
                 .ThenInclude( b=> b.Club)
-                .Where(o => o.CreatedAccountId == AccountId && o.Status == "Pending").FirstOrDefaultAsync();
+                .Where(o => o.CreatedAccountId == AccountId && o.Status == "InCart").FirstOrDefaultAsync();
 
             return items;
         }
