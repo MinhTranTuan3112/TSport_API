@@ -27,7 +27,6 @@ namespace TSport.Api.Repositories.Repositories
                 .Include(s => s.SeasonPlayer)
                     .ThenInclude(sp => sp.Season)
                         .ThenInclude(se => se.Club)
-                .Include(s => s.CreatedAccount)
                 .Include(s => s.OrderDetails)
                 .Include(s => s.Images)
                 .SingleOrDefaultAsync(s => s.Id == id);

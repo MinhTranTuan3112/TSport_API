@@ -31,7 +31,7 @@ namespace TSport.Api.Models.ResponseModels.Shirt
 
         public int? ModifiedAccountId { get; set; }
 
-//        public virtual Entities.Account? CreatedAccount { get; set; }
+//        public virtual Entities.Account? CreatedAccount { get; set; } bi stackoverflow do goi account lai co created shirt roi shirt lai co accont
 
         public virtual ICollection<Image>? Images { get; set; }
 
@@ -39,7 +39,7 @@ namespace TSport.Api.Models.ResponseModels.Shirt
 
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
 
-        public virtual SeasonPlayer? SeasonPlayer { get; set; }
+//        public virtual SeasonPlayer? SeasonPlayer { get; set; }
 
 //        public virtual ShirtEdition? ShirtEdition { get; set; }
     }
