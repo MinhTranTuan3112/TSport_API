@@ -33,6 +33,8 @@ public partial class Account
 
     public string Role { get; set; } = null!;
 
+    public string ClerkId { get; set; } = null!;
+
     public string? Status { get; set; }
 
     public virtual ICollection<Club> ClubCreatedAccounts { get; set; } = new List<Club>();

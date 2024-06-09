@@ -60,6 +60,10 @@ namespace TSport.Api.Middlewares
                     errorResponse.ErrorType = ErrorType.Unauthorized.ToString();
                     errorResponse.StatusCode = (int)HttpStatusCode.Unauthorized;
                     break;
+                case ForbiddenMethodException _:
+                    errorResponse.ErrorType = ErrorType.Forbidden.ToString();
+                    errorResponse.StatusCode = (int)HttpStatusCode.Forbidden;
+                    break;
                 default:
                     errorResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;

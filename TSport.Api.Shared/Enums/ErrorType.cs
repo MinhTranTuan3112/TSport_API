@@ -5,6 +5,7 @@ namespace TSport.Api.Shared.Enums
         NotFound,
         BadRequest,
         Unauthorized,
-        InternalServerError
+        InternalServerError,
+        Forbidden
     }
 }

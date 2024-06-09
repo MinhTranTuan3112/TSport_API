@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
@@ -23,9 +25,13 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
+        [ClerkAuthorize]
+        public async Task<Account> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request,
+        [CurrentAccount] Account account)
         {
-            return await _serviceFactory.ShirtService.GetPagedShirts(request);
+            // return await _serviceFactory.ShirtService.GetPagedShirts(request);
+
+            return account;
         }
 
         [HttpGet("{id}")]

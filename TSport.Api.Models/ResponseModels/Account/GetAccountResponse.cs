@@ -33,6 +33,8 @@ namespace TSport.Api.Models.ResponseModels.Account
 
         public string Role { get; set; } = null!;
 
+        public string ClerkId { get; set; } = null!;
+
         public string? Status { get; set; }
     }
 }

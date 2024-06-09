@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Clerk.Net.Client;
 using Microsoft.Extensions.Configuration;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;

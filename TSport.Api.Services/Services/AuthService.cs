@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Clerk.Net.Client;
 using Mapster;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Account;
@@ -89,12 +90,35 @@ namespace TSport.Api.Services.Services
             {
                 throw new BadRequestException("Account with this email already exists");
             }
-            
-            
+
+
             var newAccount = request.Adapt<Account>();
             newAccount.Password = HashPassword(request.Password);
             await _unitOfWork.AccountRepository.AddAsync(newAccount);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<GetAccountResponse> GetAccountInfoFromClerkAuth(ClaimsPrincipal claims)
+        {
+            var clerkIdClaim = claims.FindFirst(c => c.Type == "sub");
+
+            if (clerkIdClaim is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            string clerkId = clerkIdClaim.Value;
+            
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.ClerkId == clerkId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Invalid account");
+            }
+
+            return account.Adapt<GetAccountResponse>();
+
+        }
+        
     }
 }
