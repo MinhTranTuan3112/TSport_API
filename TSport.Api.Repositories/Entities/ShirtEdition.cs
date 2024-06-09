@@ -9,7 +9,7 @@ public partial class ShirtEdition
 
     public string? Code { get; set; }
 
-    public string? Size { get; set; }
+    public string Size { get; set; } = null!;
 
     public bool? HasSignature { get; set; }
 
@@ -23,7 +23,7 @@ public partial class ShirtEdition
 
     public string? Origin { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
     public string? Material { get; set; }
 

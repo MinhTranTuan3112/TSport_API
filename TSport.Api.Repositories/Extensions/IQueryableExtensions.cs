@@ -31,6 +31,11 @@ namespace TSport.Api.Repositories.Extensions
                                         s.ShirtEdition.DiscountPrice <= request.EndPrice);
             }
 
+            if (request.Sizes is not [])
+            {
+                query = query.Where(s => s.ShirtEdition != null && request.Sizes.Contains(s.ShirtEdition.Size.ToUpper()));
+            }
+
 
             var filterProperties = typeof(QueryShirtRequest).GetProperties();
             foreach (var property in filterProperties)

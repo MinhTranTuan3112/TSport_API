@@ -9,7 +9,7 @@ namespace TSport.Api.Models.RequestModels.Shirt
     public class QueryPagedShirtsRequest
     {
         public int PageNumber { get; set; } = 1;
-        
+
         public int PageSize { get; set; } = 9;
 
         public string SortColumn { get; set; } = "id";
@@ -21,5 +21,7 @@ namespace TSport.Api.Models.RequestModels.Shirt
         public decimal StartPrice { get; set; }
 
         public decimal EndPrice { get; set; }
+
+        public List<string> Sizes { get; set; } = [];
     }
 }
