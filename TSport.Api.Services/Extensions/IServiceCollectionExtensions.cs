@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Google.Cloud.Storage.V1;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using TSport.Api.Models.RequestModels.Account;
@@ -22,6 +23,8 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IShirtService, ShirtService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddSingleton(opt => StorageClient.Create());
+            services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
             return services;
         }
 

@@ -14,5 +14,7 @@ namespace TSport.Api.Services.Interfaces
         ITokenService TokenService { get; }
 
         IAccountService AccountService { get; }
+
+        IFirebaseStorageService FirebaseStorageService { get; }
     }
 }

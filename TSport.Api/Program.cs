@@ -1,3 +1,4 @@
+
 using Serilog;
 using TSport.Api.Extensions;
 using TSport.Api.Middlewares;
@@ -14,12 +15,13 @@ builder.Services.AddApiDependencies(configuration)
 
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"D:\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseSwagger();
+app.UseSwagger();   
 app.UseSwaggerUI();
 
 app.UseCors("AllowAll");

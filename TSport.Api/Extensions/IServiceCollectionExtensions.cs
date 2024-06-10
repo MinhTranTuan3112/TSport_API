@@ -25,7 +25,6 @@ namespace TSport.Api.Extensions
                     .AddAuthenticationServicesWithConfigurations(configuration)
                     .AddSwaggerConfigurations()
                     .AddCorsConfigurations();
-
             return services;
         }
 
