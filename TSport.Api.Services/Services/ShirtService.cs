@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Models.ResponseModels.Shirt;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Shirt;
@@ -35,6 +38,31 @@ namespace TSport.Api.Services.Services
             }
             
             return shirt.Adapt<ShirtDetailModel>();
+        }
+        public async Task<CreateShirtResponse> AddShirt(CreateShirtRequest createShirtRequest, ClaimsPrincipal user)
+        {
+            string? userId = user.FindFirst(c => c.Type == "aid")?.Value;
+
+            if (userId is null)
+            {
+                throw new BadRequestException("User Unauthorized");
+            }
+
+            var existedShirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == createShirtRequest.Code);
+            if ( existedShirt is not null )
+            {
+                throw new BadRequestException("Shirt code existed!");
+            }
+
+            Shirt shirt = createShirtRequest.Adapt<Shirt>();
+            shirt.Status = "Active";
+            shirt.CreatedAccountId = Int32.Parse(userId);
+            shirt.CreatedDate = DateTime.Now;
+
+            await _unitOfWork.ShirtRepository.AddAsync(shirt);
+            await _unitOfWork.SaveChangesAsync();
+
+            return shirt.Adapt<CreateShirtResponse>();
         }
     }
 }

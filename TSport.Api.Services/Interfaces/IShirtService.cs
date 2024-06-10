@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Models.ResponseModels.Shirt;
 using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Shirt;
 
@@ -13,5 +15,6 @@ namespace TSport.Api.Services.Interfaces
     {
         Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request);   
         Task<ShirtDetailModel> GetShirtDetailById(int id);
+        Task<CreateShirtResponse> AddShirt(CreateShirtRequest shirt, ClaimsPrincipal user);
     }
 }
