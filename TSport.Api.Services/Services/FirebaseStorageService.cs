@@ -51,14 +51,16 @@ namespace TSport.Api.Services.Services
         }
 
 
-        public async Task<string> UploadImageAsync(IFormFile imageFile)
+        public async Task<string> UploadImageAsync(IFormFile imageFile, string? imageName = default)
         {
+            
+            imageName ??= imageFile.FileName;
 
             using var stream = new MemoryStream();
 
             await imageFile.CopyToAsync(stream);
 
-            var blob = await _storageClient.UploadObjectAsync(_bucketName, imageFile.FileName, imageFile.ContentType, stream, cancellationToken: CancellationToken.None);
+            var blob = await _storageClient.UploadObjectAsync(_bucketName, imageName, imageFile.ContentType, stream, cancellationToken: CancellationToken.None);
 
             if (blob is null)
             {
