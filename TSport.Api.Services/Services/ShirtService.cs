@@ -48,6 +48,12 @@ namespace TSport.Api.Services.Services
                 throw new BadRequestException("User Unauthorized");
             }
 
+            var existedShirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == createShirtRequest.Code);
+            if ( existedShirt is not null )
+            {
+                throw new BadRequestException("Shirt code existed!");
+            }
+
             Shirt shirt = createShirtRequest.Adapt<Shirt>();
             shirt.Status = "Active";
             shirt.CreatedAccountId = Int32.Parse(userId);
@@ -56,11 +62,7 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.ShirtRepository.AddAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
 
-            return (await _unitOfWork.ShirtRepository.GetByIdAsync(CountShirt())).Adapt<CreateShirtResponse>();
-        }
-        private int CountShirt()
-        {
-            return _unitOfWork.ShirtRepository.Entities.Count();
+            return shirt.Adapt<CreateShirtResponse>();
         }
     }
 }
