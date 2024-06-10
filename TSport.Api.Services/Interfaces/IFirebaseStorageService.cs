@@ -8,8 +8,12 @@ namespace TSport.Api.Services.Interfaces
 {
     public interface IFirebaseStorageService
     {
-        Task UploadImageAsync(IFormFile imageFile);
+        Task<string> UploadImageAsync(IFormFile imageFile);
 
-        Task<string> GetImageUrlAsync(string imageName);
+        string GetImageUrl(string imageName);
+
+        Task<string> UpdateImageAsync(IFormFile imageFile, string imageName);
+
+        Task DeleteImageAsync(string imageName);
     }
 }
