@@ -66,25 +66,26 @@ namespace TSport.Api.Services.Services
             shirt.CreatedAccountId = Int32.Parse(userId);
             shirt.CreatedDate = DateTime.Now;
 
-            var imageConut = _unitOfWork.ImageRepository.Entities.Count() + 1; // init image Id
+            await _unitOfWork.ShirtRepository.AddAsync(shirt);
+            await _unitOfWork.SaveChangesAsync();
+
+//            var imageConut = _unitOfWork.ImageRepository.Entities.Count() + 1; // init image Id
             var result = new CreateShirtResponse();
             List<string> imageList = [];
 
             foreach (var image in createShirtRequest.Images)
             {
                 var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
-                shirt.Images.Add(new Image
+                await _unitOfWork.ImageRepository.AddAsync(new Image
                 {
-                    Id = imageConut,
+//                    Id = imageConut,
                     Url = imageUrl,
-                    ShirtId = _unitOfWork.ShirtRepository.Entities.Count() + 1
+                    ShirtId = shirt.Id
                 });
+                //                imageConut++; // image Id +1 for next image
+                await _unitOfWork.SaveChangesAsync();
                 imageList.Add(imageUrl);
-                imageConut++; // image Id +1 for next image
             }
-            
-            await _unitOfWork.ShirtRepository.AddAsync(shirt);
-            await _unitOfWork.SaveChangesAsync();
 
             result = shirt.Adapt<CreateShirtResponse>();
             result.ImagesUrl = imageList;
