@@ -209,7 +209,7 @@ create table OrderDetail
 
 create table [Image]
 (
-  Id int not null,
+  Id int identity(1,1) not null,
   [Url] nvarchar(max),
   ShirtId int not null,
 
