@@ -31,6 +31,6 @@ namespace TSport.Api.Models.ResponseModels.Shirt
 
         public int? ModifiedAccountId { get; set; }
 
-        public required List<string> ImagesUrl { get; set; } = [];
+        public List<string> ImagesUrl { get; set; } = [];
     }
 }
