@@ -30,5 +30,7 @@ namespace TSport.Api.Models.ResponseModels.Shirt
         public DateTime? ModifiedDate { get; set; }
 
         public int? ModifiedAccountId { get; set; }
+
+        public required List<string> ImagesUrl { get; set; } = [];
     }
 }

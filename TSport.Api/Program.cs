@@ -5,8 +5,6 @@ using TSport.Api.Middlewares;
 using TSport.Api.Repositories.Extensions;
 using TSport.Api.Services.Extensions;
 
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"..\..\");
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,7 +15,7 @@ builder.Services.AddApiDependencies(configuration)
 
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"D:\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"C:\Users\Toant\Downloads\fpt_stuff\SWD392\TSport\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
 
 var app = builder.Build();
 

@@ -19,10 +19,12 @@ namespace TSport.Api.Services.Services
     public class ShirtService : IShirtService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IServiceFactory _serviceFactory;
 
-        public ShirtService(IUnitOfWork unitOfWork)
+        public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
         {
             _unitOfWork = unitOfWork;
+            _serviceFactory = serviceFactory;
         }
 
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request)
@@ -60,9 +62,25 @@ namespace TSport.Api.Services.Services
             shirt.CreatedDate = DateTime.Now;
 
             await _unitOfWork.ShirtRepository.AddAsync(shirt);
+
+//            await _unitOfWork.SaveChangesAsync();
+
+            var result = shirt.Adapt<CreateShirtResponse>();
+
+
+            foreach (var image in createShirtRequest.Images)
+            {
+                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
+                await _unitOfWork.ImageRepository.AddAsync(new Image
+                {
+                    Url = imageUrl,
+                    ShirtId = shirt.Id
+                });
+                result.ImagesUrl.Add(imageUrl);
+            }
             await _unitOfWork.SaveChangesAsync();
 
-            return shirt.Adapt<CreateShirtResponse>();
+            return result;
         }
     }
 }
