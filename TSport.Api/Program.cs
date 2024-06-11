@@ -4,6 +4,8 @@ using TSport.Api.Middlewares;
 using TSport.Api.Repositories.Extensions;
 using TSport.Api.Services.Extensions;
 
+Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"..\..\");
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
