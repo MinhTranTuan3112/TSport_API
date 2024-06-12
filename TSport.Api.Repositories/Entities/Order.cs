@@ -9,7 +9,7 @@ public partial class Order
 
     public string? Code { get; set; }
 
-    public DateTime? OrderDate { get; set; }
+    public DateTime OrderDate { get; set; }
 
     public string? Status { get; set; }
 

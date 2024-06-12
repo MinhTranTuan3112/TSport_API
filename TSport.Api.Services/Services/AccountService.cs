@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Shared.Exceptions;
@@ -18,6 +19,18 @@ namespace TSport.Api.Services.Services
         public AccountService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+        }
+
+        public async Task<Account> GetAccountBySupabaseId(string supabaseId)
+        {
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new ForbiddenMethodException("Account not found");                
+            }
+
+            return account;
         }
 
         public async Task UpdateCustomerInfo(ClaimsPrincipal claims, UpdateCustomerInfoRequest request)

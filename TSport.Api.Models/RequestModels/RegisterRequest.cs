@@ -21,5 +21,8 @@ namespace TSport.Api.Models.RequestModels
         [Required]
         [EnumDataType(typeof(Role), ErrorMessage = "Invalid role")]
         public required string Role { get; set; }
+
+        [Required]
+        public required Guid SupabaseId { get; set; }
     }
 }
