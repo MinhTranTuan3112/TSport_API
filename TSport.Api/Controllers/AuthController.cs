@@ -22,11 +22,11 @@ namespace TSport.Api.Controllers
             _serviceFactory = serviceFactory;
         }
 
-        [HttpPost("login")]
-        public async Task<ActionResult<AuthTokensResponse>> Login([FromBody] LoginRequest request)
-        {
-            return Created(nameof(Login), await _serviceFactory.AuthService.Login(request));
-        }
+        // [HttpPost("login")]
+        // public async Task<ActionResult<AuthTokensResponse>> Login([FromBody] LoginRequest request)
+        // {
+        //     return Created(nameof(Login), await _serviceFactory.AuthService.Login(request));
+        // }
 
 
         [HttpPost("register")]

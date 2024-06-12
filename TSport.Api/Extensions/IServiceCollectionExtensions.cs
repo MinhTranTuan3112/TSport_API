@@ -13,6 +13,7 @@ using TSport.Api.Repositories;
 using TSport.Api.Shared;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text.RegularExpressions;
+using TSport.Api.Attributes;
 
 namespace TSport.Api.Extensions
 {
@@ -22,7 +23,7 @@ namespace TSport.Api.Extensions
         {
             services.AddControllersWithConfigurations()
                     .AddDbContextWithConfigurations(configuration)
-                    .AddAuthenticationServicesWithConfigurations(configuration)
+                    .AddSupabaseAuthenticationConfigurations(configuration)
                     .AddSwaggerConfigurations()
                     .AddCorsConfigurations();
             return services;
@@ -86,9 +87,34 @@ namespace TSport.Api.Extensions
             return services;
         }
 
+        private static IServiceCollection AddSupabaseAuthenticationConfigurations(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Supabase:SecretKey"]!)),
+                    ValidAudience = configuration["Supabase:Audience"],
+                    ValidIssuer = configuration["Supabase:Issuer"],
+                };
+            });
+            return services;
+        }
+
         private static IServiceCollection AddControllersWithConfigurations(this IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers(
+                options => options.ModelBinderProviders.Insert(0, new CurrentAccountModelBinderProvider())
+            ).AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 options.SerializerSettings.Converters.Add(new DateOnlyJsonConverter());

@@ -24,11 +24,14 @@ var app = builder.Build();
 app.UseSwagger();   
 app.UseSwaggerUI();
 
+
 app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
