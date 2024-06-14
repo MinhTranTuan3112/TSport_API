@@ -22,7 +22,7 @@ namespace TSport.Api.Attributes
                 throw new ArgumentNullException(nameof(bindingContext));
             }
 
-            var account = bindingContext.HttpContext.Items["Account"] as Account;
+            var account = bindingContext.HttpContext.Items["User"] as Account;
             bindingContext.Result = ModelBindingResult.Success(account);
             return Task.CompletedTask;
         }
