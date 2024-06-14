@@ -18,18 +18,18 @@ go
 create table Account
 (
   Id int identity(1,1) not null,
-  Code nvarchar(255),
   Username nvarchar(255),
   Email nvarchar(255) not null,
-  [Password] nvarchar(255) not null,
+  [Password] nvarchar(max) not null,
   FirstName nvarchar(255),
   LastName nvarchar(255),
   Gender nvarchar(10),
   [Address] nvarchar(255),
   Phone nvarchar(50),
   Dob date,
-  RefreshToken nvarchar(max),
-  RefreshTokenExpiryTime datetime,
+  -- RefreshToken nvarchar(max),
+  -- RefreshTokenExpiryTime datetime,
+  SupabaseId nvarchar(max) not null,
   [Role] nvarchar(50) not null,
   [Status] nvarchar(100),
 
@@ -41,7 +41,7 @@ create table [Order]
 (
   Id int identity(1,1) not null,
   Code nvarchar(255),
-  OrderDate datetime,
+  OrderDate datetime not null default GETDATE(),
   [Status] nvarchar(100),
   Total money,
   CreatedDate datetime not null default GETDATE(),
@@ -217,74 +217,74 @@ create table [Image]
   foreign key (ShirtId) references dbo.Shirt(Id)
 );
 
----- Insert data into Account table
-INSERT INTO Account
-  (Email, [Password], [Role], [Status])
-VALUES
-  ('minh@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Staff', 'Active');
+------ Insert data into Account table
+--INSERT INTO Account
+--  (Email, [Password], [Role], [Status])
+--VALUES
+--  ('minh@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Staff', 'Active');
 
--- Insert data into Club table
-INSERT INTO Club
-  (Code, [Name], LogoUrl, [Status], CreatedAccountId)
-VALUES
-  ('CLB001', 'Real Madrid', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png', 'Active', 1),
-  ('CLB002', 'Barcelona', 'https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/220px-FC_Barcelona_logo.svg.png', 'Active', 1),
-  ('CLB003', 'Manchester United', 'https://upload.wikimedia.org/wikipedia/vi/a/a1/Man_Utd_FC_.svg', 'Active', 1);
+---- Insert data into Club table
+--INSERT INTO Club
+--  (Code, [Name], LogoUrl, [Status], CreatedAccountId)
+--VALUES
+--  ('CLB001', 'Real Madrid', 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/1200px-Real_Madrid_CF.svg.png', 'Active', 1),
+--  ('CLB002', 'Barcelona', 'https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/220px-FC_Barcelona_logo.svg.png', 'Active', 1),
+--  ('CLB003', 'Manchester United', 'https://upload.wikimedia.org/wikipedia/vi/a/a1/Man_Utd_FC_.svg', 'Active', 1);
 
--- Insert data into Player table
-INSERT INTO Player
-  (Code, [Name], [Status], ClubId, CreatedAccountId)
-VALUES
-  ('PLY001', 'Lionel Messi', 'Active', 2, 1),
-  ('PLY002', 'Cristiano Ronaldo', 'Active', 1, 1),
-  ('PLY003', 'Neymar', 'Active', 2, 1),
-  ('PLY004', 'Kylian Mbapp�', 'Active', 2, 1),
-  ('PLY005', 'Robert Lewandowski', 'Active', 2, 1);
+---- Insert data into Player table
+--INSERT INTO Player
+--  (Code, [Name], [Status], ClubId, CreatedAccountId)
+--VALUES
+--  ('PLY001', 'Lionel Messi', 'Active', 2, 1),
+--  ('PLY002', 'Cristiano Ronaldo', 'Active', 1, 1),
+--  ('PLY003', 'Neymar', 'Active', 2, 1),
+--  ('PLY004', 'Kylian Mbapp�', 'Active', 2, 1),
+--  ('PLY005', 'Robert Lewandowski', 'Active', 2, 1);
 
--- Insert data into Season table
-INSERT INTO Season
-  (Code, [Name], ClubId, CreatedAccountId)
-VALUES
-  ('SES001', '2022/2023', 1, 1),
-  ('SES002', '2021/2022', 1, 1),
-  ('SES003', '2022/2023', 2, 1),
-  ('SES004', '2021/2022', 2, 1);
+---- Insert data into Season table
+--INSERT INTO Season
+--  (Code, [Name], ClubId, CreatedAccountId)
+--VALUES
+--  ('SES001', '2022/2023', 1, 1),
+--  ('SES002', '2021/2022', 1, 1),
+--  ('SES003', '2022/2023', 2, 1),
+--  ('SES004', '2021/2022', 2, 1);
 
--- Insert data into SeasonPlayer table
-INSERT INTO SeasonPlayer
-  (SeasonId, PlayerId)
-VALUES
-  (1, 2),
-  (1, 3),
-  (3, 1),
-  (3, 4),
-  (3, 5);
+---- Insert data into SeasonPlayer table
+--INSERT INTO SeasonPlayer
+--  (SeasonId, PlayerId)
+--VALUES
+--  (1, 2),
+--  (1, 3),
+--  (3, 1),
+--  (3, 4),
+--  (3, 5);
 
--- Insert data into ShirtEdition table
-INSERT INTO ShirtEdition
-  (Code, Size, HasSignature, StockPrice, DiscountPrice, Color, [Status], Origin, Material, SeasonId, CreatedAccountId, Quantity)
-VALUES
-  ('SE001', 'S', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 34),
-  ('SE002', 'M', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 45),
-  ('SE003', 'L', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 67),
-  ('SE004', 'XL', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 87),
-  ('SE005', 'S', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 76),
-  ('SE006', 'M', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 32),
-  ('SE007', 'L', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 15),
-  ('SE008', 'XL', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 54);
+---- Insert data into ShirtEdition table
+--INSERT INTO ShirtEdition
+--  (Code, Size, HasSignature, StockPrice, DiscountPrice, Color, [Status], Origin, Material, SeasonId, CreatedAccountId, Quantity)
+--VALUES
+--  ('SE001', 'S', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 34),
+--  ('SE002', 'M', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 45),
+--  ('SE003', 'L', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 67),
+--  ('SE004', 'XL', 0, 79.99,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 87),
+--  ('SE005', 'S', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 76),
+--  ('SE006', 'M', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 32),
+--  ('SE007', 'L', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 15),
+--  ('SE008', 'XL', 1, 99.99,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 54);
 
--- Insert data into Shirt table
-INSERT INTO Shirt
-  (Code, [Description], [Status], ShirtEditionId, SeasonPlayerId, CreatedAccountId, Quantity)
-VALUES
-  ('SRT001', 'Real Madrid Home Jersey', 'Active', 1, 1, 1, 32),
-  ('SRT002', 'Real Madrid Home Jersey', 'Active', 2, 1, 1, 45),
-  ('SRT003', 'Real Madrid Home Jersey', 'Active', 3, 1, 1, 23),
-  ('SRT004', 'Real Madrid Home Jersey', 'Active', 4, 1, 1, 43),
-  ('SRT005', 'Barcelona Home Jersey', 'Active', 5, 3, 1, 56),
-  ('SRT006', 'Barcelona Home Jersey', 'Active', 6, 3, 1, 23),
-  ('SRT007', 'Barcelona Home Jersey', 'Active', 7, 3, 1, 30),
-  ('SRT008', 'Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
+---- Insert data into Shirt table
+--INSERT INTO Shirt
+--  (Code, [Description], [Status], ShirtEditionId, SeasonPlayerId, CreatedAccountId, Quantity)
+--VALUES
+--  ('SRT001', 'Real Madrid Home Jersey', 'Active', 1, 1, 1, 32),
+--  ('SRT002', 'Real Madrid Home Jersey', 'Active', 2, 1, 1, 45),
+--  ('SRT003', 'Real Madrid Home Jersey', 'Active', 3, 1, 1, 23),
+--  ('SRT004', 'Real Madrid Home Jersey', 'Active', 4, 1, 1, 43),
+--  ('SRT005', 'Barcelona Home Jersey', 'Active', 5, 3, 1, 56),
+--  ('SRT006', 'Barcelona Home Jersey', 'Active', 6, 3, 1, 23),
+--  ('SRT007', 'Barcelona Home Jersey', 'Active', 7, 3, 1, 30),
+--  ('SRT008', 'Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
 
 ---- Insert data into Order table
 --INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)

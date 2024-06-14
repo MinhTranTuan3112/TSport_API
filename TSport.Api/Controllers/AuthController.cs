@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Models.ResponseModels.Auth;
@@ -36,10 +37,12 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("who-am-i"), Authorize]
+        [HttpGet("who-am-i")]
+        [Authorize]
+
         public async Task<ActionResult<GetAccountResponse>> WhoAmI()
         {
-            return await _serviceFactory.AuthService.GetAuthAccountInfo(HttpContext.User);
+            return await _serviceFactory.AuthService.GetAuthAccountInfoFromSupabaseClaims(HttpContext.User);
         }
     }
 }
