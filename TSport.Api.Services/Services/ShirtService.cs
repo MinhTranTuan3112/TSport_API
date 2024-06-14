@@ -151,7 +151,6 @@ namespace TSport.Api.Services.Services
                     var updatedImages = images.ElementAt(count);
                     updatedImages.Url = imageUrl;
 
-                    await _unitOfWork.ImageRepository.UpdateAsync(updatedImages);
                     await _unitOfWork.SaveChangesAsync();
                     imageList.Add(imageUrl);
                     count++;
@@ -159,7 +158,6 @@ namespace TSport.Api.Services.Services
                 
             }
 
-            await _unitOfWork.ShirtRepository.UpdateAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
 
             result = shirt.Adapt<UpdateShirtResponse>();
