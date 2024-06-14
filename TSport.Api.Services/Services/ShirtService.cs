@@ -12,6 +12,7 @@ using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
@@ -38,7 +39,11 @@ namespace TSport.Api.Services.Services
             {
                 throw new NotFoundException("Shirt not found");
             }
-            
+            else if (shirt.Status is not null && shirt.Status.Equals("Deleted"))
+            {
+                throw new BadRequestException("Shirt deleted");
+            }
+
             return shirt.Adapt<ShirtDetailModel>();
         }
         public async Task<CreateShirtResponse> AddShirt(CreateShirtRequest createShirtRequest, ClaimsPrincipal user)
@@ -90,6 +95,23 @@ namespace TSport.Api.Services.Services
             result = shirt.Adapt<CreateShirtResponse>();
             result.ImagesUrl = imageList;
             return result;
+        }
+        public async Task DeleteShirt(int id)
+        {
+            var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Id == id);
+            if (shirt is null)
+            {
+                throw new NotFoundException("Shirt not found");
+            }
+
+            else if (shirt.Status is not null && shirt.Status == ShirtStatus.Deleted)
+            {
+                throw new BadRequestException("Shirt deleted");
+            }
+
+            shirt.Status = ShirtStatus.Deleted;
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

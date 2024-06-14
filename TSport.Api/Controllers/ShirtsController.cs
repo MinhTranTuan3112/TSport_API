@@ -42,11 +42,17 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<CreateShirtResponse>> CreateShirt([FromForm] CreateShirtRequest createShirtRequest)
         {
             var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);
             return Created(nameof(CreateShirt), result);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteShirt(int id)
+        {
+            await _serviceFactory.ShirtService.DeleteShirt(id);
+            return Ok();
         }
     }
 }
