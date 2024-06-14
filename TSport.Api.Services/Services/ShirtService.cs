@@ -111,7 +111,6 @@ namespace TSport.Api.Services.Services
 
             shirt.Status = ShirtStatus.Deleted;
 
-            await _unitOfWork.ShirtRepository.UpdateAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
             return;
         }
