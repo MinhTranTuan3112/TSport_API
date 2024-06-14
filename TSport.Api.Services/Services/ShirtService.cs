@@ -38,7 +38,11 @@ namespace TSport.Api.Services.Services
             {
                 throw new NotFoundException("Shirt not found");
             }
-            
+            else if (shirt.Status is not null && shirt.Status.Equals("Deleted"))
+            {
+                throw new BadRequestException("Shirt deleted");
+            }
+
             return shirt.Adapt<ShirtDetailModel>();
         }
         public async Task<CreateShirtResponse> AddShirt(CreateShirtRequest createShirtRequest, ClaimsPrincipal user)
@@ -90,6 +94,25 @@ namespace TSport.Api.Services.Services
             result = shirt.Adapt<CreateShirtResponse>();
             result.ImagesUrl = imageList;
             return result;
+        }
+        public async Task DeleteShirt(int id)
+        {
+            var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Id == id);
+            if (shirt is null)
+            {
+                throw new NotFoundException("Shirt not found");
+            }
+
+            else if (shirt.Status is not null && shirt.Status.Equals("Deleted"))
+            {
+                throw new BadRequestException("Shirt deleted");
+            }
+
+            shirt.Status = "Deleted";
+
+            await _unitOfWork.ShirtRepository.UpdateAsync(shirt);
+            await _unitOfWork.SaveChangesAsync();
+            return;
         }
     }
 }
