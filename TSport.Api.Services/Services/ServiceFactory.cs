@@ -21,7 +21,7 @@ namespace TSport.Api.Services.Services
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
-            _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork));
+            _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork, this));
             _accountService = new Lazy<IAccountService>(() => new AccountService(unitOfWork));  
             _firebaseStorageService = new Lazy<IFirebaseStorageService>(() => new FirebaseStorageService(storageClient, configuration));
         }
