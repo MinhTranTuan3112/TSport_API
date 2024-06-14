@@ -23,6 +23,6 @@ namespace TSport.Api.Models.RequestModels
         public required string Role { get; set; }
 
         [Required]
-        public required Guid SupabaseId { get; set; }
+        public required string SupabaseId { get; set; }
     }
 }

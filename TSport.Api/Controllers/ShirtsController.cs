@@ -20,16 +20,18 @@ namespace TSport.Api.Controllers
     public class ShirtsController : ControllerBase
     {
         private readonly IServiceFactory _serviceFactory;
+        private readonly ILogger<ShirtsController> _logger;
 
-        public ShirtsController(IServiceFactory serviceFactory)
+        public ShirtsController(IServiceFactory serviceFactory, ILogger<ShirtsController> logger)
         {
             _serviceFactory = serviceFactory;
+            _logger = logger;
         }
 
         [HttpGet]
-        [SupabaseAuthorize]
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
         {
+            _logger.LogInformation(HttpContext.User.ToString());
             return await _serviceFactory.ShirtService.GetPagedShirts(request);
         }
 

@@ -13,6 +13,7 @@ namespace TSport.Api.Services.Interfaces
     {
         Task<AuthTokensResponse> Login(LoginRequest request);
         Task<GetAccountResponse> GetAuthAccountInfo(ClaimsPrincipal claims);
+        Task<GetAccountResponse> GetAuthAccountInfoFromSupabaseClaims(ClaimsPrincipal claims);
         Task RegisterAccount(RegisterRequest request);    
     }
 }

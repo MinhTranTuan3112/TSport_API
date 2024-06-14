@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Models.ResponseModels.Auth;
@@ -22,11 +23,11 @@ namespace TSport.Api.Controllers
             _serviceFactory = serviceFactory;
         }
 
-        // [HttpPost("login")]
-        // public async Task<ActionResult<AuthTokensResponse>> Login([FromBody] LoginRequest request)
-        // {
-        //     return Created(nameof(Login), await _serviceFactory.AuthService.Login(request));
-        // }
+        [HttpPost("login")]
+        public async Task<ActionResult<AuthTokensResponse>> Login([FromBody] LoginRequest request)
+        {
+            return Created(nameof(Login), await _serviceFactory.AuthService.Login(request));
+        }
 
 
         [HttpPost("register")]
@@ -36,10 +37,12 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
-        [HttpGet("who-am-i"), Authorize]
+        [HttpGet("who-am-i")]
+        [Authorize]
+
         public async Task<ActionResult<GetAccountResponse>> WhoAmI()
         {
-            return await _serviceFactory.AuthService.GetAuthAccountInfo(HttpContext.User);
+            return await _serviceFactory.AuthService.GetAuthAccountInfoFromSupabaseClaims(HttpContext.User);
         }
     }
 }
