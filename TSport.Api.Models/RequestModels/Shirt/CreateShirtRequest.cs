@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,5 +31,8 @@ namespace TSport.Api.Models.RequestModels.Shirt
         [Required]
         [RegularExpression("^\\d+$", ErrorMessage = "Invalid id")]
         public int SeasonPlayerId { get; set; }
+
+        [Required]
+        public IFormFileCollection Images { get; set; } = null!;
     }
 }

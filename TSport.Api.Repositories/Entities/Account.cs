@@ -7,8 +7,6 @@ public partial class Account
 {
     public int Id { get; set; }
 
-    public string? Code { get; set; }
-
     public string? Username { get; set; }
 
     public string Email { get; set; } = null!;
@@ -27,9 +25,7 @@ public partial class Account
 
     public DateOnly? Dob { get; set; }
 
-    public string? RefreshToken { get; set; }
-
-    public DateTime? RefreshTokenExpiryTime { get; set; }
+    public string SupabaseId { get; set; } = null!;
 
     public string Role { get; set; } = null!;
 
