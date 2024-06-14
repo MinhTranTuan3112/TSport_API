@@ -96,5 +96,19 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.AccountRepository.AddAsync(newAccount);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<GetAccountResponse> GetAuthAccountInfoFromSupabaseClaims(ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(supabaseId))
+            {
+                throw new ForbiddenMethodException("You don't have permission to access this resource");
+            }
+
+            var account = await _serviceFactory.AccountService.GetAccountBySupabaseId(supabaseId);
+
+            return account.Adapt<GetAccountResponse>();
+        }
     }
 }
