@@ -12,6 +12,7 @@ using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
@@ -103,12 +104,12 @@ namespace TSport.Api.Services.Services
                 throw new NotFoundException("Shirt not found");
             }
 
-            else if (shirt.Status is not null && shirt.Status.Equals("Deleted"))
+            else if (shirt.Status is not null && shirt.Status == ShirtStatus.Deleted)
             {
                 throw new BadRequestException("Shirt deleted");
             }
 
-            shirt.Status = "Deleted";
+            shirt.Status = ShirtStatus.Deleted;
 
             await _unitOfWork.ShirtRepository.UpdateAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
