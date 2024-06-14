@@ -112,7 +112,6 @@ namespace TSport.Api.Services.Services
             shirt.Status = ShirtStatus.Deleted;
 
             await _unitOfWork.SaveChangesAsync();
-            return;
         }
     }
 }
