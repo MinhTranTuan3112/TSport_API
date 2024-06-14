@@ -43,5 +43,14 @@ namespace TSport.Api.Controllers
             var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);
             return Created(nameof(CreateShirt), result);
         }
+
+
+        [HttpPatch]
+        [Authorize]
+        public async Task<ActionResult<UpdateShirtResponse>> UpdateShirt([FromForm] UpdateShirtRequest updateShirtRequest)
+        {
+            var result = await _serviceFactory.ShirtService.UpdateShirt(updateShirtRequest, HttpContext.User);
+            return Created(nameof(UpdateShirt), result);
+        }
     }
 }
