@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TSport.Api.BusinessLogic.Interfaces;
 
 namespace TSport.Api.Services.Interfaces
 {
@@ -16,5 +17,6 @@ namespace TSport.Api.Services.Interfaces
         IAccountService AccountService { get; }
 
         IFirebaseStorageService FirebaseStorageService { get; }
+        IClubService ClubService { get; }
     }
 }
