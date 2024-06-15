@@ -222,7 +222,8 @@ INSERT INTO Account
   (Email, [Password], [Role], [Status], SupabaseId)
 VALUES
   ('staff@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Staff', 'Active', '49ab1ee8-4b75-41da-b831-cea19d171406'),
-  ('admin@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Admin', 'Active', '85f1eb98-25ed-4adc-a226-2846e06a5a7d');
+  ('admin@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Admin', 'Active', '85f1eb98-25ed-4adc-a226-2846e06a5a7d'),
+  ('minh@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Customer', 'Active', '580b1b9e-c395-467c-a4e8-ce48c0ec09d1');
 
 -- Insert data into Club table
 INSERT INTO Club
