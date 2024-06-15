@@ -42,7 +42,7 @@ public partial class TsportDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0729DD25D0");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0768610F23");
 
             entity.ToTable("Account");
 
@@ -59,7 +59,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC07AB69881A");
+            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC0743343E66");
 
             entity.ToTable("Club");
 
@@ -83,7 +83,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC076C5653FB");
+            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC07D731BF20");
 
             entity.ToTable("Image");
 
@@ -95,7 +95,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC073C83B9E3");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07CBD7C1DF");
 
             entity.ToTable("Order");
 
@@ -122,7 +122,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EF23C129B");
+            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9E2BD08F88");
 
             entity.ToTable("OrderDetail");
 
@@ -143,7 +143,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07758F5231");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC0762F9BF89");
 
             entity.ToTable("Payment");
 
@@ -172,7 +172,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC07B12E2597");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC072DDE8D71");
 
             entity.ToTable("Player");
 
@@ -186,7 +186,6 @@ public partial class TsportDbContext : DbContext
 
             entity.HasOne(d => d.Club).WithMany(p => p.Players)
                 .HasForeignKey(d => d.ClubId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Player__ClubId__4CA06362");
 
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.PlayerCreatedAccounts)
@@ -201,7 +200,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Season>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC0710266FE2");
+            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC072C89917F");
 
             entity.ToTable("Season");
 
@@ -228,7 +227,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<SeasonPlayer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07C3D1F8FB");
+            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC071EA53424");
 
             entity.ToTable("SeasonPlayer");
 
@@ -245,7 +244,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Shirt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC0759A76A25");
+            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC075DB62D4A");
 
             entity.ToTable("Shirt");
 
@@ -279,7 +278,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<ShirtEdition>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07D54CCD59");
+            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07E24C8DA6");
 
             entity.ToTable("ShirtEdition");
 
