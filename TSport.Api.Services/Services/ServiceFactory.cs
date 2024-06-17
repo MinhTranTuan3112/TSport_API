@@ -20,7 +20,8 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<ITokenService> _tokenService;
         private readonly Lazy<IAccountService> _accountService;
         private readonly Lazy<IFirebaseStorageService> _firebaseStorageService;
-
+        private readonly Lazy<IOrderService> _orderService;
+        private readonly Lazy<IOrderDetailsService> _orderdetailsService;
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration, StorageClient storageClient,
             IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService)
         {
@@ -29,6 +30,8 @@ namespace TSport.Api.Services.Services
             _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork, this, pagedResultCacheService));
             _accountService = new Lazy<IAccountService>(() => new AccountService(unitOfWork));  
             _firebaseStorageService = new Lazy<IFirebaseStorageService>(() => new FirebaseStorageService(storageClient, configuration));
+            _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
+            _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork, this));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -40,5 +43,8 @@ namespace TSport.Api.Services.Services
         public IAccountService AccountService => _accountService.Value;
 
         public IFirebaseStorageService FirebaseStorageService => _firebaseStorageService.Value;
+        public IOrderService OrderService => _orderService.Value;
+
+        public IOrderDetailsService OrderDetailsService => _orderdetailsService.Value;
     }
 }
