@@ -97,11 +97,11 @@ namespace TSport.Api.Services.Services
         {
             string? userId = user.FindFirst(c => c.Type == "aid")?.Value;
 
-            if (userId is null)
+/*            if (userId is null)
             {
                 throw new BadRequestException("User Unauthorized");
             }
-
+*/
             var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == updateShirtRequest.Code);
 
             //there are a image obj with id = 0, shirtId = 0 by default, don't know why
@@ -120,46 +120,35 @@ namespace TSport.Api.Services.Services
                 shirt.Images.Clear(); // remove all items from shirt's image list
             }
 
-            shirt.ModifiedAccountId = Int32.Parse(userId);
-            shirt.ModifiedDate = DateTime.Now;
-            shirt.Description = updateShirtRequest.Description;
-            shirt.Quantity = updateShirtRequest.Quantity;
-            shirt.ShirtEditionId = updateShirtRequest.ShirtEditionId;
-            shirt.SeasonPlayerId = updateShirtRequest.SeasonPlayerId;
+//            shirt.ModifiedAccountId = Int32.Parse(userId);
+//            shirt.ModifiedDate = DateTime.Now;
+            shirt.Description = updateShirtRequest.Description is null ? shirt.Description : updateShirtRequest.Description;
+            shirt.Quantity = updateShirtRequest.Quantity is null ? shirt.Quantity : updateShirtRequest.Quantity;
+            shirt.ShirtEditionId = (int)(updateShirtRequest.ShirtEditionId is null ? shirt.ShirtEditionId : updateShirtRequest.ShirtEditionId);
+            shirt.SeasonPlayerId = (int)(updateShirtRequest.SeasonPlayerId is null ? shirt.SeasonPlayerId : updateShirtRequest.SeasonPlayerId);
 
             var images = await _unitOfWork.ImageRepository.FindAsync(i => i.ShirtId == shirt.Id);
-            var count = 0;
 
+            foreach(var image in images)
+            {
+                await _unitOfWork.ImageRepository.DeleteAsync(image);
+                await _unitOfWork.SaveChangesAsync();
+            }
             var result = new UpdateShirtResponse();
             List<string> imageList = [];
 
             foreach (var image in updateShirtRequest.Images)
             {
                 var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
-                if (count >= images.Count) 
-                {
-                    await _unitOfWork.ImageRepository.AddAsync(new Image
-                    {
-                        Url = imageUrl,
-                        ShirtId = shirt.Id
-                    });
-                    await _unitOfWork.SaveChangesAsync();
-                    imageList.Add(imageUrl);
-                }
-                else
-                {
-                    var updatedImages = images.ElementAt(count);
-                    updatedImages.Url = imageUrl;
 
-                    await _unitOfWork.SaveChangesAsync();
-                    imageList.Add(imageUrl);
-                    count++;
-                }
-                
+                await _unitOfWork.ImageRepository.AddAsync(new Image
+                {
+                    Url = imageUrl,
+                    ShirtId = shirt.Id
+                });
+                await _unitOfWork.SaveChangesAsync();
+                imageList.Add(imageUrl);
             }
-
-            await _unitOfWork.SaveChangesAsync();
-
             result = shirt.Adapt<UpdateShirtResponse>();
             result.ImagesUrl = imageList;
             return result;
