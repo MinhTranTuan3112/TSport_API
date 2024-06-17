@@ -14,6 +14,7 @@ namespace TSport.Api.Services.Interfaces
     public interface IShirtService
     {
         Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request);   
+        Task<PagedResultResponse<GetShirtModel>> GetCachedPagedShirts(QueryPagedShirtsRequest request);
         Task<ShirtDetailModel> GetShirtDetailById(int id);
         Task<CreateShirtResponse> AddShirt(CreateShirtRequest shirt, ClaimsPrincipal user);
         Task DeleteShirt(int id);

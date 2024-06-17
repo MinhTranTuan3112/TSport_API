@@ -22,10 +22,23 @@ namespace TSport.Api.Extensions
         public static IServiceCollection AddApiDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddControllersWithConfigurations()
+                    .AddRedisCacheConfigurations(configuration)
                     .AddDbContextWithConfigurations(configuration)
                     .AddSupabaseAuthenticationConfigurations(configuration)
                     .AddSwaggerConfigurations()
                     .AddCorsConfigurations();
+
+            return services;
+        }
+
+        private static IServiceCollection AddRedisCacheConfigurations(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:LocalConnection"]!;
+                options.InstanceName = configuration["Redis:InstanceName"]!;
+            });
+            
             return services;
         }
 
