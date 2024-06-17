@@ -13,7 +13,7 @@ public partial class Player
 
     public string? Status { get; set; }
 
-    public int ClubId { get; set; }
+    public int? ClubId { get; set; }
 
     public DateTime CreatedDate { get; set; }
 
@@ -23,7 +23,7 @@ public partial class Player
 
     public int? ModifiedAccountId { get; set; }
 
-    public virtual Club Club { get; set; } = null!;
+    public virtual Club? Club { get; set; }
 
     public virtual Account CreatedAccount { get; set; } = null!;
 
