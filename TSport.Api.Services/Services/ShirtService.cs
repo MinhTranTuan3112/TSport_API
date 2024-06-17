@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.Extensions.Caching.Distributed;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Shirt;
@@ -21,17 +22,34 @@ namespace TSport.Api.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IServiceFactory _serviceFactory;
+        private readonly IRedisCacheService<PagedResultResponse<GetShirtModel>> _pagedResultCacheService;
 
-        public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
+        public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService)
         {
             _unitOfWork = unitOfWork;
             _serviceFactory = serviceFactory;
+            _pagedResultCacheService = pagedResultCacheService;
         }
 
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request)
         {
-            return (await _unitOfWork.ShirtRepository.GetPagedShirts(request)).Adapt<PagedResultResponse<GetShirtModel>>();
+            var pagedResult = await _unitOfWork.ShirtRepository.GetPagedShirts(request);
+            
+            return pagedResult.Adapt<PagedResultResponse<GetShirtModel>>();
         }
+
+        public async Task<PagedResultResponse<GetShirtModel>> GetCachedPagedShirts(QueryPagedShirtsRequest request)
+        {
+            return await _pagedResultCacheService.GetOrSetCacheAsync(
+                "pagedShirts",
+                () => GetPagedShirts(request),
+                new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) // Set the cache expiration
+                }
+            ) ?? new PagedResultResponse<GetShirtModel>();
+        }
+
         public async Task<ShirtDetailModel> GetShirtDetailById(int id)
         {
             var shirt = await _unitOfWork.ShirtRepository.GetShirtDetailById(id);
@@ -56,7 +74,7 @@ namespace TSport.Api.Services.Services
             }
 
             var existedShirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == createShirtRequest.Code);
-            if ( existedShirt is not null )
+            if (existedShirt is not null)
             {
                 throw new BadRequestException("Shirt code existed!");
             }
@@ -74,7 +92,7 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.ShirtRepository.AddAsync(shirt);
             await _unitOfWork.SaveChangesAsync();
 
-//            var imageConut = _unitOfWork.ImageRepository.Entities.Count() + 1; // init image Id
+            //            var imageConut = _unitOfWork.ImageRepository.Entities.Count() + 1; // init image Id
             var result = new CreateShirtResponse();
             List<string> imageList = [];
 
@@ -83,7 +101,7 @@ namespace TSport.Api.Services.Services
                 var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
                 await _unitOfWork.ImageRepository.AddAsync(new Image
                 {
-//                    Id = imageConut,
+                    //                    Id = imageConut,
                     Url = imageUrl,
                     ShirtId = shirt.Id
                 });
@@ -115,4 +133,4 @@ namespace TSport.Api.Services.Services
         }
     }
 }
-       
+

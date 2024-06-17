@@ -18,6 +18,7 @@ namespace TSport.Api.Services.Extensions
         public static IServiceCollection AddServicesDependencies(this IServiceCollection services)
         {
             services.AddMapsterConfigurations();
+            services.AddHostedServicesDependencies();
             services.AddScoped<IServiceFactory, ServiceFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
@@ -25,6 +26,13 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddSingleton(opt => StorageClient.Create());
             services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
+            services.AddSingleton(typeof(IRedisCacheService<>), typeof(RedisCacheService<>));
+            return services;
+        }
+
+        private static IServiceCollection AddHostedServicesDependencies(this IServiceCollection services)
+        {
+            services.AddHostedService<CacheRefresherService>();
             return services;
         }
 

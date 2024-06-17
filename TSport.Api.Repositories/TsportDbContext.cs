@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Repositories.Entities;
+using TSport.Api.Repositories.Extensions;
 
 namespace TSport.Api.Repositories;
 
@@ -309,7 +310,7 @@ public partial class TsportDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShirtEdit__Seaso__59FA5E80");
         });
-
+        
         OnModelCreatingPartial(modelBuilder);
     }
 
