@@ -20,19 +20,16 @@ namespace TSport.Api.Controllers
     public class ShirtsController : ControllerBase
     {
         private readonly IServiceFactory _serviceFactory;
-        private readonly ILogger<ShirtsController> _logger;
 
-        public ShirtsController(IServiceFactory serviceFactory, ILogger<ShirtsController> logger)
+        public ShirtsController(IServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
-            _logger = logger;
         }
 
         [HttpGet]
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
         {
-            _logger.LogInformation(HttpContext.User.ToString());
-            return await _serviceFactory.ShirtService.GetPagedShirts(request);
+            return await _serviceFactory.ShirtService.GetCachedPagedShirts(request);
         }
 
         [HttpGet("{id}")]
@@ -42,11 +39,17 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<ActionResult<CreateShirtResponse>> CreateShirt([FromForm] CreateShirtRequest createShirtRequest)
         {
             var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);
             return Created(nameof(CreateShirt), result);
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteShirt(int id)
+        {
+            await _serviceFactory.ShirtService.DeleteShirt(id);
+            return Ok();
         }
 
 

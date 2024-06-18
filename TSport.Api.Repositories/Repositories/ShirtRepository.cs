@@ -86,4 +86,4 @@ namespace TSport.Api.Repositories.Repositories
         }
     }
 }
-        
+
