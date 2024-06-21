@@ -10,6 +10,7 @@ using TSport.Api.BusinessLogic.Services;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels.Club;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
 
@@ -25,13 +26,13 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IClubService> _clubService;
 
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration, StorageClient storageClient,
-            IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService)
+            IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService, IRedisCacheService<PagedResultResponse<GetClubModel>> pagedClubResultCacheService)
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
         
         
-            _clubService = new Lazy<IClubService>(() => new ClubService(unitOfWork));
+            _clubService = new Lazy<IClubService>(() => new ClubService(unitOfWork,this, pagedClubResultCacheService));
 
            
             _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork, this, pagedResultCacheService));

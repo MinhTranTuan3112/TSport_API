@@ -21,6 +21,6 @@ namespace TSport.Api.Models.RequestModels.Club
         public ClubRequest? ClubRequest { get; set; }
 
 
-        public List<string>? Sizes { get; set; } = [];
+      
     }
 }

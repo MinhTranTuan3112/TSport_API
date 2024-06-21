@@ -51,7 +51,7 @@ namespace TSport.Api.Repositories.Repositories
             int pageSize = queryPagedClubDto.PageSize;
             string sortColumn = queryPagedClubDto.SortColumn;
             bool sortByDesc = queryPagedClubDto.OrderByDesc;
-            var query = _context.Clubs
+            var query = _context.Clubs.Where(c => c.Status !="Deleted")
                 .AsNoTracking().Include(s => s.Seasons)
                .AsQueryable();
 

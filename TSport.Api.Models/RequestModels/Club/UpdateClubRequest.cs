@@ -8,19 +8,18 @@ using System.Threading.Tasks;
 
 namespace TSport.Api.Models.RequestModels.Club
 {
-    public class CreateClubRequest
+    public class UpdateClubRequest
     {
-
-        [Required]
+        [Required]      
         [RegularExpression("^\\d{3}$", ErrorMessage = "Invalid shirt code")]
         public string? Code { get; set; }
-        [Required]
+        
         [MaxLength(255)]
         public string? Name { get; set; }
 
-        [Required]
-        public IFormFile Images { get; set; } = null!;
+       
+        public IFormFile? Image { get; set; }
 
-        public string? Status { get; set; } = "Active";
+        public string? Status { get; set; }
     }
 }

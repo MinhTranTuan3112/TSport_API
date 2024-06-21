@@ -20,8 +20,8 @@ namespace TSport.Api.BusinessLogic.Interfaces
        
         Task<PagedResultResponse<GetClubModel>> GetPagedClub(QueryCLubRequest queryPagedClubDto);
         Task<GetClubModel> GetClubByClubId(int clubId);
-        Task<CreateClubResponse> AddClub(CreateClubRequest shirt, ClaimsPrincipal user);
-
-
+        Task<CreateClubResponse> AddClub(CreateClubRequest shirt, ClaimsPrincipal userId);
+        Task DeleteClub(int id);
+        Task<UpdateClubResponse> UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal userId);
     }
 }

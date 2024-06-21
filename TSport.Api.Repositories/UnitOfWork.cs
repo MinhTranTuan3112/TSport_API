@@ -31,14 +31,11 @@ namespace TSport.Api.Repositories
         }
 
 
-        }
+
         public IClubRepository ClubRepository => _clubRepository.Value;
         public IAccountRepository AccountRepository => _accountRepository.Value;
         public IShirtRepository ShirtRepository => _shirtRepository.Value;
         public IImageRepository ImageRepository => _imageRepository.Value;
-
-
-      
 
         public async Task<int> SaveChangesAsync()
         {
