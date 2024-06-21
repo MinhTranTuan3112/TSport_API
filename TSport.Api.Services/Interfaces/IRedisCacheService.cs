@@ -12,6 +12,6 @@ namespace TSport.Api.Services.Interfaces
 
         Task SetCacheValueAsync(string key, T cacheValue);
 
-        Task<T?> GetOrSetCacheAsync(string cacheKey, Func<Task<T>> fetchFromDataSource, DistributedCacheEntryOptions options);
+        Task<T?> GetOrSetCacheAsync(string cacheKey, Func<Task<T>> fetchFromDataSource, DistributedCacheEntryOptions? options = default);
     }
 }
