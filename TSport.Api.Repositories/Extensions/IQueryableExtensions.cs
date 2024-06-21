@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
@@ -69,5 +70,22 @@ namespace TSport.Api.Repositories.Extensions
 
             return query;
         }
+        public static IQueryable<Club> ApplyPagedClubFilter(this IQueryable<Club> query, QueryClubRequest request)
+        {
+            var filterProperties = typeof(ClubRequest).GetProperties();
+            foreach (var property in filterProperties)
+            {
+                var propertyValue = property.GetValue(request.ClubRequest, null);
+
+                if (propertyValue is null)
+                {
+                    continue;
+                }
+
+            }
+            return query;
+
+        }
+
     }
 }

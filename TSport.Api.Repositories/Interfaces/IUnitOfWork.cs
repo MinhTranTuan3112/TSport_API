@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TSport.Api.DataAccess.Interfaces;
 
 namespace TSport.Api.Repositories.Interfaces
 {
@@ -10,6 +11,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<int> SaveChangesAsync();
 
         IAccountRepository AccountRepository { get; }
+        IClubRepository ClubRepository { get; }
 
         IShirtRepository ShirtRepository { get; }
 

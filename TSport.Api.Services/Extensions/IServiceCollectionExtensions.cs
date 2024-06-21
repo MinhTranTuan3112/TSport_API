@@ -7,6 +7,7 @@ using Google.Cloud.Storage.V1;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
@@ -39,6 +40,7 @@ namespace TSport.Api.Services.Extensions
         private static void AddMapsterConfigurations(this IServiceCollection services)
         {
             TypeAdapterConfig<UpdateCustomerInfoRequest, Account>.NewConfig().IgnoreNullValues(true);
+            TypeAdapterConfig<UpdateClubRequest, Club>.NewConfig().IgnoreNullValues(true);
         }
     }
 }
