@@ -139,7 +139,7 @@ create table SeasonPlayer
   PlayerId int not null
 
     -- Keys
-    primary key (Id),
+  primary key (Id),
   foreign key (SeasonId) references dbo.Season(Id),
   foreign key (PlayerId) references dbo.Player(Id)
 );
@@ -173,7 +173,8 @@ create table ShirtEdition
 create table Shirt
 (
   Id int identity(1,1) not null,
-  Code nvarchar(255),
+  Code nvarchar(255) not null,
+  [Name] nvarchar(255) not null,
   [Description] nvarchar(255),
   Quantity int,
   [Status] nvarchar(100),
@@ -277,16 +278,16 @@ VALUES
 
 -- Insert data into Shirt table
 INSERT INTO Shirt
-  (Code, [Description], [Status], ShirtEditionId, SeasonPlayerId, CreatedAccountId, Quantity)
+  (Code, [Name], [Description], [Status], ShirtEditionId, SeasonPlayerId, CreatedAccountId, Quantity)
 VALUES
-  ('SRT001', 'Real Madrid Home Jersey', 'Active', 1, 1, 1, 32),
-  ('SRT002', 'Real Madrid Home Jersey', 'Active', 2, 1, 1, 45),
-  ('SRT003', 'Real Madrid Home Jersey', 'Active', 3, 1, 1, 23),
-  ('SRT004', 'Real Madrid Home Jersey', 'Active', 4, 1, 1, 43),
-  ('SRT005', 'Barcelona Home Jersey', 'Active', 5, 3, 1, 56),
-  ('SRT006', 'Barcelona Home Jersey', 'Active', 6, 3, 1, 23),
-  ('SRT007', 'Barcelona Home Jersey', 'Active', 7, 3, 1, 30),
-  ('SRT008', 'Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
+  ('SRT001', 'Real Madrid Home Jersey','Real Madrid Home Jersey', 'Active', 1, 1, 1, 32),
+  ('SRT002', 'Real Madrid Home Jersey','Real Madrid Home Jersey', 'Active', 2, 1, 1, 45),
+  ('SRT003', 'Real Madrid Home Jersey','Real Madrid Home Jersey', 'Active', 3, 1, 1, 23),
+  ('SRT004', 'Real Madrid Home Jersey','Real Madrid Home Jersey', 'Active', 4, 1, 1, 43),
+  ('SRT005', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 5, 3, 1, 56),
+  ('SRT006', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 6, 3, 1, 23),
+  ('SRT007', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 7, 3, 1, 30),
+  ('SRT008', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
 
 ---- Insert data into Order table
 --INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)

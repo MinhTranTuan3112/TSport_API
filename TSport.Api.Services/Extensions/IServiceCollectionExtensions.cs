@@ -32,7 +32,7 @@ namespace TSport.Api.Services.Extensions
 
         private static IServiceCollection AddHostedServicesDependencies(this IServiceCollection services)
         {
-            services.AddHostedService<CacheRefresherService>();
+            // services.AddHostedService<CacheRefresherService>();
             return services;
         }
 
