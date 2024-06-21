@@ -26,17 +26,14 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IClubService> _clubService;
 
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration, StorageClient storageClient,
-            IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService, IRedisCacheService<PagedResultResponse<GetClubModel>> pagedClubResultCacheService)
+            IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService, 
+            IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService)
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
-        
-        
-            _clubService = new Lazy<IClubService>(() => new ClubService(unitOfWork,this, pagedClubResultCacheService));
-
-           
+            _clubService = new Lazy<IClubService>(() => new ClubService(unitOfWork, this, clubPagedResultCacheService));
             _shirtService = new Lazy<IShirtService>(() => new ShirtService(unitOfWork, this, pagedResultCacheService));
-            _accountService = new Lazy<IAccountService>(() => new AccountService(unitOfWork));  
+            _accountService = new Lazy<IAccountService>(() => new AccountService(unitOfWork));
             _firebaseStorageService = new Lazy<IFirebaseStorageService>(() => new FirebaseStorageService(storageClient, configuration));
         }
 

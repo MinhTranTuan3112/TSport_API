@@ -70,7 +70,7 @@ namespace TSport.Api.Repositories.Extensions
 
             return query;
         }
-        public static IQueryable<Club> ApplyPagedClubFilter(this IQueryable<Club> query, QueryCLubRequest request)
+        public static IQueryable<Club> ApplyPagedClubFilter(this IQueryable<Club> query, QueryClubRequest request)
         {
             var filterProperties = typeof(ClubRequest).GetProperties();
             foreach (var property in filterProperties)

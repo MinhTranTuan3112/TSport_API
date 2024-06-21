@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Club;
@@ -11,7 +12,7 @@ namespace TSport.Api.Controllers
     [ApiController]
     [Route("api/[controller]")]
     public class ClubsController : ControllerBase
- {
+    {
         private readonly IServiceFactory _serviceFactory;
 
         public ClubsController(IServiceFactory serviceFactory)
@@ -20,34 +21,41 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResultResponse<GetClubModel>>> GetClub([FromQuery] QueryCLubRequest query)
+        public async Task<ActionResult<PagedResultResponse<GetClubModel>>> GetPagedClubs([FromQuery] QueryClubRequest query)
         {
-            return await _serviceFactory.ClubService.GetPagedClub(query);
+            return await _serviceFactory.ClubService.GetCachedPagedClubs(query);
         }
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<GetClubModel>> GetShirtDetailsById(int id)
+        public async Task<ActionResult<GetClubDetailsModel>> GetClubDetailsById(int id)
         {
-            return await _serviceFactory.ClubService.GetClubByClubId(id);
+            return await _serviceFactory.ClubService.GetClubDetailsById(id);
         }
 
         [HttpPost]
-        
-        public async Task<ActionResult<CreateClubResponse>> CreateClub( CreateClubRequest createShirtRequest)
+        [SupabaseAuthorize(Roles = ["Staff"])]
+
+        public async Task<ActionResult<GetClubResponse>> CreateClub(CreateClubRequest createClubRequest)
         {
-            var result = await _serviceFactory.ClubService.AddClub(createShirtRequest, HttpContext.User);
+            var result = await _serviceFactory.ClubService.AddClub(createClubRequest, HttpContext.User);
             return Created(nameof(CreateClub), result);
         }
+
         [HttpDelete]
+        [SupabaseAuthorize(Roles = ["Staff"])]
         public async Task<ActionResult> DeleteClub(int id)
         {
             await _serviceFactory.ClubService.DeleteClub(id);
             return Ok();
         }
+
         [HttpPut]
-        public async Task<ActionResult<CreateClubResponse>> UpdateClub([FromQuery] UpdateClubRequest updateClub)
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<ActionResult> UpdateClub([FromQuery] UpdateClubRequest updateClub)
         {
-            var result = await _serviceFactory.ClubService.UpdateClub(updateClub, HttpContext.User);
-            return Created(nameof(UpdateClub), result);
+            await _serviceFactory.ClubService.UpdateClub(updateClub, HttpContext.User);
+            return NoContent();
         }
+
     }
 }

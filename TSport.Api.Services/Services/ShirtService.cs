@@ -121,12 +121,12 @@ namespace TSport.Api.Services.Services
                 throw new NotFoundException("Shirt not found");
             }
 
-            else if (shirt.Status is not null && shirt.Status == ShirtStatus.Deleted)
+            else if (shirt.Status is not null && shirt.Status == ShirtStatus.Deleted.ToString())
             {
                 throw new BadRequestException("Shirt deleted");
             }
 
-            shirt.Status = ShirtStatus.Deleted;
+            shirt.Status = ShirtStatus.Deleted.ToString();
 
             await _unitOfWork.SaveChangesAsync();
         }

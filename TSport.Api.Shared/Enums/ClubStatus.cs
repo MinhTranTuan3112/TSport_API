@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace TSport.Api.Shared.Enums
 {
-    public enum ClubEnum
+    public enum ClubStatus
     {
         Active,
         Deleted
-    }
-    public class ClubStatus
-    {
-        public static string Active = ShirtEnum.Active.ToString();
-        public static string Deleted = ShirtEnum.Deleted.ToString();
     }
 }

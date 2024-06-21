@@ -16,12 +16,12 @@ using TSport.Api.Services.BusinessModels.Club;
 namespace TSport.Api.BusinessLogic.Interfaces
 {
     public interface IClubService
-    {
-       
-        Task<PagedResultResponse<GetClubModel>> GetPagedClub(QueryCLubRequest queryPagedClubDto);
-        Task<GetClubModel> GetClubByClubId(int clubId);
-        Task<CreateClubResponse> AddClub(CreateClubRequest shirt, ClaimsPrincipal userId);
+    {       
+        Task<PagedResultResponse<GetClubModel>> GetPagedClubs(QueryClubRequest request);
+        Task<PagedResultResponse<GetClubModel>> GetCachedPagedClubs(QueryClubRequest request);
+        Task<GetClubDetailsModel> GetClubDetailsById(int clubId);
+        Task<GetClubResponse> AddClub(CreateClubRequest shirt, ClaimsPrincipal user);
         Task DeleteClub(int id);
-        Task<UpdateClubResponse> UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal userId);
+        Task UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal user);
     }
 }

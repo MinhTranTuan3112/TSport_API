@@ -13,7 +13,7 @@ namespace TSport.Api.DataAccess.Interfaces
 {
     public interface IClubRepository :IGenericRepository<Club>
     {
-        Task<PagedResultResponse<Club>> GetPagedClub(QueryCLubRequest queryPagedClubDto);
+        Task<PagedResultResponse<Club>> GetPagedClub(QueryClubRequest queryPagedClubDto);
         Task<Club?> GetClubDetailById(int id);
     }
 }

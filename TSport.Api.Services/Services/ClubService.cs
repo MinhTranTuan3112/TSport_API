@@ -1,26 +1,16 @@
 ﻿using Mapster;
-using Microsoft.VisualStudio.CodeCoverage;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Newtonsoft.Json;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 using TSport.Api.BusinessLogic.Interfaces;
-
 using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Club;
-
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Club;
 using TSport.Api.Services.BusinessModels.Shirt;
 using TSport.Api.Services.Interfaces;
-using TSport.Api.Services.Services;
-using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TSport.Api.BusinessLogic.Services
 {
@@ -28,7 +18,9 @@ namespace TSport.Api.BusinessLogic.Services
     {
         private readonly IServiceFactory _serviceFactory;
         private readonly IUnitOfWork _unitOfWork;
+
         private readonly IRedisCacheService<PagedResultResponse<GetClubModel>> _pagedResultCacheService;
+
         public ClubService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetClubModel>> pagedResultCacheService)
         {
             _serviceFactory = serviceFactory;
@@ -36,18 +28,20 @@ namespace TSport.Api.BusinessLogic.Services
             _pagedResultCacheService = pagedResultCacheService;
         }
 
-        public async Task<PagedResultResponse<GetClubModel>> GetPagedClub(QueryCLubRequest queryPagedClubDto)
+        public async Task<PagedResultResponse<GetClubModel>> GetPagedClubs(QueryClubRequest request)
         {
-            return (await _unitOfWork.ClubRepository.GetPagedClub(queryPagedClubDto)).Adapt<PagedResultResponse<GetClubModel>>();
+            return (await _unitOfWork.ClubRepository.GetPagedClub(request)).Adapt<PagedResultResponse<GetClubModel>>();
         }
 
-
-
-        public Task<List<GetClubModel>> GetShirts()
+        public async Task<PagedResultResponse<GetClubModel>> GetCachedPagedClubs(QueryClubRequest request)
         {
-            throw new NotImplementedException();
+            return await _pagedResultCacheService.GetOrSetCacheAsync(
+                $"pagedClubs_{JsonConvert.SerializeObject(request)}",
+                () => GetPagedClubs(request)
+            ) ?? new PagedResultResponse<GetClubModel>();
         }
-        public async Task<GetClubModel> GetClubByClubId(int id)
+
+        public async Task<GetClubDetailsModel> GetClubDetailsById(int id)
         {
             var shirt = await _unitOfWork.ClubRepository.GetClubDetailById(id);
             if (shirt is null)
@@ -55,44 +49,52 @@ namespace TSport.Api.BusinessLogic.Services
                 throw new NotFoundException("Club not found");
             }
 
-            return shirt.Adapt<GetClubModel>();
+            return shirt.Adapt<GetClubDetailsModel>();
         }
 
-        public async Task<CreateClubResponse> AddClub(CreateClubRequest createClubRequest,ClaimsPrincipal user)
+        public async Task<GetClubResponse> AddClub(CreateClubRequest createClubRequest, ClaimsPrincipal user)
         {
-            string? userId = "1";
-                //user.FindFirst(c => c.Type == "aid")?.Value;
+            var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId is null)
+            if (supabaseId is null)
             {
-                throw new BadRequestException("User Unauthorized");
+                throw new UnauthorizedException("Unauthorized");
             }
+
+            var account = await _serviceFactory.AccountService.GetAccountBySupabaseId(supabaseId);
 
             var existedShirt = await _unitOfWork.ClubRepository.FindOneAsync(s => s.Code == createClubRequest.Code);
             if (existedShirt is not null)
             {
                 throw new BadRequestException("Club code existed!");
             }
-            Club club = createClubRequest.Adapt<Club>();
+
+            var club = createClubRequest.Adapt<Club>();
 
             club.Status = "Active";
-            club.CreatedAccountId = Int32.Parse(userId);
+            club.CreatedAccountId = account.Id;
             club.CreatedDate = DateTime.Now;
-            club.ModifiedDate = DateTime.Now;
-            club.ModifiedAccountId = Int32.Parse(userId);
-            var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(createClubRequest.Images);
-             club.LogoUrl = imageUrl;
-            
+            // club.ModifiedDate = DateTime.Now;
+            // club.ModifiedAccountId = account.Id;
+
+            if (createClubRequest.Image is not null)
+            {
+                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(createClubRequest.Image);
+                club.LogoUrl = imageUrl;
+            }
+
+
             await _unitOfWork.ClubRepository.AddAsync(club);
             await _unitOfWork.SaveChangesAsync();
 
-            return club.Adapt<CreateClubResponse>();
+            return club.Adapt<GetClubResponse>();
 
         }
 
         public async Task DeleteClub(int id)
         {
-            var club = await _unitOfWork.ClubRepository.FindOneAsync(s => s.Id == id);
+            var club = await _unitOfWork.ClubRepository.FindOneAsync(c => c.Id == id);
+
             if (club is null)
             {
                 throw new NotFoundException("Club not found");
@@ -108,30 +110,34 @@ namespace TSport.Api.BusinessLogic.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<UpdateClubResponse> UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal user)
+        public async Task UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal user)
         {
-            string? userId = "1";
-            var club = await _unitOfWork.ClubRepository.FindOneAsync(s=> s.Code == updateClubRequest.Code);
+            var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _serviceFactory.AccountService.GetAccountBySupabaseId(supabaseId!);
+
+            var club = await _unitOfWork.ClubRepository.FindOneAsync(s => s.Code == updateClubRequest.Code);
+
             if (club is null)
             {
                 throw new NotFoundException("Club not found");
             }
-            club.Name = updateClubRequest.Name is null ? club.Name : updateClubRequest.Name;
-            club.Status = updateClubRequest.Status is null ? club.Status : updateClubRequest.Status;
-            
+
+            // club.Name = updateClubRequest.Name is null ? club.Name : updateClubRequest.Name;
+            // club.Status = updateClubRequest.Status is null ? club.Status : updateClubRequest.Status;
+
+            updateClubRequest.Adapt(club);
+
             club.ModifiedDate = DateTime.Now;
-            club.ModifiedAccountId = Int32.Parse(userId);
-            if (updateClubRequest.Image != null)
+            club.ModifiedAccountId = account.Id;
+
+            if (updateClubRequest.Image is not null)
             {
                 var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(updateClubRequest.Image);
-
                 club.LogoUrl = imageUrl;
             }
 
-           var    result = club.Adapt<UpdateClubResponse>();
             await _unitOfWork.SaveChangesAsync();
-
-            return result;
         }
     }
 }

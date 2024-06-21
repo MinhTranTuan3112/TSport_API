@@ -12,14 +12,14 @@ namespace TSport.Api.Models.RequestModels.Club
     {
 
         [Required]
-        [RegularExpression("^\\d{3}$", ErrorMessage = "Invalid shirt code")]
-        public string? Code { get; set; }
+        // [RegularExpression("^\\d{3}$", ErrorMessage = "Invalid club code")]
+        public required string Code { get; set; }
+
         [Required]
         [MaxLength(255)]
         public string? Name { get; set; }
 
-        [Required]
-        public IFormFile Images { get; set; } = null!;
+        public IFormFile? Image { get; set; }
 
         public string? Status { get; set; } = "Active";
     }

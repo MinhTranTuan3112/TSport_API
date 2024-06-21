@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using TSport.Api.Services.BusinessModels.Player;
+using TSport.Api.Services.BusinessModels.Season;
 
-namespace TSport.Api.Models.ResponseModels.Club
+namespace TSport.Api.Services.BusinessModels.Club
 {
-    public class CreateClubResponse
+    public class GetClubDetailsModel
     {
         public int Id { get; set; }
 
@@ -26,6 +27,8 @@ namespace TSport.Api.Models.ResponseModels.Club
 
         public int? ModifiedAccountId { get; set; }
 
+        public ICollection<GetPlayerModel> Players { get; set; } = [];
 
+        public ICollection<GetSeasonModel> Seasons { get; set; } = [];
     }
 }

@@ -13,6 +13,7 @@ using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Extensions;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -25,7 +26,7 @@ namespace TSport.Api.Repositories.Repositories
             _context = context;
         }
 
-        
+
         private Expression<Func<Club, object>> GetSortProperty(string sortColumn)
         {
             return sortColumn.ToLower() switch
@@ -37,28 +38,24 @@ namespace TSport.Api.Repositories.Repositories
             };
         }
 
-        //var query = _context.Shirts
-        //                        .AsNoTracking()
-        //                        .Include(s => s.ShirtEdition)
-        //                        .Include(s => s.SeasonPlayer)
-        //                            .ThenInclude(sp => sp.Player)
-        //                        .Include(s => s.SeasonPlayer)
-        //                            .ThenInclude(sp => sp.Season)
-        //                        .AsQueryable();
-        public async Task<PagedResultResponse<Club>> GetPagedClub(QueryCLubRequest queryPagedClubDto)
+        public async Task<PagedResultResponse<Club>> GetPagedClub(QueryClubRequest queryPagedClubDto)
         {
             int pageNumber = queryPagedClubDto.PageNumber;
             int pageSize = queryPagedClubDto.PageSize;
             string sortColumn = queryPagedClubDto.SortColumn;
             bool sortByDesc = queryPagedClubDto.OrderByDesc;
-            var query = _context.Clubs.Where(c => c.Status !="Deleted")
-                .AsNoTracking().Include(s => s.Seasons)
-               .AsQueryable();
+
+            var query = _context.Clubs
+                    .AsNoTracking()
+                    .Where(c => c.Status != ShirtStatus.Deleted.ToString())
+                    .Include(s => s.Seasons)
+                    .AsQueryable();
 
             if (queryPagedClubDto.ClubRequest is not null)
             {
                 query = query.ApplyPagedClubFilter(queryPagedClubDto);
             }
+
             //Sort
             query = sortByDesc ? query.OrderByDescending(GetSortProperty(sortColumn))
                                 : query.OrderBy(GetSortProperty(sortColumn));
@@ -70,13 +67,13 @@ namespace TSport.Api.Repositories.Repositories
 
         public async Task<Club?> GetClubDetailById(int id)
         {
-            var club = await _context.Clubs.Include(s => s.Seasons)
-                .Include(s => s.Players)
-                            
-                                .SingleOrDefaultAsync(s => s.Id == id);
+            var club = await _context.Clubs.AsNoTracking()
+                                            .Include(s => s.Seasons)
+                                            .Include(s => s.Players)
+                                            .SingleOrDefaultAsync(s => s.Id == id);
 
 
             return club;
-            }
+        }
     }
 }
