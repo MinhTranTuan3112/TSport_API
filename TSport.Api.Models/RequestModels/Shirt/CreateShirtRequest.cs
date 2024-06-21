@@ -12,7 +12,11 @@ namespace TSport.Api.Models.RequestModels.Shirt
     {
         [Required]
         [RegularExpression("^SRT\\d{3}$", ErrorMessage = "Invalid shirt code")]
-        public string? Code { get; set; }
+        public string Code { get; set; } = null!;
+
+        [Required]
+        [MaxLength(255, ErrorMessage = "Name is too long")]
+        public string Name { get; set; } = null!;
 
         [Required]
         [MaxLength(255)]

@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Shirt;
@@ -34,19 +35,17 @@ namespace TSport.Api.Services.Services
         public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request)
         {
             var pagedResult = await _unitOfWork.ShirtRepository.GetPagedShirts(request);
-            
+
             return pagedResult.Adapt<PagedResultResponse<GetShirtModel>>();
         }
 
         public async Task<PagedResultResponse<GetShirtModel>> GetCachedPagedShirts(QueryPagedShirtsRequest request)
         {
+            var serializedRequest = JsonConvert.SerializeObject(request);
+
             return await _pagedResultCacheService.GetOrSetCacheAsync(
-                "pagedShirts",
-                () => GetPagedShirts(request),
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) // Set the cache expiration
-                }
+                $"pagedShirts_{serializedRequest}",
+                () => GetPagedShirts(request)
             ) ?? new PagedResultResponse<GetShirtModel>();
         }
 

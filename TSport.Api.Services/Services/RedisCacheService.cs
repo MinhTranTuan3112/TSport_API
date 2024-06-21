@@ -27,10 +27,16 @@ namespace TSport.Api.Services.Services
             return jsonString is null ? null : JsonConvert.DeserializeObject<T>(jsonString);
         }
 
-        public async Task<T?> GetOrSetCacheAsync(string cacheKey, Func<Task<T>> fetchFromDataSource, DistributedCacheEntryOptions options)
+        public async Task<T?> GetOrSetCacheAsync(string cacheKey, Func<Task<T>> fetchFromDataSource,
+        DistributedCacheEntryOptions? options = default)
         {
+            options ??= new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) // Set the cache expiration
+            };
+
             var cachedData = await _distributedCache.GetStringAsync(cacheKey);
-            
+
             if (string.IsNullOrEmpty(cachedData))
             {
                 // Cache miss - fetch data from the original data source

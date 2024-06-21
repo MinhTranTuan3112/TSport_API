@@ -39,9 +39,15 @@ namespace TSport.Api.Repositories.Extensions
 
 
             var filterProperties = typeof(QueryShirtRequest).GetProperties();
-            foreach (var property in filterProperties)
+            var requestProperties = typeof(QueryPagedShirtsRequest).GetProperties();
+
+            foreach (var requestProperty in requestProperties)
             {
-                var propertyValue = property.GetValue(request.QueryShirtRequest, null);
+                if (!filterProperties.Any(p => p.Name == requestProperty.Name)) {
+                    continue;
+                }
+
+                var propertyValue = requestProperty.GetValue(request, null);
 
                 if (propertyValue is null)
                 {
@@ -49,15 +55,15 @@ namespace TSport.Api.Repositories.Extensions
                 }
 
 
-                if (property.PropertyType == typeof(string))
+                if (requestProperty.PropertyType == typeof(string))
                 {
                     var filterValueLower = ((string)propertyValue).ToLower();
 
-                    query = query.Where(s => EF.Property<string>(s, property.Name).ToLower().Contains(filterValueLower));
+                    query = query.Where(s => EF.Property<string>(s, requestProperty.Name).ToLower().Contains(filterValueLower));
                 }
                 else
                 {
-                    query = query.Where(s => EF.Property<object>(s, property.Name) == propertyValue);
+                    query = query.Where(s => EF.Property<object>(s, requestProperty.Name) == propertyValue);
                 }
             }
 

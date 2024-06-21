@@ -40,10 +40,10 @@ namespace TSport.Api.Repositories.Repositories
                                        .AsQueryable();
 
             //Filter
-            if (request.QueryShirtRequest is not null)
-            {
-                query = query.ApplyPagedShirtsFilter(request);
-            }
+            // if (request.QueryShirtRequest is not null)
+            // {
+            // }
+            query = query.ApplyPagedShirtsFilter(request);
 
             //Sort
             query = sortByDesc ? query.OrderByDescending(GetSortProperty(sortColumn))

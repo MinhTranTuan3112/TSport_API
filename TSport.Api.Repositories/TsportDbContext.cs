@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Repositories.Entities;
-using TSport.Api.Repositories.Extensions;
 
 namespace TSport.Api.Repositories;
 
@@ -43,7 +42,7 @@ public partial class TsportDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0768610F23");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0791B47B68");
 
             entity.ToTable("Account");
 
@@ -60,7 +59,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC0743343E66");
+            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC072360917E");
 
             entity.ToTable("Club");
 
@@ -84,7 +83,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC07D731BF20");
+            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC0785972EBA");
 
             entity.ToTable("Image");
 
@@ -96,7 +95,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07CBD7C1DF");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07C6515E8E");
 
             entity.ToTable("Order");
 
@@ -123,7 +122,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9E2BD08F88");
+            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EDA22DA3A");
 
             entity.ToTable("OrderDetail");
 
@@ -144,7 +143,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC0762F9BF89");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07B7EE05BA");
 
             entity.ToTable("Payment");
 
@@ -173,7 +172,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC072DDE8D71");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC07E0B09727");
 
             entity.ToTable("Player");
 
@@ -201,7 +200,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Season>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC072C89917F");
+            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC07115FF10A");
 
             entity.ToTable("Season");
 
@@ -228,7 +227,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<SeasonPlayer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC071EA53424");
+            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07B7D91333");
 
             entity.ToTable("SeasonPlayer");
 
@@ -245,7 +244,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Shirt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC075DB62D4A");
+            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC07F7E77EE1");
 
             entity.ToTable("Shirt");
 
@@ -255,6 +254,7 @@ public partial class TsportDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            entity.Property(e => e.Name).HasMaxLength(255);
             entity.Property(e => e.Status).HasMaxLength(100);
 
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.ShirtCreatedAccounts)
@@ -279,7 +279,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<ShirtEdition>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07E24C8DA6");
+            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07C3034308");
 
             entity.ToTable("ShirtEdition");
 
@@ -310,7 +310,7 @@ public partial class TsportDbContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__ShirtEdit__Seaso__59FA5E80");
         });
-        
+
         OnModelCreatingPartial(modelBuilder);
     }
 
