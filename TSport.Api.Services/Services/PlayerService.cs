@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
 using Newtonsoft.Json;
 using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Player;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
+using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
 {
@@ -16,10 +20,41 @@ namespace TSport.Api.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRedisCacheService<PagedResultResponse<GetPlayerModel>> _pagedResultCacheService;
+
         public PlayerService(IUnitOfWork unitOfWork, IRedisCacheService<PagedResultResponse<GetPlayerModel>> pagedResultCacheService)
         {
             _unitOfWork = unitOfWork;
             _pagedResultCacheService = pagedResultCacheService;
+        }
+
+        public async Task<GetPlayerModel> CreatePlayer(CreatePlayerRequest request, ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            if (request.ClubId.HasValue)
+            {
+                if (!await _unitOfWork.ClubRepository.AnyAsync(c => c.Id == request.ClubId))
+                {
+                    throw new BadRequestException("Club does not exist");
+                }
+            }
+
+            var player = request.Adapt<Player>();
+            player.CreatedDate = DateTime.Now;
+            player.CreatedAccountId = account.Id;
+            player.Status = PlayerStatus.Active.ToString();
+
+            await _unitOfWork.PlayerRepository.AddAsync(player);
+            await _unitOfWork.SaveChangesAsync();
+
+            return player.Adapt<GetPlayerModel>();
         }
 
         public async Task<PagedResultResponse<GetPlayerModel>> GetCachedPagedPlayers(QueryPagedPlayersRequest request)

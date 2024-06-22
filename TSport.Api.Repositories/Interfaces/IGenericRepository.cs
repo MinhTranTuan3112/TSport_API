@@ -23,5 +23,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task UpdateAsync(T TEntity);
 
         Task DeleteAsync(T TEntity);
+
+        Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
     }
 }

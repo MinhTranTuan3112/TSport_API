@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.ResponseModels;
@@ -13,5 +14,7 @@ namespace TSport.Api.Services.Interfaces
         Task<PagedResultResponse<GetPlayerModel>> GetPagedPlayers(QueryPagedPlayersRequest request);  
 
         Task<PagedResultResponse<GetPlayerModel>> GetCachedPagedPlayers(QueryPagedPlayersRequest request); 
+
+        Task<GetPlayerModel> CreatePlayer(CreatePlayerRequest request, ClaimsPrincipal claims);
     }
 }

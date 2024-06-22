@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Services.BusinessModels.Player;
@@ -27,6 +28,12 @@ namespace TSport.Api.Controllers
             return await _serviceFactory.PlayerService.GetCachedPagedPlayers(request);
         }
 
+        [HttpPost]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<ActionResult<GetPlayerModel>> CreatePlayer([FromBody] CreatePlayerRequest request)
+        {
+            return Created(nameof(CreatePlayer), await _serviceFactory.PlayerService.CreatePlayer(request, User));
+        }
 
     }
 }
