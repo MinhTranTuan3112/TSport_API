@@ -11,5 +11,6 @@ namespace TSport.Api.Repositories.Interfaces
     public interface IPlayerRepository : IGenericRepository<Player>
     {
         Task<PagedResultResponse<Player>> GetPagedPlayers(QueryPagedPlayersRequest request);
+        Task<Player?> GetPlayerDetailsById(int id);
     }
 }
