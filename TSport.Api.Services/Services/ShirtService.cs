@@ -23,30 +23,30 @@ namespace TSport.Api.Services.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IServiceFactory _serviceFactory;
-        private readonly IRedisCacheService<PagedResultResponse<GetShirtModel>> _pagedResultCacheService;
+        private readonly IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> _pagedResultCacheService;
 
-        public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService)
+        public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService)
         {
             _unitOfWork = unitOfWork;
             _serviceFactory = serviceFactory;
             _pagedResultCacheService = pagedResultCacheService;
         }
 
-        public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts(QueryPagedShirtsRequest request)
+        public async Task<PagedResultResponse<GetShirtInPagingResultModel>> GetPagedShirts(QueryPagedShirtsRequest request)
         {
             var pagedResult = await _unitOfWork.ShirtRepository.GetPagedShirts(request);
 
-            return pagedResult.Adapt<PagedResultResponse<GetShirtModel>>();
+            return pagedResult.Adapt<PagedResultResponse<GetShirtInPagingResultModel>>();
         }
 
-        public async Task<PagedResultResponse<GetShirtModel>> GetCachedPagedShirts(QueryPagedShirtsRequest request)
+        public async Task<PagedResultResponse<GetShirtInPagingResultModel>> GetCachedPagedShirts(QueryPagedShirtsRequest request)
         {
             var serializedRequest = JsonConvert.SerializeObject(request);
 
             return await _pagedResultCacheService.GetOrSetCacheAsync(
                 $"pagedShirts_{serializedRequest}",
                 () => GetPagedShirts(request)
-            ) ?? new PagedResultResponse<GetShirtModel>();
+            ) ?? new PagedResultResponse<GetShirtInPagingResultModel>();
         }
 
         public async Task<ShirtDetailModel> GetShirtDetailById(int id)

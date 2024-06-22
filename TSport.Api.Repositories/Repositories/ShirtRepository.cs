@@ -31,13 +31,8 @@ namespace TSport.Api.Repositories.Repositories
             //Query
             var query = _context.Shirts
                                    .AsNoTracking()
-                                 
                                    .Include(s => s.ShirtEdition)
-                                   .Include(s => s.SeasonPlayer)
-                                       .ThenInclude(sp => sp.Player)
-                                   .Include(s => s.SeasonPlayer)
-                                       .ThenInclude(sp => sp.Season)
-                                       .AsQueryable();
+                                    .AsQueryable();
 
             //Filter
             // if (request.QueryShirtRequest is not null)

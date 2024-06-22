@@ -26,7 +26,7 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IClubService> _clubService;
 
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration, StorageClient storageClient,
-            IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedResultCacheService, 
+            IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService, 
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService)
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
