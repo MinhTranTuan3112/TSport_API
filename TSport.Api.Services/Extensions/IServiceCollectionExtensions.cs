@@ -28,6 +28,7 @@ namespace TSport.Api.Services.Extensions
             services.AddSingleton(opt => StorageClient.Create());
             services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
             services.AddSingleton(typeof(IRedisCacheService<>), typeof(RedisCacheService<>));
+            services.AddScoped<ISeasonService, SeasonService>();
             return services;
         }
 
