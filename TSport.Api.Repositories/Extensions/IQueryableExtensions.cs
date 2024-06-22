@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Models.RequestModels.Club;
+using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
@@ -43,7 +44,8 @@ namespace TSport.Api.Repositories.Extensions
 
             foreach (var requestProperty in requestProperties)
             {
-                if (!filterProperties.Any(p => p.Name == requestProperty.Name)) {
+                if (!filterProperties.Any(p => p.Name == requestProperty.Name))
+                {
                     continue;
                 }
 
@@ -87,5 +89,20 @@ namespace TSport.Api.Repositories.Extensions
 
         }
 
+
+        public static IQueryable<Season> ApplyPagedSeasonsFilter(this IQueryable<Season> query, QueryPagedSeasonRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.Code))
+            {
+                query = query.Where(s => s.Code != null && s.Code.ToLower().Contains(request.Code.ToLower()));    
+            }
+
+            if (!string.IsNullOrEmpty(request.Name))
+            {
+                query = query.Where(s => s.Name != null && s.Name.ToLower().Contains(request.Name.ToLower()));
+            }
+
+            return query;
+        }
     }
 }
