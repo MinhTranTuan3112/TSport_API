@@ -22,7 +22,8 @@ namespace TSport.Api.Repositories.Repositories
 
         public async Task<PagedResultResponse<Player>> GetPagedPlayers(QueryPagedPlayersRequest request)
         {
-            var query = _context.Players.AsQueryable();
+            var query = _context.Players
+                            .AsQueryable();
 
             //Filter
             query = query.ApplyPagedPlayersFilter(request);
