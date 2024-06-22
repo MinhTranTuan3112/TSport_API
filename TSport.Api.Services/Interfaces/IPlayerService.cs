@@ -18,5 +18,7 @@ namespace TSport.Api.Services.Interfaces
         Task<GetPlayerModel> CreatePlayer(CreatePlayerRequest request, ClaimsPrincipal claims);
 
         Task<GetPlayerDetailsModel> GetPlayerDetailsById(int id);
+
+        Task UpdatePlayer(int id, UpdatePlayerRequest request, ClaimsPrincipal user);
     }
 }

@@ -41,5 +41,13 @@ namespace TSport.Api.Controllers
             return Created(nameof(CreatePlayer), await _serviceFactory.PlayerService.CreatePlayer(request, User));
         }
 
+        [HttpPut("{id}")]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<ActionResult> UpdatePlayer([FromRoute] int id, [FromBody] UpdatePlayerRequest request)
+        {
+            await _serviceFactory.PlayerService.UpdatePlayer(id, request, User);
+            return NoContent();
+        }
+
     }
 }
