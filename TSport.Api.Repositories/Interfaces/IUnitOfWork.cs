@@ -20,5 +20,7 @@ namespace TSport.Api.Repositories.Interfaces
 
         ISeasonRepository SeasonRepository { get; }
 
+        IPlayerRepository PlayerRepository { get; }
+
     }
 }

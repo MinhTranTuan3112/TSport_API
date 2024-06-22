@@ -21,5 +21,7 @@ namespace TSport.Api.Services.Interfaces
         IClubService ClubService { get; }
 
         ISeasonService SeasonService { get; }
+
+        IPlayerService PlayerService { get; }
     }
 }
