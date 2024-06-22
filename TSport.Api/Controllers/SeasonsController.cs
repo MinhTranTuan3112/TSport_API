@@ -26,5 +26,11 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.SeasonService.GetPagedSeasons(request);
         }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetSeasonDetailsModel>> GetSeasonDetailsById(int id)
+        {
+            return await _serviceFactory.SeasonService.GetSeasonDetailsById(id);
+        }
     }
 }

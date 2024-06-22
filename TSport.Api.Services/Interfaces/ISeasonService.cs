@@ -11,5 +11,7 @@ namespace TSport.Api.Services.Interfaces
     public interface ISeasonService
     {
         Task<PagedResultResponse<GetSeasonModel>> GetPagedSeasons(QueryPagedSeasonRequest request);
+
+        Task<GetSeasonDetailsModel> GetSeasonDetailsById(int id);
     }
 }

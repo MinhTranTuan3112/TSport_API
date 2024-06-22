@@ -11,5 +11,7 @@ namespace TSport.Api.Repositories.Interfaces
     public interface ISeasonRepository : IGenericRepository<Season>
     {
         Task<PagedResultResponse<Season>> GetPagedSeasons(QueryPagedSeasonRequest request);
+
+        Task<Season?> GetSeasonDetailsById(int id);
     }
 }
