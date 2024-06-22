@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Models.RequestModels.Club;
+using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.ResponseModels;
@@ -94,13 +95,40 @@ namespace TSport.Api.Repositories.Extensions
         {
             if (!string.IsNullOrEmpty(request.Code))
             {
-                query = query.Where(s => s.Code != null && s.Code.ToLower().Contains(request.Code.ToLower()));    
+                query = query.Where(s => s.Code != null && s.Code.ToLower().Contains(request.Code.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(request.Name))
             {
                 query = query.Where(s => s.Name != null && s.Name.ToLower().Contains(request.Name.ToLower()));
             }
+
+            return query;
+        }
+
+        public static IQueryable<Player> ApplyPagedPlayersFilter(this IQueryable<Player> query, QueryPagedPlayersRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.Code))
+            {
+                query = query.Where(p => p.Code != null && p.Code.ToLower().Contains(request.Code.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(request.Name))
+            {
+                query = query.Where(p => p.Name != null && p.Name.ToLower().Contains(request.Name.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(request.Status))
+            {
+                query = query.Where(p => p.Status != null && p.Status.ToLower() == request.Status.ToLower());
+            }
+
+            if (request.ClubId.HasValue)
+            {
+                query = query.Where(p => p.ClubId == request.ClubId);
+            }
+
+            
 
             return query;
         }
