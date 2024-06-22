@@ -16,5 +16,7 @@ namespace TSport.Api.Services.Interfaces
         Task<PagedResultResponse<GetPlayerModel>> GetCachedPagedPlayers(QueryPagedPlayersRequest request); 
 
         Task<GetPlayerModel> CreatePlayer(CreatePlayerRequest request, ClaimsPrincipal claims);
+
+        Task<GetPlayerDetailsModel> GetPlayerDetailsById(int id);
     }
 }

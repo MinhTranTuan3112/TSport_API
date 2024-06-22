@@ -28,6 +28,12 @@ namespace TSport.Api.Controllers
             return await _serviceFactory.PlayerService.GetCachedPagedPlayers(request);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetPlayerDetailsModel>> GetPlayerDetailsById(int id)
+        {
+            return await _serviceFactory.PlayerService.GetPlayerDetailsById(id);
+        }
+
         [HttpPost]
         [SupabaseAuthorize(Roles = ["Staff"])]
         public async Task<ActionResult<GetPlayerModel>> CreatePlayer([FromBody] CreatePlayerRequest request)

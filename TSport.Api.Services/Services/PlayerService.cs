@@ -69,5 +69,17 @@ namespace TSport.Api.Services.Services
         {
             return (await _unitOfWork.PlayerRepository.GetPagedPlayers(request)).Adapt<PagedResultResponse<GetPlayerModel>>();
         }
+
+        public async Task<GetPlayerDetailsModel> GetPlayerDetailsById(int id)
+        {
+            var player = await _unitOfWork.PlayerRepository.GetPlayerDetailsById(id);
+
+            if (player is null)
+            {
+                throw new NotFoundException("Player does not exist");
+            }
+
+            return player.Adapt<GetPlayerDetailsModel>();
+        }
     }
 }
