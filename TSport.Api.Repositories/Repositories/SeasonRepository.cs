@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
@@ -36,6 +37,16 @@ namespace TSport.Api.Repositories.Repositories
 
             //Paging
             return await query.ToPagedResultResponseAsync(request.PageNumber, request.PageSize);
+        }
+
+        public async Task<Season?> GetSeasonDetailsById(int id)
+        {
+            return await _context.Seasons.AsNoTracking()
+                                           .Include(s => s.Club)
+                                           .Include(s => s.CreatedAccount)
+                                           .Include(s => s.ModifiedAccount)
+                                           .AsSplitQuery()
+                                           .SingleOrDefaultAsync(s => s.Id == id);
         }
 
         private Expression<Func<Season, object>> GetSortProperty(string sortColumn)
