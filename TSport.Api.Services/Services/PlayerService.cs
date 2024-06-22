@@ -81,5 +81,36 @@ namespace TSport.Api.Services.Services
 
             return player.Adapt<GetPlayerDetailsModel>();
         }
+
+        public async Task UpdatePlayer(int id, UpdatePlayerRequest request, ClaimsPrincipal user)
+        {
+            var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            if (request.ClubId.HasValue)
+            {
+                if (!await _unitOfWork.ClubRepository.AnyAsync(c => c.Id == request.ClubId))
+                {
+                    throw new BadRequestException("Club does not exist");
+                }
+            }
+
+            var player = await _unitOfWork.PlayerRepository.FindOneAsync(p => p.Id == id);
+
+            if (player is null)
+            {
+                throw new NotFoundException("Player not found");
+            }
+
+            request.Adapt(player);
+            
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }
