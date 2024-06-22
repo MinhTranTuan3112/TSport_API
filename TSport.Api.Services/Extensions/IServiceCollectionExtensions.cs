@@ -7,6 +7,8 @@ using Google.Cloud.Storage.V1;
 using Mapster;
 using Microsoft.Extensions.DependencyInjection;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Models.RequestModels.Club;
+using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
@@ -26,7 +28,9 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddSingleton(opt => StorageClient.Create());
             services.AddScoped<IFirebaseStorageService, FirebaseStorageService>();
-            services.AddSingleton(typeof(IRedisCacheService<>), typeof(RedisCacheService<>));
+            services.AddScoped(typeof(IRedisCacheService<>), typeof(RedisCacheService<>));
+            services.AddScoped<ISeasonService, SeasonService>();
+            services.AddScoped<IPlayerService, PlayerService>();
             return services;
         }
 
@@ -39,6 +43,8 @@ namespace TSport.Api.Services.Extensions
         private static void AddMapsterConfigurations(this IServiceCollection services)
         {
             TypeAdapterConfig<UpdateCustomerInfoRequest, Account>.NewConfig().IgnoreNullValues(true);
+            TypeAdapterConfig<UpdateClubRequest, Club>.NewConfig().IgnoreNullValues(true);
+            TypeAdapterConfig<UpdatePlayerRequest, Player>.NewConfig().IgnoreNullValues(true);
         }
     }
 }

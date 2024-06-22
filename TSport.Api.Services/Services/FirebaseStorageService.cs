@@ -53,7 +53,6 @@ namespace TSport.Api.Services.Services
 
         public async Task<string> UploadImageAsync(IFormFile imageFile, string? imageName = default)
         {
-            
             imageName ??= imageFile.FileName;
 
             using var stream = new MemoryStream();

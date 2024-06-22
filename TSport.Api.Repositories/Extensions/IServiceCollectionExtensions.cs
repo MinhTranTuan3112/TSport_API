@@ -16,6 +16,8 @@ namespace TSport.Api.Repositories.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<IShirtRepository, ShirtRepository>();
+            services.AddScoped<ISeasonRepository, SeasonRepository>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
             return services;
         }
     }

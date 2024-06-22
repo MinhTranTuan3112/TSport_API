@@ -43,7 +43,7 @@ namespace TSport.Api.Services.Services
 
                     using var scope = _serviceProvider.CreateScope();
 
-                    var pagedShirtsCacheService = scope.ServiceProvider.GetRequiredService<IRedisCacheService<PagedResultResponse<GetShirtModel>>>();
+                    var pagedShirtsCacheService = scope.ServiceProvider.GetRequiredService<IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>>>();
                     var serviceFactory = scope.ServiceProvider.GetRequiredService<IServiceFactory>();
 
                     await SetPagedShirtsCache(cacheEntryOptions, pagedShirtsCacheService, serviceFactory);
@@ -59,7 +59,7 @@ namespace TSport.Api.Services.Services
             _logger.LogInformation("BACKGROUND WORKER: Cache refresher is stopping");
         }
 
-        private async Task SetPagedShirtsCache(DistributedCacheEntryOptions cacheEntryOptions, IRedisCacheService<PagedResultResponse<GetShirtModel>> pagedShirtsCacheService, IServiceFactory serviceFactory)
+        private async Task SetPagedShirtsCache(DistributedCacheEntryOptions cacheEntryOptions, IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedShirtsCacheService, IServiceFactory serviceFactory)
         {
             _logger.LogInformation("BACKGROUND WORKER: Attempting to set cache for paged shirts");
             var pagedShirts = await serviceFactory.ShirtService.GetCachedPagedShirts(new QueryPagedShirtsRequest());

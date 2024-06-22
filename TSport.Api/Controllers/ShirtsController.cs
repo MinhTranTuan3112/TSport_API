@@ -27,7 +27,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<PagedResultResponse<GetShirtModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
+        public async Task<PagedResultResponse<GetShirtInPagingResultModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
         {
             return await _serviceFactory.ShirtService.GetCachedPagedShirts(request);
         }

@@ -25,6 +25,11 @@ namespace TSport.Api.Repositories.Repositories
             return Task.CompletedTask;
         }
 
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> expression)
+        {
+            return await _context.Set<T>().AnyAsync(expression);
+        }
+
         public Task DeleteAsync(T TEntity)
         {
             _context.Remove(TEntity);
