@@ -57,7 +57,7 @@ namespace TSport.Api.Repositories.Repositories
             return (int)totalAmount;
         }
 
-        public async Task<decimal?> getDiscountPrice(int shirtId)
+        public async Task<decimal> GetDiscountPrice(int shirtId)
         {
             var Product = await _context.Orders
                 .AsNoTracking()
@@ -69,8 +69,9 @@ namespace TSport.Api.Repositories.Repositories
             var ProductPrice = Product?.OrderDetails.FirstOrDefault();
 
 
-            return ProductPrice.Shirt.ShirtEdition.DiscountPrice;
+            return ProductPrice.Shirt.ShirtEdition.DiscountPrice ?? 0;
         }
+
     }
 
 

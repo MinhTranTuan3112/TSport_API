@@ -10,6 +10,7 @@ using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Season;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
@@ -51,6 +52,7 @@ namespace TSport.Api.Services.Services
 
             season.CreatedDate = DateTime.Now;
             season.CreatedAccountId = account.Id;
+            season.Status = SeasonStatus.Active.ToString();
 
             await _unitOfWork.SeasonRepository.AddAsync(season);
             await _unitOfWork.SaveChangesAsync();

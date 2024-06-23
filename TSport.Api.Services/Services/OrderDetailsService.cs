@@ -21,9 +21,6 @@ namespace TSport.Api.Services.Services
         }
 
 
-
-
-    
         public async Task AddToCart(int Userid, int ShirtId, int quantity)
         {
             var ExsitingCart = await _unitOfWork.OrderDetailsRepository.ExistingCart(Userid);
@@ -41,8 +38,8 @@ namespace TSport.Api.Services.Services
                     Total = 0,
 
                 };
-                _unitOfWork.OrderRepository.AddAsync(newCart);
-                _unitOfWork.SaveChangesAsync();
+                await _unitOfWork.OrderRepository.AddAsync(newCart);
+                await _unitOfWork.SaveChangesAsync();
             }
             int totalOrderDetails = await _unitOfWork.OrderDetailsRepository.TotalOrderDetails();
 
@@ -50,10 +47,10 @@ namespace TSport.Api.Services.Services
             string newOrderDetailCode = "OD" + (totalOrderDetails + 1).ToString("D3");
 
 
-            decimal? pricePerProduct = await _unitOfWork.OrderDetailsRepository.getDiscountPrice(ShirtId);
+            decimal pricePerProduct = await _unitOfWork.OrderDetailsRepository.GetDiscountPrice(ShirtId);
 
 
-            decimal? subtotal = pricePerProduct * quantity;
+            decimal subtotal = pricePerProduct * quantity;
 
             var AddShirt = new OrderDetail
             {
@@ -64,22 +61,21 @@ namespace TSport.Api.Services.Services
                 Subtotal = subtotal,
                 Status = "Pending"
             };
-            _unitOfWork.OrderDetailsRepository.AddAsync(AddShirt);
+            
+            await _unitOfWork.OrderDetailsRepository.AddAsync(AddShirt);
 
             var currentOrder = await _unitOfWork.OrderRepository.GetCartByID(Userid);
-            if (currentOrder == null) {
+            if (currentOrder == null)
+            {
                 throw new Exception("Can  not found Account");
-            
+
             }
             currentOrder.Total += AddShirt.Subtotal;
 
-            _unitOfWork.OrderRepository.UpdateAsync(currentOrder);
+            await _unitOfWork.OrderRepository.UpdateAsync(currentOrder);
 
-            _unitOfWork.SaveChangesAsync();
-
-
-
-
+            await _unitOfWork.SaveChangesAsync();
+            
 
         }
     }
