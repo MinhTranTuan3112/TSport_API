@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.ResponseModels;
@@ -13,5 +14,7 @@ namespace TSport.Api.Services.Interfaces
         Task<PagedResultResponse<GetSeasonModel>> GetPagedSeasons(QueryPagedSeasonRequest request);
 
         Task<GetSeasonDetailsModel> GetSeasonDetailsById(int id);
+
+        Task<GetSeasonModel> CreateSeason(CreateSeasonRequest request, ClaimsPrincipal claims);
     }
 }
