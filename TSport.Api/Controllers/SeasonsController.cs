@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Services.BusinessModels.Season;
@@ -32,5 +33,14 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.SeasonService.GetSeasonDetailsById(id);
         }
+
+        [HttpPost]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<ActionResult<GetSeasonModel>> CreateSeason([FromBody] CreateSeasonRequest request)
+        {
+            return Created(nameof(CreateSeason), await _serviceFactory.SeasonService.CreateSeason(request, HttpContext.User));
+        }
+
+        
     }
 }
