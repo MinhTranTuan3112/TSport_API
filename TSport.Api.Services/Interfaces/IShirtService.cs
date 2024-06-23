@@ -18,5 +18,7 @@ namespace TSport.Api.Services.Interfaces
         Task<ShirtDetailModel> GetShirtDetailById(int id);
         Task<CreateShirtResponse> AddShirt(CreateShirtRequest shirt, ClaimsPrincipal user);
         Task DeleteShirt(int id);
+        Task UpdateShirt(UpdateShirtRequest updateShirtRequest, ClaimsPrincipal user);
+
     }
 }

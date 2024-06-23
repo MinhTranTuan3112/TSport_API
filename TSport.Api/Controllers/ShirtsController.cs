@@ -45,11 +45,20 @@ namespace TSport.Api.Controllers
             return Created(nameof(CreateShirt), result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteShirt(int id)
         {
             await _serviceFactory.ShirtService.DeleteShirt(id);
             return Ok();
+        }
+
+        [HttpPut]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+
+        public async Task<ActionResult<UpdateShirtResponse>> UpdateShirt([FromForm] UpdateShirtRequest updateShirtRequest)
+        {
+            await _serviceFactory.ShirtService.UpdateShirt(updateShirtRequest, HttpContext.User);
+            return NoContent();
         }
     }
 }

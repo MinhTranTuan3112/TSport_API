@@ -15,7 +15,7 @@ builder.Services.AddApiDependencies(configuration)
 
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
-Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"D:\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
+//Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"D:\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
 
 var app = builder.Build();
 
