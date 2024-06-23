@@ -27,7 +27,8 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IClubService> _clubService;
         private readonly Lazy<ISeasonService> _seasonService;
         private readonly Lazy<IPlayerService> _playerService;
-
+        private readonly Lazy<IOrderService> _orderService;
+        private readonly Lazy<IOrderDetailsService> _orderdetailsService;
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration, StorageClient storageClient,
             IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService,
@@ -41,6 +42,8 @@ namespace TSport.Api.Services.Services
             _firebaseStorageService = new Lazy<IFirebaseStorageService>(() => new FirebaseStorageService(storageClient, configuration));
             _seasonService = new Lazy<ISeasonService>(() => new SeasonService(unitOfWork));
             _playerService = new Lazy<IPlayerService>(() => new PlayerService(unitOfWork, playerPagedResultCacheService));
+            _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
+            _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork, this));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -57,5 +60,8 @@ namespace TSport.Api.Services.Services
         public ISeasonService SeasonService => _seasonService.Value;
 
         public IPlayerService PlayerService => _playerService.Value;
+        public IOrderService OrderService => _orderService.Value;
+
+        public IOrderDetailsService OrderDetailsService => _orderdetailsService.Value;
     }
 }

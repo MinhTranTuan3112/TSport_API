@@ -17,11 +17,12 @@ namespace TSport.Api.Services.Interfaces
         IAccountService AccountService { get; }
 
         IFirebaseStorageService FirebaseStorageService { get; }
-
         IClubService ClubService { get; }
 
         ISeasonService SeasonService { get; }
 
         IPlayerService PlayerService { get; }
+        IOrderService OrderService { get; }
+        IOrderDetailsService OrderDetailsService { get; }
     }
 }
