@@ -16,5 +16,7 @@ namespace TSport.Api.Services.Interfaces
         Task<GetSeasonDetailsModel> GetSeasonDetailsById(int id);
 
         Task<GetSeasonModel> CreateSeason(CreateSeasonRequest request, ClaimsPrincipal claims);
+
+        Task UpdateSeason(int id, UpdateSeasonRequest request, ClaimsPrincipal claims);
     }
 }

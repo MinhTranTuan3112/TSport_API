@@ -41,6 +41,14 @@ namespace TSport.Api.Controllers
             return Created(nameof(CreateSeason), await _serviceFactory.SeasonService.CreateSeason(request, HttpContext.User));
         }
 
-        
+        [HttpPut("{id}")]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<ActionResult> UpdateSeason([FromRoute] int id, [FromBody] UpdateSeasonRequest request)
+        {
+            await _serviceFactory.SeasonService.UpdateSeason(id, request, HttpContext.User);
+            return NoContent();
+        }
+
+
     }
 }
