@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.RequestModels.Player;
+using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
@@ -45,6 +46,7 @@ namespace TSport.Api.Services.Extensions
             TypeAdapterConfig<UpdateCustomerInfoRequest, Account>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdateClubRequest, Club>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdatePlayerRequest, Player>.NewConfig().IgnoreNullValues(true);
+            TypeAdapterConfig<UpdateSeasonRequest, Season>.NewConfig().IgnoreNullValues(true);
         }
     }
 }
