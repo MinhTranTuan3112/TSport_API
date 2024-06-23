@@ -9,6 +9,12 @@ namespace TSport.Api.Repositories.Interfaces
     public interface IUnitOfWork
     {
         Task<int> SaveChangesAsync();
+        
+        Task BeginTransactionAsync();
+
+        Task CommitTransactionAsync();
+
+        Task RollbackTransactionAsync();
 
         IAccountRepository AccountRepository { get; }
 

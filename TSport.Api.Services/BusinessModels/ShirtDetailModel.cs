@@ -19,7 +19,7 @@ namespace TSport.Api.Services.BusinessModels
 
         public int? Quantity { get; set; }
 
-        public string? Status { get; set; }
+        public string Status { get; set; } = null!;
 
         public int ShirtEditionId { get; set; }
 
@@ -33,7 +33,7 @@ namespace TSport.Api.Services.BusinessModels
 
         public int? ModifiedAccountId { get; set; }
 
-        public GetAccountResponse CreatedAccount { get; set; } = null!; 
+        public GetAccountResponse CreatedAccount { get; set; } = null!;
 
         public ICollection<ImageModel> Images { get; set; } = [];
 

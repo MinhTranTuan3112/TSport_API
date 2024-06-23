@@ -11,9 +11,9 @@ public partial class Order
 
     public DateTime OrderDate { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; } = null!;
 
-    public decimal? Total { get; set; }
+    public decimal Total { get; set; }
 
     public DateTime CreatedDate { get; set; }
 

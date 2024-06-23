@@ -42,8 +42,8 @@ create table [Order]
   Id int identity(1,1) not null,
   Code nvarchar(255),
   OrderDate datetime not null default GETDATE(),
-  [Status] nvarchar(100),
-  Total money,
+  [Status] nvarchar(100) not null,
+  Total money not null default 0,
   CreatedDate datetime not null default GETDATE(),
   CreatedAccountId int not null,
   ModifiedDate datetime null,
@@ -80,9 +80,9 @@ create table Club
 (
   Id int identity(1,1) not null,
   Code nvarchar(255),
-  [Name] nvarchar(255),
+  [Name] nvarchar(255) not null,
   LogoUrl nvarchar(max),
-  [Status] nvarchar(100),
+  [Status] nvarchar(100) not null,
   CreatedDate datetime not null default GETDATE(),
   CreatedAccountId int not null,
   ModifiedDate datetime null,
@@ -98,8 +98,8 @@ create table Player
 (
   Id int identity(1,1) not null,
   Code nvarchar(255),
-  [Name] nvarchar(255),
-  [Status] nvarchar(100),
+  [Name] nvarchar(255) not null,
+  [Status] nvarchar(100) not null,
   ClubId int null,
   CreatedDate datetime not null default GETDATE(),
   CreatedAccountId int not null,
@@ -118,12 +118,13 @@ create table Season
 (
   Id int identity(1,1) not null,
   Code nvarchar(255),
-  [Name] nvarchar(255),
+  [Name] nvarchar(255) not null,
   ClubId int null,
   CreatedDate datetime not null default GETDATE(),
   CreatedAccountId int not null,
   ModifiedDate datetime null,
   ModifiedAccountId int null,
+  [Status] nvarchar(100) not null
 
   -- Keys
   primary key (Id),
@@ -149,11 +150,11 @@ create table ShirtEdition
   Id int identity(1,1) not null,
   Code nvarchar(255),
   Size nvarchar(10) not null,
-  HasSignature bit,
+  HasSignature bit not null default 0,
   StockPrice money not null,
   DiscountPrice money,
   Color nvarchar(255),
-  [Status] nvarchar(100),
+  [Status] nvarchar(100) not null,
   Origin nvarchar(255),
   Quantity int not null,
   Material nvarchar(255),
@@ -177,7 +178,7 @@ create table Shirt
   [Name] nvarchar(255) not null,
   [Description] nvarchar(255),
   Quantity int,
-  [Status] nvarchar(100),
+  [Status] nvarchar(100) not null,
   ShirtEditionId int not null,
   SeasonPlayerId int not null,
   CreatedDate datetime not null default GETDATE(),
@@ -198,8 +199,8 @@ create table OrderDetail
   OrderId int not null,
   ShirtId int not null,
   Code nvarchar(255),
-  Subtotal money,
-  Quantity int,
+  Subtotal money not null default 0,
+  Quantity int not null default 0,
   [Status] nvarchar(100),
 
   -- Keys
@@ -246,12 +247,12 @@ VALUES
 
 -- Insert data into Season table
 INSERT INTO Season
-  (Code, [Name], ClubId, CreatedAccountId)
+  (Code, [Name], ClubId, CreatedAccountId, [Status])
 VALUES
-  ('SES001', '2022/2023', 1, 1),
-  ('SES002', '2021/2022', 1, 1),
-  ('SES003', '2022/2023', 2, 1),
-  ('SES004', '2021/2022', 2, 1);
+  ('SES001', '2022/2023', 1, 1, 'Active'),
+  ('SES002', '2021/2022', 1, 1, 'Active'),
+  ('SES003', '2022/2023', 2, 1, 'Active'),
+  ('SES004', '2021/2022', 2, 1, 'Active');
 
 -- Insert data into SeasonPlayer table
 INSERT INTO SeasonPlayer

@@ -15,7 +15,7 @@ namespace TSport.Api.Services.BusinessModels.Season
 
         public string? Code { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public int? ClubId { get; set; }
 
@@ -26,6 +26,8 @@ namespace TSport.Api.Services.BusinessModels.Season
         public DateTime? ModifiedDate { get; set; }
 
         public int? ModifiedAccountId { get; set; }
+
+        public string Status { get; set; } = null!;
 
         public GetClubModel? Club { get; set; }
 
