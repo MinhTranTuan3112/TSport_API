@@ -39,8 +39,16 @@ namespace TSport.Api.Services.Services
                 throw new UnauthorizedException("Unauthorized");
             }
 
+            if (request.ClubId.HasValue)
+            {
+                if (!await _unitOfWork.ClubRepository.AnyAsync(c => c.Id == request.ClubId))
+                {
+                    throw new BadRequestException("Club does not exist");
+                }
+            }
+
             var season = request.Adapt<Season>();
-            
+
             season.CreatedDate = DateTime.Now;
             season.CreatedAccountId = account.Id;
 
@@ -66,6 +74,38 @@ namespace TSport.Api.Services.Services
 
 
             return season.Adapt<GetSeasonDetailsModel>();
+        }
+
+        public async Task UpdateSeason(int id, UpdateSeasonRequest request, ClaimsPrincipal claims)
+        {
+            var season = await _unitOfWork.SeasonRepository.FindOneAsync(s => s.Id == id);
+
+            if (season is null)
+            {
+                throw new NotFoundException("Season not found");
+            }
+
+            if (request.ClubId.HasValue)
+            {
+                if (!await _unitOfWork.ClubRepository.AnyAsync(c => c.Id == request.ClubId))
+                {
+                    throw new BadRequestException("Club does not exist");
+                }
+            }
+
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            request.Adapt(season);
+            season.ModifiedAccountId = account.Id;
+            season.ModifiedDate = DateTime.Now;
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }
