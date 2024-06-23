@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Storage;
 using TSport.Api.DataAccess.Interfaces;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Repositories.Repositories;
@@ -11,6 +12,7 @@ namespace TSport.Api.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TsportDbContext _context;
+        private IDbContextTransaction? _currentTransaction;
         private readonly Lazy<IAccountRepository> _accountRepository;
         private readonly Lazy<IShirtRepository> _shirtRepository;
         private readonly Lazy<IClubRepository> _clubRepository;
@@ -28,9 +30,7 @@ namespace TSport.Api.Repositories
             _seasonRepository = new Lazy<ISeasonRepository>(() => new SeasonRepository(context));
             _playerRepository = new Lazy<IPlayerRepository>(() => new PlayerRepository(context));
         }
-
-
-
+        
         public IClubRepository ClubRepository => _clubRepository.Value;
         public IAccountRepository AccountRepository => _accountRepository.Value;
         public IShirtRepository ShirtRepository => _shirtRepository.Value;
@@ -39,6 +39,31 @@ namespace TSport.Api.Repositories
         public ISeasonRepository SeasonRepository => _seasonRepository.Value;
 
         public IPlayerRepository PlayerRepository => _playerRepository.Value;
+
+        public async Task BeginTransactionAsync()
+        {
+            _currentTransaction = await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            if (_currentTransaction is not null)
+            {
+                await _currentTransaction.CommitAsync();
+                await _currentTransaction.DisposeAsync();
+                _currentTransaction = null;
+            }
+        }
+
+        public async Task RollbackTransactionAsync()
+        {
+            if (_currentTransaction is not null)
+            {
+                await _currentTransaction.RollbackAsync();
+                await _currentTransaction.DisposeAsync();
+                _currentTransaction = null;
+            }
+        }
 
         public async Task<int> SaveChangesAsync()
         {

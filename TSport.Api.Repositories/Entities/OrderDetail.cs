@@ -11,9 +11,9 @@ public partial class OrderDetail
 
     public string? Code { get; set; }
 
-    public decimal? Subtotal { get; set; }
+    public decimal Subtotal { get; set; }
 
-    public int? Quantity { get; set; }
+    public int Quantity { get; set; }
 
     public string? Status { get; set; }
 

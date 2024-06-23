@@ -42,7 +42,7 @@ public partial class TsportDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0791B47B68");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC075090CD21");
 
             entity.ToTable("Account");
 
@@ -59,7 +59,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC072360917E");
+            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC07E7F79E69");
 
             entity.ToTable("Club");
 
@@ -74,28 +74,28 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.ClubCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Club__CreatedAcc__45F365D3");
+                .HasConstraintName("FK__Club__CreatedAcc__46E78A0C");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.ClubModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Club__ModifiedAc__46E78A0C");
+                .HasConstraintName("FK__Club__ModifiedAc__47DBAE45");
         });
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC0785972EBA");
+            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC072A8F80DE");
 
             entity.ToTable("Image");
 
             entity.HasOne(d => d.Shirt).WithMany(p => p.Images)
                 .HasForeignKey(d => d.ShirtId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Image__ShirtId__693CA210");
+                .HasConstraintName("FK__Image__ShirtId__6D0D32F4");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07C6515E8E");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC0718A21284");
 
             entity.ToTable("Order");
 
@@ -113,16 +113,16 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.OrderCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Order__CreatedAc__3B75D760");
+                .HasConstraintName("FK__Order__CreatedAc__3C69FB99");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.OrderModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Order__ModifiedA__3C69FB99");
+                .HasConstraintName("FK__Order__ModifiedA__3D5E1FD2");
         });
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EDA22DA3A");
+            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9EBF37EB90");
 
             entity.ToTable("OrderDetail");
 
@@ -133,17 +133,17 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderDeta__Order__656C112C");
+                .HasConstraintName("FK__OrderDeta__Order__693CA210");
 
             entity.HasOne(d => d.Shirt).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.ShirtId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__OrderDeta__Shirt__66603565");
+                .HasConstraintName("FK__OrderDeta__Shirt__6A30C649");
         });
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07B7EE05BA");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07C2D7F14A");
 
             entity.ToTable("Payment");
 
@@ -159,20 +159,20 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.PaymentCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payment__Created__412EB0B6");
+                .HasConstraintName("FK__Payment__Created__4222D4EF");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.PaymentModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Payment__Modifie__4222D4EF");
+                .HasConstraintName("FK__Payment__Modifie__4316F928");
 
             entity.HasOne(d => d.Order).WithMany(p => p.Payments)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK__Payment__OrderId__403A8C7D");
+                .HasConstraintName("FK__Payment__OrderId__412EB0B6");
         });
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC07E0B09727");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC07E7E0E756");
 
             entity.ToTable("Player");
 
@@ -186,21 +186,21 @@ public partial class TsportDbContext : DbContext
 
             entity.HasOne(d => d.Club).WithMany(p => p.Players)
                 .HasForeignKey(d => d.ClubId)
-                .HasConstraintName("FK__Player__ClubId__4CA06362");
+                .HasConstraintName("FK__Player__ClubId__4D94879B");
 
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.PlayerCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Player__CreatedA__4AB81AF0");
+                .HasConstraintName("FK__Player__CreatedA__4BAC3F29");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.PlayerModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Player__Modified__4BAC3F29");
+                .HasConstraintName("FK__Player__Modified__4CA06362");
         });
 
         modelBuilder.Entity<Season>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC07115FF10A");
+            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC0720256379");
 
             entity.ToTable("Season");
 
@@ -210,41 +210,42 @@ public partial class TsportDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.Name).HasMaxLength(255);
+            entity.Property(e => e.Status).HasMaxLength(100);
 
             entity.HasOne(d => d.Club).WithMany(p => p.Seasons)
                 .HasForeignKey(d => d.ClubId)
-                .HasConstraintName("FK__Season__ClubId__5070F446");
+                .HasConstraintName("FK__Season__ClubId__5165187F");
 
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.SeasonCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Season__CreatedA__5165187F");
+                .HasConstraintName("FK__Season__CreatedA__52593CB8");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.SeasonModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Season__Modified__52593CB8");
+                .HasConstraintName("FK__Season__Modified__534D60F1");
         });
 
         modelBuilder.Entity<SeasonPlayer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07B7D91333");
+            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC0755A8DC6B");
 
             entity.ToTable("SeasonPlayer");
 
             entity.HasOne(d => d.Player).WithMany(p => p.SeasonPlayers)
                 .HasForeignKey(d => d.PlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__SeasonPla__Playe__5629CD9C");
+                .HasConstraintName("FK__SeasonPla__Playe__571DF1D5");
 
             entity.HasOne(d => d.Season).WithMany(p => p.SeasonPlayers)
                 .HasForeignKey(d => d.SeasonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__SeasonPla__Seaso__5535A963");
+                .HasConstraintName("FK__SeasonPla__Seaso__5629CD9C");
         });
 
         modelBuilder.Entity<Shirt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC07F7E77EE1");
+            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC0785400E59");
 
             entity.ToTable("Shirt");
 
@@ -260,26 +261,26 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.ShirtCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Shirt__CreatedAc__5FB337D6");
+                .HasConstraintName("FK__Shirt__CreatedAc__619B8048");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.ShirtModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__Shirt__ModifiedA__60A75C0F");
+                .HasConstraintName("FK__Shirt__ModifiedA__628FA481");
 
             entity.HasOne(d => d.SeasonPlayer).WithMany(p => p.Shirts)
                 .HasForeignKey(d => d.SeasonPlayerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Shirt__SeasonPla__628FA481");
+                .HasConstraintName("FK__Shirt__SeasonPla__6477ECF3");
 
             entity.HasOne(d => d.ShirtEdition).WithMany(p => p.Shirts)
                 .HasForeignKey(d => d.ShirtEditionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Shirt__ShirtEdit__619B8048");
+                .HasConstraintName("FK__Shirt__ShirtEdit__6383C8BA");
         });
 
         modelBuilder.Entity<ShirtEdition>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07C3034308");
+            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC074A1F4912");
 
             entity.ToTable("ShirtEdition");
 
@@ -299,16 +300,16 @@ public partial class TsportDbContext : DbContext
             entity.HasOne(d => d.CreatedAccount).WithMany(p => p.ShirtEditionCreatedAccounts)
                 .HasForeignKey(d => d.CreatedAccountId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ShirtEdit__Creat__5AEE82B9");
+                .HasConstraintName("FK__ShirtEdit__Creat__5CD6CB2B");
 
             entity.HasOne(d => d.ModifiedAccount).WithMany(p => p.ShirtEditionModifiedAccounts)
                 .HasForeignKey(d => d.ModifiedAccountId)
-                .HasConstraintName("FK__ShirtEdit__Modif__5BE2A6F2");
+                .HasConstraintName("FK__ShirtEdit__Modif__5DCAEF64");
 
             entity.HasOne(d => d.Season).WithMany(p => p.ShirtEditions)
                 .HasForeignKey(d => d.SeasonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ShirtEdit__Seaso__59FA5E80");
+                .HasConstraintName("FK__ShirtEdit__Seaso__5BE2A6F2");
         });
 
         OnModelCreatingPartial(modelBuilder);

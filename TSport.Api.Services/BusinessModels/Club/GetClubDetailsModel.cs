@@ -13,11 +13,11 @@ namespace TSport.Api.Services.BusinessModels.Club
 
         public string? Code { get; set; }
 
-        public string? Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public string? LogoUrl { get; set; }
 
-        public string? Status { get; set; }
+        public string Status { get; set; } = null!;
 
         public DateTime CreatedDate { get; set; }
 

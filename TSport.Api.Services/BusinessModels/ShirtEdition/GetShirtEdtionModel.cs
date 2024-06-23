@@ -13,7 +13,7 @@ namespace TSport.Api.Services.BusinessModels.ShirtEdition
 
         public string Size { get; set; } = null!;
 
-        public bool? HasSignature { get; set; }
+        public bool HasSignature { get; set; }
 
         public decimal StockPrice { get; set; }
 
@@ -21,7 +21,7 @@ namespace TSport.Api.Services.BusinessModels.ShirtEdition
 
         public string? Color { get; set; }
 
-        public string? Status { get; set; }
+        public string Status { get; set; } = null!;
 
         public string? Origin { get; set; }
 

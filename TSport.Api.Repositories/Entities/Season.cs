@@ -9,7 +9,7 @@ public partial class Season
 
     public string? Code { get; set; }
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
     public int? ClubId { get; set; }
 
@@ -20,6 +20,8 @@ public partial class Season
     public DateTime? ModifiedDate { get; set; }
 
     public int? ModifiedAccountId { get; set; }
+
+    public string Status { get; set; } = null!;
 
     public virtual Club? Club { get; set; }
 
