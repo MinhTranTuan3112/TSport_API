@@ -52,9 +52,8 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
-
         [HttpPatch]
-//        [Authorize]
+        
         public async Task<ActionResult<UpdateShirtResponse>> UpdateShirt([FromForm] UpdateShirtRequest updateShirtRequest)
         {
             var result = await _serviceFactory.ShirtService.UpdateShirt(updateShirtRequest, HttpContext.User);
