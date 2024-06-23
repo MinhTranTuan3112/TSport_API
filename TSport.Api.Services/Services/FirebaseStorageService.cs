@@ -30,7 +30,7 @@ namespace TSport.Api.Services.Services
 
         public string GetImageUrl(string imageName)
         {
-            
+
             string imageUrl = $"https://firebasestorage.googleapis.com/v0/b/{_bucketName}/o/{Uri.EscapeDataString(imageName)}?alt=media";
             return imageUrl;
         }
@@ -39,7 +39,7 @@ namespace TSport.Api.Services.Services
         {
 
             using var stream = new MemoryStream();
-            
+
             await imageFile.CopyToAsync(stream);
 
             stream.Position = 0;
@@ -70,5 +70,18 @@ namespace TSport.Api.Services.Services
 
         }
 
+        public async Task<string[]> UploadImagesAsync(IFormFileCollection files)
+        {
+            var uploadTasks = new List<Task<string>>();
+
+            foreach (var file in files)
+            {
+                uploadTasks.Add(UploadImageAsync(file));
+            }
+
+            var imageUrls = await Task.WhenAll(uploadTasks);
+
+            return imageUrls;
+        }
     }
 }

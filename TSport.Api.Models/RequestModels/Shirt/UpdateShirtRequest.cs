@@ -5,12 +5,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Models.RequestModels.Shirt
 {
     public class UpdateShirtRequest
     {
-        [Required]
         [RegularExpression("^SRT\\d{3}$", ErrorMessage = "Invalid shirt code")]
         public string? Code { get; set; }
 
@@ -26,7 +26,9 @@ namespace TSport.Api.Models.RequestModels.Shirt
         [RegularExpression("^\\d+$", ErrorMessage = "Invalid id")]
         public int? SeasonPlayerId { get; set; }
 
-        [Required]
-        public IFormFileCollection Images { get; set; } = null!;
+        [EnumDataType(typeof(ShirtStatus))]
+        public string? Status { get; set; }
+
+        public IFormFileCollection? ShirtImages { get; set; }
     }
 }

@@ -15,5 +15,7 @@ namespace TSport.Api.Services.Interfaces
         Task<string> UpdateImageAsync(IFormFile imageFile, string imageName);
 
         Task DeleteImageAsync(string imageName);
+
+        Task<string[]> UploadImagesAsync(IFormFileCollection files);
     }
 }

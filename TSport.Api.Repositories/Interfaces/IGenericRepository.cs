@@ -25,5 +25,9 @@ namespace TSport.Api.Repositories.Interfaces
         Task DeleteAsync(T TEntity);
 
         Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
+
+        Task AddRangeAsync(IEnumerable<T> entities);
+
+        Task ExecuteDeleteAsync(Expression<Func<T, bool>> expression);
     }
 }

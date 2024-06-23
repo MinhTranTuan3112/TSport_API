@@ -52,12 +52,11 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [SupabaseAuthorize(Roles = ["Staff"])]
-
-        public async Task<ActionResult<UpdateShirtResponse>> UpdateShirt([FromForm] UpdateShirtRequest updateShirtRequest)
+        public async Task<ActionResult> UpdateShirt([FromRoute] int id, [FromForm] UpdateShirtRequest request)
         {
-            await _serviceFactory.ShirtService.UpdateShirt(updateShirtRequest, HttpContext.User);
+            await _serviceFactory.ShirtService.UpdateShirt(id, request, HttpContext.User);
             return NoContent();
         }
     }

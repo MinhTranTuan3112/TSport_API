@@ -114,73 +114,6 @@ namespace TSport.Api.Services.Services
             return result;
         }
 
-
-        public async Task UpdateShirt(UpdateShirtRequest request, ClaimsPrincipal user)
-        {
-            var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);    
-
-            if (account is null)
-            {
-                throw new UnauthorizedException("Unauthorized");
-            }
-
-            var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == request.Code);
-
-            //there are a image obj with id = 0, shirtId = 0 by default, don't know why
-            if (shirt is null)
-            {
-                throw new NotFoundException("Shirt not existed!");
-            }
-
-            if (shirt.Status is not null && shirt.Status.Equals("Deleted"))
-            {
-                throw new BadRequestException("Shirt deleted!");
-            }
-
-            if (shirt.Images.Count != 0)
-            {
-                shirt.Images.Clear(); // remove all items from shirt's image list
-            }
-
-// //            shirt.ModifiedAccountId = Int32.Parse(userId);
-// //            shirt.ModifiedDate = DateTime.Now;
-//             shirt.Description = updateShirtRequest.Description is null ? shirt.Description : updateShirtRequest.Description;
-//             shirt.Quantity = updateShirtRequest.Quantity is null ? shirt.Quantity : updateShirtRequest.Quantity;
-//             shirt.ShirtEditionId = (int)(updateShirtRequest.ShirtEditionId is null ? shirt.ShirtEditionId : updateShirtRequest.ShirtEditionId);
-//             shirt.SeasonPlayerId = (int)(updateShirtRequest.SeasonPlayerId is null ? shirt.SeasonPlayerId : updateShirtRequest.SeasonPlayerId);
-
-            request.Adapt(shirt);
-            shirt.ModifiedAccountId = account.Id;
-            shirt.ModifiedDate = DateTime.Now;
-
-            var images = await _unitOfWork.ImageRepository.FindAsync(i => i.ShirtId == shirt.Id);
-
-            foreach(var image in images)
-            {
-                await _unitOfWork.ImageRepository.DeleteAsync(image);
-                await _unitOfWork.SaveChangesAsync();
-            }
-
-            var result = new UpdateShirtResponse();
-            List<string> imageList = [];
-
-            foreach (var image in request.Images)
-            {
-                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
-
-                await _unitOfWork.ImageRepository.AddAsync(new Image
-                {
-                    Url = imageUrl,
-                    ShirtId = shirt.Id
-                });
-                await _unitOfWork.SaveChangesAsync();
-                imageList.Add(imageUrl);
-            }
-
-        }
-        
         public async Task DeleteShirt(int id)
         {
             var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Id == id);
@@ -198,7 +131,54 @@ namespace TSport.Api.Services.Services
 
             await _unitOfWork.SaveChangesAsync();
         }
-        
+
+        public async Task UpdateShirt(int id, UpdateShirtRequest request, ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            var shirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Id == id);
+
+            if (shirt is null)
+            {
+                throw new NotFoundException("Shirt not found!");
+            }
+
+            request.Adapt(shirt);
+            shirt.ModifiedDate = DateTime.Now;
+            shirt.ModifiedAccountId = account.Id;
+
+
+            if (request.ShirtImages is not null or [])
+            {
+                List<Image> images = [];
+
+                await _unitOfWork.ImageRepository.ExecuteDeleteAsync(i => i.ShirtId == shirt.Id);
+
+                var imageUrls = await _serviceFactory.FirebaseStorageService.UploadImagesAsync(request.ShirtImages);
+
+                foreach (var imageUrl in imageUrls)
+                {
+                    images.Add(new Image
+                    {
+                        Url = imageUrl,
+                        ShirtId = shirt.Id
+                    });
+                }
+
+                await _unitOfWork.ImageRepository.AddRangeAsync(images);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+
+        }
     }
 }
 
