@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Google.Cloud.Storage.V1;
 using Mapster;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Supabase;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.RequestModels.Player;
@@ -19,10 +21,10 @@ namespace TSport.Api.Services.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        public static IServiceCollection AddServicesDependencies(this IServiceCollection services)
+        public static IServiceCollection AddServicesDependencies(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMapsterConfigurations();
-            services.AddHostedServicesDependencies();
+            services.AddSupabaseServiceConfiguartions(configuration);
             services.AddScoped<IServiceFactory, ServiceFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
@@ -33,12 +35,23 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped(typeof(IRedisCacheService<>), typeof(RedisCacheService<>));
             services.AddScoped<ISeasonService, SeasonService>();
             services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<ISupabaseStorageService, SupabaseStorageService>();
             return services;
         }
 
-        private static IServiceCollection AddHostedServicesDependencies(this IServiceCollection services)
+        private static IServiceCollection AddSupabaseServiceConfiguartions(this IServiceCollection services, IConfiguration configuration)
         {
-            // services.AddHostedService<CacheRefresherService>();
+            string url = configuration["Supabase:Url"]!;
+            string key = configuration["Supabase:APIKey"]!;
+
+            var options = new SupabaseOptions
+            {
+                AutoRefreshToken = true,
+                AutoConnectRealtime = true,
+                // SessionHandler = new SupabaseSessionHandler() <-- This must be implemented by the developer
+            };
+
+            services.AddSingleton(provider => new Supabase.Client(url, key, options));
             return services;
         }
 

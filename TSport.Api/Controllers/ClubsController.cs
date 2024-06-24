@@ -23,7 +23,7 @@ namespace TSport.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResultResponse<GetClubModel>>> GetPagedClubs([FromQuery] QueryClubRequest query)
         {
-            return await _serviceFactory.ClubService.GetCachedPagedClubs(query);
+            return await _serviceFactory.ClubService.GetPagedClubs(query);
         }
 
         [HttpGet("{id}")]

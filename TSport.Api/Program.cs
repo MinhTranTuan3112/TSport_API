@@ -10,12 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var configuration = builder.Configuration;
 builder.Services.AddApiDependencies(configuration)
-                .AddServicesDependencies()
+                .AddServicesDependencies(configuration)
                 .AddRepositoriesDependencies();
 
 //Add serilog
 builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
-// Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", @"D:\tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json");
 
 var app = builder.Build();
 

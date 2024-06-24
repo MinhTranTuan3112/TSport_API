@@ -21,6 +21,8 @@ namespace TSport.Api.BusinessLogic.Services
 
         private readonly IRedisCacheService<PagedResultResponse<GetClubModel>> _pagedResultCacheService;
 
+        private readonly string _bucketName = "Clubs";
+
         public ClubService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetClubModel>> pagedResultCacheService)
         {
             _serviceFactory = serviceFactory;
@@ -79,7 +81,7 @@ namespace TSport.Api.BusinessLogic.Services
 
             if (createClubRequest.Image is not null)
             {
-                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(createClubRequest.Image);
+                var imageUrl = await _serviceFactory.SupabaseStorageService.UploadImageAsync(createClubRequest.Image, _bucketName);
                 club.LogoUrl = imageUrl;
             }
 
@@ -133,7 +135,7 @@ namespace TSport.Api.BusinessLogic.Services
 
             if (updateClubRequest.Image is not null)
             {
-                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(updateClubRequest.Image);
+                var imageUrl = await _serviceFactory.SupabaseStorageService.UploadImageAsync(updateClubRequest.Image, _bucketName);
                 club.LogoUrl = imageUrl;
             }
 

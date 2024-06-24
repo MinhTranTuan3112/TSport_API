@@ -29,7 +29,7 @@ namespace TSport.Api.Controllers
         [HttpGet]
         public async Task<PagedResultResponse<GetShirtInPagingResultModel>> GetPagedShirts([FromQuery] QueryPagedShirtsRequest request)
         {
-            return await _serviceFactory.ShirtService.GetCachedPagedShirts(request);
+            return await _serviceFactory.ShirtService.GetPagedShirts(request);
         }
 
         [HttpGet("{id}")]

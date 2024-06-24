@@ -35,7 +35,7 @@ namespace TSport.Api.Extensions
         {
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration["Redis:DockerConnection"]!;
+                options.Configuration = configuration["Redis:LocalConnection"]!;
                 options.InstanceName = configuration["Redis:InstanceName"]!;
             });
             
@@ -44,7 +44,7 @@ namespace TSport.Api.Extensions
 
         private static IServiceCollection AddDbContextWithConfigurations(this IServiceCollection services, IConfiguration configuration)
         {
-            string connectionString = configuration.GetConnectionString("DockerConnection")!;
+            string connectionString = configuration.GetConnectionString("DefaultConnection")!;
             services.AddDbContext<TsportDbContext>(options =>
             options.UseSqlServer(connectionString));
             return services;

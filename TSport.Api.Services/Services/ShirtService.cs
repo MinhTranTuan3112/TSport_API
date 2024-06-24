@@ -25,6 +25,8 @@ namespace TSport.Api.Services.Services
         private readonly IServiceFactory _serviceFactory;
         private readonly IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> _pagedResultCacheService;
 
+        private readonly string _bucketName = "Shirts";
+
         public ShirtService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory, IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService)
         {
             _unitOfWork = unitOfWork;
@@ -97,7 +99,7 @@ namespace TSport.Api.Services.Services
 
             foreach (var image in createShirtRequest.Images)
             {
-                var imageUrl = await _serviceFactory.FirebaseStorageService.UploadImageAsync(image);
+                var imageUrl = await _serviceFactory.SupabaseStorageService.UploadImageAsync(image, _bucketName);
                 await _unitOfWork.ImageRepository.AddAsync(new Image
                 {
                     //                    Id = imageConut,
@@ -161,7 +163,7 @@ namespace TSport.Api.Services.Services
 
                 await _unitOfWork.ImageRepository.ExecuteDeleteAsync(i => i.ShirtId == shirt.Id);
 
-                var imageUrls = await _serviceFactory.FirebaseStorageService.UploadImagesAsync(request.ShirtImages);
+                var imageUrls = await _serviceFactory.SupabaseStorageService.UploadImagesAsync(request.ShirtImages, _bucketName);
 
                 foreach (var imageUrl in imageUrls)
                 {

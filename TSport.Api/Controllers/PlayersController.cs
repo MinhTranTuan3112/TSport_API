@@ -25,7 +25,7 @@ namespace TSport.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<PagedResultResponse<GetPlayerModel>>> GetPagedPlayers([FromQuery] QueryPagedPlayersRequest request)
         {
-            return await _serviceFactory.PlayerService.GetCachedPagedPlayers(request);
+            return await _serviceFactory.PlayerService.GetPagedPlayers(request);
         }
 
         [HttpGet("{id}")]

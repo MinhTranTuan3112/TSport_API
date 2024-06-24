@@ -11,13 +11,13 @@ services:
   tsport_api:
     # image: minhtrantuan3112/tsport_api:tsport
     build: .
-    volumes:
-      - D:/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json:/credentials/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json
+    # volumes:
+    #   - D:/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json:/credentials/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json
     env_file:
       - .env
     environment:
       - ASPNETCORE_URLS=http://+:80
-      - GOOGLE_APPLICATION_CREDENTIALS=/credentials/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json
+      # - GOOGLE_APPLICATION_CREDENTIALS=/credentials/tsport-a98e7-firebase-adminsdk-zmnm7-85b610a946.json
     ports:
       - "8080:80"
   redis:

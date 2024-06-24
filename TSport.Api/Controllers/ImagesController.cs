@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Services.Interfaces;
 
@@ -22,7 +23,7 @@ namespace TSport.Api.Controllers
         [HttpPost("test-upload")]
         public async Task<IActionResult> TestUpload(UploadImageFileRequest request)
         {
-            return Created(nameof(TestUpload), await _serviceFactory.FirebaseStorageService.UploadImageAsync(request.ImageFile));
+            return Created(nameof(TestUpload), await _serviceFactory.SupabaseStorageService.UploadImageAsync(request.ImageFile, "TSport"));
         }
 
         

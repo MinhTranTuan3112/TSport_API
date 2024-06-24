@@ -30,8 +30,8 @@ namespace TSport.Api.Attributes
 
             var account = await accountService.GetAccountBySupabaseId(supabaseId);
 
-            context.HttpContext.Items["User"] = account;
-
+            // context.HttpContext.Items["User"] = account;
+            
             if (Roles is [])
             {
                 return;
