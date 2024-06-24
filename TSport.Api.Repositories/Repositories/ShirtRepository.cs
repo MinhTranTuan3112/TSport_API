@@ -31,6 +31,7 @@ namespace TSport.Api.Repositories.Repositories
             //Query
             var query = _context.Shirts
                                    .AsNoTracking()
+                                   .Include(s => s.Images)
                                    .Include(s => s.ShirtEdition)
                                     .AsQueryable();
 
