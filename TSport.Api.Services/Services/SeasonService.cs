@@ -109,5 +109,19 @@ namespace TSport.Api.Services.Services
 
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<bool> DeleteSeasonAsync(int seasonId)
+        {
+            var season = await _unitOfWork.SeasonRepository.GetByIdAsync(seasonId);
+            if (season == null)
+            {
+                return false;
+            }
+
+            season.Status = SeasonStatus.Deleted;
+            _unitOfWork.SeasonRepository.Update(season);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
     }
 }
