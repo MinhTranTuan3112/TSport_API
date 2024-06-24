@@ -118,7 +118,7 @@ namespace TSport.Api.Services.Services
                 return false;
             }
 
-            season.Status = SeasonStatus.Deleted;
+            season.Status = SeasonStatus.Deleted.ToString();
             _unitOfWork.SeasonRepository.Update(season);
             await _unitOfWork.SaveChangesAsync();
             return true;
