@@ -13,5 +13,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<PagedResultResponse<Season>> GetPagedSeasons(QueryPagedSeasonRequest request);
 
         Task<Season?> GetSeasonDetailsById(int id);
+
+        void Update(Season season);
     }
 }

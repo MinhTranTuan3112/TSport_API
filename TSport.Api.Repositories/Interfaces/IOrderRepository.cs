@@ -12,6 +12,6 @@ namespace TSport.Api.Repositories.Interfaces
     {
         Task<Order?> GetCartByID(int id);
 
-
+        void Update(Order order);
     }
 }

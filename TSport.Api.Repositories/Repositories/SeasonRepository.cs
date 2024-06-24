@@ -59,6 +59,9 @@ namespace TSport.Api.Repositories.Repositories
             };
         }
 
-
+        public void Update(Season season)
+        {
+            _context.Seasons.Update(season);
+        }
     }
 }

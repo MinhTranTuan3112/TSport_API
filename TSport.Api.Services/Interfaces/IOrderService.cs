@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Models.ResponseModels.Cart;
+using TSport.Api.Models.ResponseModels.Order;
 
 namespace TSport.Api.Services.Interfaces
 {
@@ -13,6 +14,8 @@ namespace TSport.Api.Services.Interfaces
     {
         Task<CartResponse> GetCartInfo(int id );
 
+        Task<OrderResponse> GetOrderByIdAsync(int orderId);
 
+        Task<bool> CreateOrderAsync(int orderId);
     }
 }

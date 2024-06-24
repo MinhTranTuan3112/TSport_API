@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Cart;
+using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
 
@@ -21,9 +22,6 @@ namespace TSport.Api.Services.Services
             _unitOfWork = unitOfWork;
             _serviceFactory = serviceFactory;
         }
-
-
-     
 
         public async Task<CartResponse> GetCartInfo(int id)
         {
@@ -71,6 +69,44 @@ namespace TSport.Api.Services.Services
 
             // return cart.Adapt<CartResponse>();
         }
+
+        public async Task<OrderResponse> GetOrderByIdAsync(int orderId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                return null;
+            }
+
+            return new OrderResponse
+            {
+                Id = order.Id,
+                Code = order.Code,
+                OrderDate = order.OrderDate,
+                Status = order.Status,
+                Total = order.Total,
+                CreatedAccountId = order.CreatedAccountId,
+                CreatedDate = order.CreatedDate,
+                ModifiedDate = order.ModifiedDate,
+                ModifiedAccountId = order.ModifiedAccountId
+            };
+        }
+
+        public async Task<bool> CreateOrderAsync(int orderId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+            if (order == null || order.Status != "InCart")
+            {
+                return false;
+            }
+
+            order.Status = "Created";
+            _unitOfWork.OrderRepository.Update(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
         /*public async Task<GetShirtDetailResponse> GetShirtDetailById(int id)
         {
             return (await _unitOfWork.ShirtRepository.GetShirtDetailById(id)).Adapt<GetShirtDetailResponse>();
