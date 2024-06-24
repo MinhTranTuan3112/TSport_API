@@ -49,6 +49,17 @@ namespace TSport.Api.Controllers
             return NoContent();
         }
 
+        [HttpDelete("{seasonId}")]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<IActionResult> DeleteSeason(int seasonId)
+        {
+            var result = await _serviceFactory.SeasonService.DeleteSeasonAsync(seasonId);
+            if (!result)
+            {
+                return NotFound();
+            }
 
+            return NoContent();
+        }
     }
 }
