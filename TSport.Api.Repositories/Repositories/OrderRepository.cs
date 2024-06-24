@@ -20,8 +20,6 @@ namespace TSport.Api.Repositories.Repositories
             _context = context;
         }
 
-
-
         public async Task<Order?> GetCartByID(int AccountId)
         {
 
@@ -41,6 +39,11 @@ namespace TSport.Api.Repositories.Repositories
 
             return items;
         }
-      
+
+        public void Update(Order order)
+        {
+            _context.Orders.Update(order);
+        }
+
     }
 }
