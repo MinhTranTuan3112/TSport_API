@@ -39,6 +39,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPost]
+        [SupabaseAuthorize(Roles = ["Staff"])]
         public async Task<ActionResult<CreateShirtResponse>> CreateShirt([FromForm] CreateShirtRequest createShirtRequest)
         {
             var result = await _serviceFactory.ShirtService.AddShirt(createShirtRequest, HttpContext.User);

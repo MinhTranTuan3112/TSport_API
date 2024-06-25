@@ -67,11 +67,13 @@ namespace TSport.Api.Services.Services
         }
         public async Task<CreateShirtResponse> AddShirt(CreateShirtRequest createShirtRequest, ClaimsPrincipal user)
         {
-            string? userId = user.FindFirst(c => c.Type == "aid")?.Value;
+            var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (userId is null)
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
             {
-                throw new BadRequestException("User Unauthorized");
+                throw new UnauthorizedException("Unauthorized");
             }
 
             var existedShirt = await _unitOfWork.ShirtRepository.FindOneAsync(s => s.Code == createShirtRequest.Code);
@@ -87,7 +89,7 @@ namespace TSport.Api.Services.Services
             }
 
             shirt.Status = "Active";
-            shirt.CreatedAccountId = Int32.Parse(userId);
+            shirt.CreatedAccountId = account.Id;
             shirt.CreatedDate = DateTime.Now;
 
             await _unitOfWork.ShirtRepository.AddAsync(shirt);
