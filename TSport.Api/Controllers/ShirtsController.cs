@@ -47,6 +47,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [SupabaseAuthorize(Roles = ["Staff"])]
         public async Task<ActionResult> DeleteShirt(int id)
         {
             await _serviceFactory.ShirtService.DeleteShirt(id);
