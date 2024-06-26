@@ -35,7 +35,7 @@ namespace TSport.Api.Extensions
         {
             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = configuration["Redis:LocalConnection"]!;
+                options.Configuration = configuration["Redis:DockerConnection"]!;
                 options.InstanceName = configuration["Redis:InstanceName"]!;
             });
             
