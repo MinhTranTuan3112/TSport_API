@@ -67,6 +67,7 @@ namespace TSport.Api.Repositories.Repositories
         {
             var shirt = await _context.Shirts
                 .AsNoTracking()
+                .Where(s => s.Id == id)
                 .Include(s => s.ShirtEdition)
                 .Include(s => s.SeasonPlayer)
                     .ThenInclude(sp => sp.Player)
@@ -77,7 +78,7 @@ namespace TSport.Api.Repositories.Repositories
                 .Include(s => s.OrderDetails)
                 .Include(s => s.Images)
                 .AsSplitQuery()
-                .SingleOrDefaultAsync(s => s.Id == id);
+                .SingleOrDefaultAsync();
 
             return shirt;
         }

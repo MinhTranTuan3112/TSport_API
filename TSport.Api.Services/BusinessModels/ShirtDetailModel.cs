@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Account;
+using TSport.Api.Services.BusinessModels.SeasonPlayer;
 
 namespace TSport.Api.Services.BusinessModels
 {
@@ -41,7 +42,7 @@ namespace TSport.Api.Services.BusinessModels
 
         public ICollection<OrderDetailModel> OrderDetails { get; set; } = [];
 
-        public SeasonPlayerModel? SeasonPlayer { get; set; }
+        public SeasonPlayerWithSeasonAndClubModel? SeasonPlayer { get; set; }
 
         public ShirtEditionModel? ShirtEdition { get; set; }
     }
