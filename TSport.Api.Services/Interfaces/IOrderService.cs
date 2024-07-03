@@ -5,14 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Account;
-using TSport.Api.Models.ResponseModels.Cart;
 using TSport.Api.Models.ResponseModels.Order;
+using TSport.Api.Services.BusinessModels.Cart;
 
 namespace TSport.Api.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<CartResponse> GetCartInfo(int id );
+        Task<OrderCartResponse> GetCartInfo(ClaimsPrincipal claims);
 
         Task<OrderResponse> GetOrderByIdAsync(int orderId);
 

@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels;
 using TSport.Api.Models.ResponseModels.Auth;
-using TSport.Api.Models.ResponseModels.Cart;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels.Cart;
 using TSport.Api.Services.Interfaces;
 
 namespace TSport.Api.Controllers
@@ -25,15 +25,17 @@ namespace TSport.Api.Controllers
         }
         
         [HttpGet("get-cart")]
-        public async Task<ActionResult<CartResponse>> GetCartbyId(int userid)
+        [SupabaseAuthorize(Roles = ["Customer"])]
+        public async Task<ActionResult<OrderCartResponse>> GetCartInfo()
         {
-            return await _serviceFactory.OrderService.GetCartInfo(userid);
+            return await _serviceFactory.OrderService.GetCartInfo(HttpContext.User);
         }
 
         [HttpPost("add-to-cart")]
+        [SupabaseAuthorize(Roles = ["Customer"])]
         public async Task<ActionResult> AddtoCart([FromBody] AddToCartRequest request)
         {
-            await _serviceFactory.OrderDetailsService.AddToCart(request.UserId, request.ShirtId, request.Quantity.Value);
+            await _serviceFactory.OrderDetailsService.AddToCart(HttpContext.User, request.ShirtId, request.Quantity);
             return Ok();
         }
 

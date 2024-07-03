@@ -82,6 +82,13 @@ namespace TSport.Api.Repositories.Repositories
 
             return shirt;
         }
+
+        public async Task<Shirt?> GetShirtWithShirtEditionById(int id)
+        {
+            return await _context.Shirts.Where(s => s.Id == id)
+                 .Include(s => s.ShirtEdition)
+                 .SingleOrDefaultAsync();
+        }
     }
 }
 

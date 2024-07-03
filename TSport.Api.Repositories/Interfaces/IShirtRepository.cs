@@ -12,6 +12,8 @@ namespace TSport.Api.Repositories.Interfaces
     {
         Task<PagedResultResponse<Shirt>> GetPagedShirts(QueryPagedShirtsRequest request);   
         Task<Shirt?> GetShirtDetailById(int id);
+
+        Task<Shirt?> GetShirtWithShirtEditionById(int id);
     }
 }
   

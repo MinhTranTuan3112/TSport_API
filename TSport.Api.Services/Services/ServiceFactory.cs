@@ -37,7 +37,7 @@ namespace TSport.Api.Services.Services
             _seasonService = new Lazy<ISeasonService>(() => new SeasonService(unitOfWork));
             _playerService = new Lazy<IPlayerService>(() => new PlayerService(unitOfWork, playerPagedResultCacheService));
             _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
-            _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork, this));
+            _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork));
             _supabaseStorageService = new Lazy<ISupabaseStorageService>(() => new SupabaseStorageService(client, configuration));
         }
 

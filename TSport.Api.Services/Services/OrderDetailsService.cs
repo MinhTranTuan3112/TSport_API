@@ -6,77 +6,96 @@ using System.Threading.Tasks;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Repositories.Entities;
+using System.Security.Claims;
+using TSport.Api.Shared.Exceptions;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Services.Services
 {
     public class OrderDetailsService : IOrderDetailsService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IServiceFactory _serviceFactory;
 
-        public OrderDetailsService(IUnitOfWork unitOfWork, IServiceFactory serviceFactory)
+        public OrderDetailsService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _serviceFactory = serviceFactory;
         }
 
 
-        public async Task AddToCart(int Userid, int ShirtId, int quantity)
+        public async Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity)
         {
-            var ExsitingCart = await _unitOfWork.OrderDetailsRepository.ExistingCart(Userid);
-
-            if (ExsitingCart == false)
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (supabaseId is null)
             {
-                //Cart not yet having -> create 
-                var newCart = new Order
-                {
-                    Code = "ORD000",
-                    OrderDate = DateTime.Now,
-                    Status = "InCart",
-                    CreatedAccountId = Userid,
-                    CreatedDate = DateTime.Now,
-                    Total = 0,
+                throw new UnauthorizedException("Unauthorized");
+            }
 
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+            if (account is null)
+            {
+                throw new NotFoundException("Account not found");
+            }
+
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.CreatedAccountId == account.Id && o.Status == OrderStatus.InCart.ToString());
+
+            if (order is null)
+            {
+                order = new Order
+                {
+                    Code = $"OD{Guid.NewGuid().ToString()}",
+                    CreatedAccountId = account.Id,
+                    Status = OrderStatus.InCart.ToString(),
+                    Total = 0,
+                    CreatedDate = DateTime.Now,
+                    OrderDate = DateTime.Now
                 };
-                await _unitOfWork.OrderRepository.AddAsync(newCart);
+
+                await _unitOfWork.OrderRepository.AddAsync(order);
                 await _unitOfWork.SaveChangesAsync();
             }
-            int totalOrderDetails = await _unitOfWork.OrderDetailsRepository.TotalOrderDetails();
 
-            // Tạo mã cho OrderDetail mới, ví dụ: "OD001", "OD002", ...
-            string newOrderDetailCode = "OD" + (totalOrderDetails + 1).ToString("D3");
+            var shirt = await _unitOfWork.ShirtRepository.GetShirtWithShirtEditionById(shirtId);
 
-
-            decimal pricePerProduct = await _unitOfWork.OrderDetailsRepository.GetDiscountPrice(ShirtId);
-
-
-            decimal subtotal = pricePerProduct * quantity;
-
-            var AddShirt = new OrderDetail
+            if (shirt is null)
             {
-                Code = newOrderDetailCode,
-                OrderId = Userid,
-                ShirtId = ShirtId,//FE tra ve
-                Quantity = quantity, //Fe tra ve
-                Subtotal = subtotal,
-                Status = "Pending"
-            };
-            
-            await _unitOfWork.OrderDetailsRepository.AddAsync(AddShirt);
+                throw new NotFoundException("Shirt not found");
+            }
 
-            var currentOrder = await _unitOfWork.OrderRepository.GetCartByID(Userid);
-            if (currentOrder == null)
+            await UpsertCart(shirtId, quantity, order, shirt);
+
+        }
+
+        private async Task UpsertCart(int shirtId, int quantity, Order order, Shirt shirt)
+        {
+            var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(od => od.OrderId == order.Id && od.ShirtId == shirtId);
+
+            if (orderDetail is null)
             {
-                throw new Exception("Can  not found Account");
+
+                orderDetail = new OrderDetail
+                {
+                    OrderId = order.Id,
+                    ShirtId = shirtId,
+                    Code = shirt.Code,
+                    Quantity = quantity,
+                    Subtotal = (shirt.ShirtEdition is not null &&
+                    shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : 0,
+                    Status = OrderStatus.InCart.ToString()
+                };
+
+                await _unitOfWork.OrderDetailsRepository.AddAsync(orderDetail);
+            }
+            else
+            {
+                orderDetail.Quantity += quantity;
+                orderDetail.Subtotal += (shirt.ShirtEdition is not null &&
+                    shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : 0;
 
             }
-            currentOrder.Total += AddShirt.Subtotal;
 
-            await _unitOfWork.OrderRepository.UpdateAsync(currentOrder);
+            order.Total += orderDetail.Subtotal;
 
             await _unitOfWork.SaveChangesAsync();
-            
-
         }
     }
 }

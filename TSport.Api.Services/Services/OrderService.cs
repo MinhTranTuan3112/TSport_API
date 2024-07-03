@@ -5,10 +5,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TSport.Api.Models.ResponseModels.Cart;
 using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels.Cart;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
 {
@@ -23,51 +24,24 @@ namespace TSport.Api.Services.Services
             _serviceFactory = serviceFactory;
         }
 
-        public async Task<CartResponse> GetCartInfo(int id)
+        public async Task<OrderCartResponse> GetCartInfo(ClaimsPrincipal claims)
         {
-            var order = await _unitOfWork.OrderRepository.GetCartByID(id);
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-
-
-            var response = new CartResponse
+            var account = await _serviceFactory.AccountService.GetAccountBySupabaseId(supabaseId!);
+            if (account is null)
             {
-                OrderId = order.Id,
-                CreatedAccountId = order.CreatedAccountId,
-                ShirtId = order.OrderDetails.FirstOrDefault().ShirtId,
-                Code = order.Code,
-                Subtotal = order.Total,
-                OrderDate = order.OrderDate,
-                Status = order.Status,
-                OrderDetail = order.OrderDetails.Select(od =>
-                {
+                throw new UnauthorizedException("Account not found");
+            }
 
-                    return new CartItemResponse
-                    {
-                        OrderId = od.OrderId,
-                        ShirtId = od.ShirtId,
-                        Quantity = od.Quantity,
-                        Status = od.Status,
-                        Subtotal = od.Subtotal,
-                        Size = od.Shirt.ShirtEdition.Size,
-                        HasSignature = od.Shirt.ShirtEdition.HasSignature,
-                        Price = od.Shirt.ShirtEdition.StockPrice,
-                        Color = od.Shirt.ShirtEdition.Color,
-                        SeasonPlayerId = od.Shirt.SeasonPlayer.PlayerId,
-                        PlayerName = od.Shirt.SeasonPlayer.Player.Name,
-                        ClubId = od.Shirt.SeasonPlayer.Player.ClubId,
-                        ClubName = od.Shirt.SeasonPlayer.Player.Club.Name,
-                        SeasonId = od.Shirt.ShirtEdition.Season.Id,
-                        SeasonName = od.Shirt.ShirtEdition.Season.Name
+            var order = await _unitOfWork.OrderRepository.GetCustomerCartInfo(account.Id);
+            if (order is null)
+            {
+                throw new BadRequestException("Empty cart");
+            }
 
-
-                    };
-                }).ToList()
-            };
-
-
-            return response;
-
-            // return cart.Adapt<CartResponse>();
+            return order.Adapt<OrderCartResponse>();
+            
         }
 
         public async Task<OrderResponse> GetOrderByIdAsync(int orderId)

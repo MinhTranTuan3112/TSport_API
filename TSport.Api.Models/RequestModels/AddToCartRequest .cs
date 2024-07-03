@@ -11,8 +11,6 @@ namespace TSport.Api.Models.RequestModels
 
         public int ShirtId { get; set; }
 
-        public int? Quantity { get; set; }
-
-        public int UserId { get; set; }
+        public int Quantity { get; set; }
     }
 }
