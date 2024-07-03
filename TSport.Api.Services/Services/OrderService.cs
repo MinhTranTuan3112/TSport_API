@@ -9,6 +9,7 @@ using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Cart;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
@@ -44,46 +45,44 @@ namespace TSport.Api.Services.Services
             
         }
 
-        public async Task<OrderResponse> GetOrderByIdAsync(int orderId)
+        public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId)
         {
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
-            if (order == null)
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (supabaseId is null)
             {
-                return null;
+                throw new UnauthorizedException("Unauthorized");
             }
 
-            return new OrderResponse
-            {
-                Id = order.Id,
-                Code = order.Code,
-                OrderDate = order.OrderDate,
-                Status = order.Status,
-                Total = order.Total,
-                CreatedAccountId = order.CreatedAccountId,
-                CreatedDate = order.CreatedDate,
-                ModifiedDate = order.ModifiedDate,
-                ModifiedAccountId = order.ModifiedAccountId
-            };
-        }
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
 
-        public async Task<bool> CreateOrderAsync(int orderId)
-        {
-            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
-            if (order == null || order.Status != "InCart")
+            if (account is null)
             {
-                return false;
+                throw new UnauthorizedException("Account not found");
+            }
+            
+            // Check if the order exists
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
             }
 
-            order.Status = "Created";
-            _unitOfWork.OrderRepository.Update(order);
+            if (order.CreatedAccountId != account.Id)
+            {
+                throw new BadRequestException("The order does not belong to the customer.");
+            }
+
+            // Check if the order status is InCart
+            if (order.Status != "InCart")
+            {
+                throw new BadRequestException("The order status must be 'InCart'.");
+            }
+
+            // Create the order
+            order.Status = OrderStatus.Pending.ToString();
             await _unitOfWork.SaveChangesAsync();
 
-            return true;
         }
 
-        /*public async Task<GetShirtDetailResponse> GetShirtDetailById(int id)
-        {
-            return (await _unitOfWork.ShirtRepository.GetShirtDetailById(id)).Adapt<GetShirtDetailResponse>();
-        }*/
     }
 }

@@ -13,9 +13,7 @@ namespace TSport.Api.Services.Interfaces
     public interface IOrderService
     {
         Task<OrderCartResponse> GetCartInfo(ClaimsPrincipal claims);
-
-        Task<OrderResponse> GetOrderByIdAsync(int orderId);
-
-        Task<bool> CreateOrderAsync(int orderId);
+        
+        Task ConfirmOrder(ClaimsPrincipal claims, int orderId);
     }
 }
