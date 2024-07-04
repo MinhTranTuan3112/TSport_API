@@ -7,6 +7,7 @@ using TSport.Api.Models.RequestModels.Club;
 using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.Shirt;
+using TSport.Api.Models.RequestModels.ShirtEdition;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 
@@ -128,9 +129,55 @@ namespace TSport.Api.Repositories.Extensions
                 query = query.Where(p => p.ClubId == request.ClubId);
             }
 
-            
+
 
             return query;
+        }
+        public static IQueryable<ShirtEdition> ApplyPagedShirtEditionFilterFilter(this IQueryable<ShirtEdition> query, QueryPagedShirtEditionRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.Code))
+            {
+                query = query.Where(p => p.Code != null && p.Code.ToLower().Contains(request.Code.ToLower()));
+            }
+
+            if (request.Size != null && request.Size.Length > 0)
+            {
+                query = query.Where(s => request.Size.Contains(s.Size.ToUpper()));
+            }
+
+            if (request.HasSignature.HasValue)
+            {
+                query = query.Where(p => p.HasSignature == request.HasSignature.Value);
+            }
+
+            if (!string.IsNullOrEmpty(request.Color))
+            {
+                query = query.Where(p => p.Color != null && p.Color.ToLower().Contains(request.Color.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(request.Origin))
+            {
+                query = query.Where(p => p.Origin != null && p.Origin.ToLower().Contains(request.Origin.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(request.Material))
+            {
+                query = query.Where(p => p.Material != null && p.Material.ToLower().Contains(request.Material.ToLower()));
+            }
+            if (request.SeasonId.HasValue)
+            {
+                query = query.Where(p => p.SeasonId == request.SeasonId);
+            }
+
+            if (request.StartPrice < request.EndPrice)
+            {
+                query = query.Where(s => s.DiscountPrice >= request.StartPrice &&
+                                        s.DiscountPrice <= request.EndPrice);
+            }
+
+
+            return query;
+
         }
     }
 }

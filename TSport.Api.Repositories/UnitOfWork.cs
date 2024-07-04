@@ -21,6 +21,8 @@ namespace TSport.Api.Repositories
         private readonly Lazy<IPlayerRepository> _playerRepository;
         private readonly Lazy<IOrderRepository> _OrderRepository;
         private readonly Lazy<IOrderDetailsRepository> _orderdetailsRepository;
+        private readonly Lazy<IShirtEditionRepository> _ShirtEditionRepository;
+
 
         public UnitOfWork(TsportDbContext context)
         {
@@ -33,8 +35,10 @@ namespace TSport.Api.Repositories
             _playerRepository = new Lazy<IPlayerRepository>(() => new PlayerRepository(context));
             _OrderRepository = new Lazy<IOrderRepository>(() => new OrderRepository(context));
             _orderdetailsRepository = new Lazy<IOrderDetailsRepository>(() => new OrderDetailsRepository(context));
+            _ShirtEditionRepository = new Lazy<IShirtEditionRepository>(() => new ShirtEditionRepository(context));
+
         }
-        
+
         public IClubRepository ClubRepository => _clubRepository.Value;
         public IAccountRepository AccountRepository => _accountRepository.Value;
         public IShirtRepository ShirtRepository => _shirtRepository.Value;
@@ -44,6 +48,7 @@ namespace TSport.Api.Repositories
         public ISeasonRepository SeasonRepository => _seasonRepository.Value;
 
         public IPlayerRepository PlayerRepository => _playerRepository.Value;
+        public IShirtEditionRepository ShirtEditionRepository => _ShirtEditionRepository.Value;
 
         public async Task BeginTransactionAsync()
         {
@@ -70,6 +75,7 @@ namespace TSport.Api.Repositories
             }
         }
         public IOrderDetailsRepository OrderDetailsRepository => _orderdetailsRepository.Value;
+
 
         public async Task<int> SaveChangesAsync()
         {

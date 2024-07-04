@@ -23,6 +23,8 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IOrderService> _orderService;
         private readonly Lazy<IOrderDetailsService> _orderdetailsService;
         private readonly Lazy<ISupabaseStorageService> _supabaseStorageService;
+        private readonly Lazy<IShirtEditionService> _shirtEditionService;
+
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration,
             IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService,
@@ -39,6 +41,9 @@ namespace TSport.Api.Services.Services
             _orderService = new Lazy<IOrderService>(() => new OrderService(unitOfWork, this));
             _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork));
             _supabaseStorageService = new Lazy<ISupabaseStorageService>(() => new SupabaseStorageService(client, configuration));
+            _shirtEditionService = new Lazy<IShirtEditionService>(() => new ShirtEditionService(unitOfWork));
+
+
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -51,5 +56,7 @@ namespace TSport.Api.Services.Services
         public IOrderService OrderService => _orderService.Value;
         public IOrderDetailsService OrderDetailsService => _orderdetailsService.Value;
         public ISupabaseStorageService SupabaseStorageService => _supabaseStorageService.Value;
+        public IShirtEditionService ShirtEditionService => _shirtEditionService.Value;
+
     }
 }
