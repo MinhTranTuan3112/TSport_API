@@ -12,11 +12,9 @@ namespace TSport.Api.Repositories.Interfaces
 {
     public interface IShirtEditionRepository : IGenericRepository<ShirtEdition> 
     {
-        Task<List<ShirtEdition>> GetAll();
+        
         Task<PagedResultResponse<ShirtEdition>> GetPagedShirtsEdition(QueryPagedShirtEditionRequest request);
-
-        Task<bool> CheckSeasonID (int seasonID);
-
-        Task<ShirtEdition> getShirtEditionbyId(int id); 
+        
+        Task<ShirtEdition?> GetShirtEditionById(int id); 
     }
 }

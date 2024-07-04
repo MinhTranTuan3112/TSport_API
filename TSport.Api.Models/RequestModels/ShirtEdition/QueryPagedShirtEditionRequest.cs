@@ -20,19 +20,17 @@ namespace TSport.Api.Models.RequestModels.ShirtEdition
 
         [FromQuery(Name = "orderByDesc")]
         public bool OrderByDesc { get; set; } = true;
+
         [FromQuery(Name = "code")]
-
         public string? Code { get; set; }
+        
         [FromQuery(Name = "size")]
+        public string? Size { get; set; }
 
-        public string Size { get; set; } = null!;
         [FromQuery(Name = "hasSignature")]
-
         public bool? HasSignature { get; set; }
+
         [FromQuery(Name = "stockPrice")]
-
-
-
         public decimal StockPrice { get; set; }
 
         [FromQuery(Name = "startPrice")]
@@ -40,23 +38,23 @@ namespace TSport.Api.Models.RequestModels.ShirtEdition
 
         [FromQuery(Name = "endPrice")]
         public decimal EndPrice { get; set; }
+
         [FromQuery(Name = "discountPrice")]
-
         public decimal? DiscountPrice { get; set; }
+
         [FromQuery(Name = "color")]
-
         public string? Color { get; set; }
+
         [FromQuery(Name = "origin")]
-
         public string? Origin { get; set; }
+
         [FromQuery(Name = "quantity")]
-
         public int Quantity { get; set; }
+
         [FromQuery(Name = "material")]
-
         public string? Material { get; set; }
-        [FromQuery(Name = "seasonid")]
 
+        [FromQuery(Name = "seasonid")]
         public int? SeasonId { get; set; }
 
 

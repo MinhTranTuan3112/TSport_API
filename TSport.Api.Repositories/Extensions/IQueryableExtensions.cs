@@ -140,9 +140,7 @@ namespace TSport.Api.Repositories.Extensions
                 query = query.Where(p => p.Code != null && p.Code.ToLower().Contains(request.Code.ToLower()));
             }
 
-
-
-            if (request.Size != null && request.Size.Length > 0) // Ki?m tra xem request.Sizes có giá tr? hay không và không r?ng
+            if (request.Size != null && request.Size.Length > 0) // Ki?m tra xem request.Sizes cï¿½ giï¿½ tr? hay khï¿½ng vï¿½ khï¿½ng r?ng
             {
                 query = query.Where(s => request.Size.Contains(s.Size.ToUpper()));
             }
@@ -170,16 +168,16 @@ namespace TSport.Api.Repositories.Extensions
             {
                 query = query.Where(p => p.SeasonId == request.SeasonId);
             }
+
+            if (request.StartPrice < request.EndPrice)
             {
-                if (request.StartPrice < request.EndPrice)
-                {
-                    query = query.Where(s => s.DiscountPrice >= request.StartPrice &&
-                                            s.DiscountPrice <= request.EndPrice);
-                }
-
-
-                return query;
+                query = query.Where(s => s.DiscountPrice >= request.StartPrice &&
+                                        s.DiscountPrice <= request.EndPrice);
             }
+
+
+            return query;
+
         }
     }
 }

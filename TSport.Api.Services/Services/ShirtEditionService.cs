@@ -10,6 +10,7 @@ using TSport.Api.Models.RequestModels.ShirtEdition;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Season;
 using TSport.Api.Services.BusinessModels.ShirtEdition;
 using TSport.Api.Services.Interfaces;
@@ -27,80 +28,10 @@ namespace TSport.Api.Services.Services
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<ShirtEditionRequest> CreateShirtEdition(ShirtEditionRequest request, ClaimsPrincipal claims)
-        {
-            if (await _unitOfWork.ShirtEditionRepository.AnyAsync(p => p.Code == request.Code)){
-                throw new BadRequestException("Season with this code already exists");
-            }
-            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
-             if (account is null)
-            {
-                throw new UnauthorizedException("Unauthorized");
-            }
 
-            /*  if (!await _unitOfWork.SeasonPlayer.AnyAsync(c => c.Id == request.SeasonId))
-              {
-                  throw new BadRequestException("Club does not exist");
-          }*/
-            if (await _unitOfWork.ShirtEditionRepository.CheckSeasonID(request.SeasonId) == false) { 
-                throw new UnauthorizedException("Does not exist SeasonId");
-
-            }
-            var ShirtEdition = request.Adapt<ShirtEdition>();
-
-            ShirtEdition.CreatedDate = DateTime.Now;
-            ShirtEdition.CreatedAccountId = account.Id;
-            ShirtEdition.Status = SeasonStatus.Active.ToString();
-
-            await _unitOfWork.ShirtEditionRepository.AddAsync(ShirtEdition);
-            await _unitOfWork.SaveChangesAsync();
-
-            return ShirtEdition.Adapt<ShirtEditionRequest>();
-
-        }
-
-
-        public async Task<bool> DeleteShirtEditionAsync(int ShirtIdj)
-        {
-            var ShirtEdition = await _unitOfWork.ShirtEditionRepository.GetByIdAsync(ShirtIdj);
-            if (ShirtEdition == null)
-            {
-                return false;
-            }
-
-            ShirtEdition.Status = SeasonStatus.Deleted.ToString();
-            await _unitOfWork.ShirtEditionRepository.UpdateAsync(ShirtEdition);
-            await _unitOfWork.SaveChangesAsync();
-            return true;
-        }
-
-    
-
-        public Task<List<ShirtEdition>> getAllShirtEdition()
-        {
-            return _unitOfWork.ShirtEditionRepository.GetAll() ;
-        }
-
-        public async Task<PagedResultResponse<GetShirtEdtionModel>> GetPagedSeasons(QueryPagedShirtEditionRequest request)
-        {
-            return (await _unitOfWork.ShirtEditionRepository.GetPagedShirtsEdition(request)).Adapt<PagedResultResponse<GetShirtEdtionModel>>();
-
-        }
-
-        public Task<ShirtEdition> GetShirteditionDetailsById(int id)
-        {
-            return _unitOfWork.ShirtEditionRepository.getShirtEditionbyId(id) ;
-        }
-
-
-        public async Task UpdateShirtEdition(int id, ShirtEditionRequest request, ClaimsPrincipal claims)
+        public async Task<ShirtEditionModel> CreateShirtEdition(CreateShirtEditionRequest request, ClaimsPrincipal claims)
         {
 
-            if (await _unitOfWork.ShirtEditionRepository.AnyAsync(p => p.Code == request.Code))
-            {
-                throw new BadRequestException("Season with this code already exists");
-            }
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
             if (account is null)
@@ -108,21 +39,87 @@ namespace TSport.Api.Services.Services
                 throw new UnauthorizedException("Unauthorized");
             }
 
-            /*  if (!await _unitOfWork.SeasonPlayer.AnyAsync(c => c.Id == request.SeasonId))
-              {
-                  throw new BadRequestException("Club does not exist");
-          }*/
-            if (await _unitOfWork.ShirtEditionRepository.CheckSeasonID(request.SeasonId) == false)
+
+            if (!await _unitOfWork.SeasonRepository.AnyAsync(se => se.Id == request.SeasonId))
             {
-                throw new UnauthorizedException("Does not exist SeasonId");
-
+                throw new BadRequestException("SeasonId does not exist");
             }
-            var getShirtEdition = await _unitOfWork.ShirtEditionRepository.FindOneAsync(p => p.Id == id);
 
-            request.Adapt(getShirtEdition);
-            getShirtEdition.ModifiedDate = DateTime.Now;
+            var shirtEdition = request.Adapt<ShirtEdition>();
 
-            getShirtEdition.ModifiedAccountId = account.Id;
+            shirtEdition.Code = $"SE{Guid.NewGuid().ToString()}";
+            shirtEdition.CreatedDate = DateTime.Now;
+            shirtEdition.CreatedAccountId = account.Id;
+            shirtEdition.Status = SeasonStatus.Active.ToString();
+
+            await _unitOfWork.ShirtEditionRepository.AddAsync(shirtEdition);
+            await _unitOfWork.SaveChangesAsync();
+
+            return shirtEdition.Adapt<ShirtEditionModel>();
+        }
+
+
+        public async Task DeleteShirtEdition(int shirtEditionId)
+        {
+            var shirtEdition = await _unitOfWork.ShirtEditionRepository.GetByIdAsync(shirtEditionId);
+            if (shirtEdition is null)
+            {
+                throw new NotFoundException("ShirtEdition not found");
+            }
+
+            shirtEdition.Status = SeasonStatus.Deleted.ToString();
+            await _unitOfWork.SaveChangesAsync();
+
+        }
+
+        public async Task<PagedResultResponse<GetShirtEdtionModel>> GetPagedShirtEditions(QueryPagedShirtEditionRequest request)
+        {
+            return (await _unitOfWork.ShirtEditionRepository.GetPagedShirtsEdition(request)).Adapt<PagedResultResponse<GetShirtEdtionModel>>();
+        }
+
+        public async Task<ShirtEditionDetailsModel> GetShirtEditionDetailsById(int id)
+        {
+            var shirtEdition = await _unitOfWork.ShirtEditionRepository.GetShirtEditionById(id);
+
+            if (shirtEdition is null)
+            {
+                throw new NotFoundException("Shirt edition not found");
+            }
+
+            return shirtEdition.Adapt<ShirtEditionDetailsModel>();
+        }
+
+
+        public async Task UpdateShirtEdition(int id, UpdateShirtEditionRequest request, ClaimsPrincipal claims)
+        {
+
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            if (request.SeasonId.HasValue)
+            {
+                if (!await _unitOfWork.SeasonRepository.AnyAsync(se => se.Id == request.SeasonId))
+                {
+                    throw new BadRequestException("Does not exist SeasonId");
+                }
+            }
+
+            var shirtEdition = await _unitOfWork.ShirtEditionRepository.FindOneAsync(p => p.Id == id);
+
+            if (shirtEdition is null)
+            {
+                throw new NotFoundException("Shirt edition not found");
+            }
+
+            request.Adapt(shirtEdition);
+
+            shirtEdition.ModifiedDate = DateTime.Now;
+            shirtEdition.ModifiedAccountId = account.Id;
             await _unitOfWork.SaveChangesAsync();
 
         }

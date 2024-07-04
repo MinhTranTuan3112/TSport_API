@@ -16,21 +16,20 @@ namespace TSport.Api.Repositories.Repositories
         {
             _context = context;
         }
-        public  async Task<PagedResultResponse<ShirtEdition>> GetPagedShirtsEdition(QueryPagedShirtEditionRequest request)
+        public async Task<PagedResultResponse<ShirtEdition>> GetPagedShirtsEdition(QueryPagedShirtEditionRequest request)
         {
             int pageNumber = request.PageNumber;
             int pageSize = request.PageSize;
             string sortColumn = request.SortColumn;
             bool sortByDesc = request.OrderByDesc;
 
-            var query = _context.ShirtEditions
-                            .AsQueryable();
+            var query = _context.ShirtEditions.AsQueryable();
 
             //Filter
             query = query.ApplyPagedShirtEditionFilterFilter(request);
 
             //Sort
-            query = sortByDesc  ? query.OrderByDescending(GetSortProperty(sortColumn))
+            query = sortByDesc ? query.OrderByDescending(GetSortProperty(sortColumn))
                                         : query.OrderBy(GetSortProperty(sortColumn));
 
 
@@ -44,27 +43,21 @@ namespace TSport.Api.Repositories.Repositories
                 "code" => shirtEdition => shirtEdition.Code != null ? (object)shirtEdition.Code : shirtEdition.Id,
                 "size" => shirtEdition => shirtEdition.Size != null ? (object)shirtEdition.Size : shirtEdition.Id,
                 "price" => shirtEdition => shirtEdition.StockPrice != null ? (object)shirtEdition.StockPrice : (object)shirtEdition.Id,
-                _ => shirtEdition => shirtEdition.Id 
+                _ => shirtEdition => shirtEdition.Id
             };
         }
-        public async Task<bool> CheckSeasonID(int seasonID)
-        {
-            var result = await _context.SeasonPlayers.AnyAsync(p=>p.SeasonId == seasonID);
-            if (result)
-            {
-                return true;
-            }
-            else return false;
-        }
-      
-            public  async Task<List<ShirtEdition>> GetAll()
-        {
-          return  await _context.ShirtEditions.ToListAsync();
-        }
 
-        public async Task<ShirtEdition> getShirtEditionbyId(int id)
+
+        public async Task<ShirtEdition?> GetShirtEditionById(int id)
         {
-            return  await _context.ShirtEditions.FirstOrDefaultAsync(p=>p.Id == id);
+            return await _context.ShirtEditions
+                                   .AsNoTracking()
+                                   .Include(se => se.CreatedAccount)
+                                   .Include(se => se.ModifiedAccount)
+                                   .Include(se => se.Season)
+                                   .Include(se => se.Shirts)
+                                   .AsSplitQuery()
+                                    .SingleOrDefaultAsync(p => p.Id == id);
         }
 
     }

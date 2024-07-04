@@ -8,6 +8,7 @@ using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.ShirtEdition;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
+using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Season;
 using TSport.Api.Services.BusinessModels.ShirtEdition;
 
@@ -15,25 +16,15 @@ namespace TSport.Api.Services.Interfaces
 {
     public interface IShirtEditionService
     {
-        Task<PagedResultResponse<GetShirtEdtionModel>> GetPagedSeasons(QueryPagedShirtEditionRequest request);
+        Task<PagedResultResponse<GetShirtEdtionModel>> GetPagedShirtEditions(QueryPagedShirtEditionRequest request);
 
-        Task<List<ShirtEdition>> getAllShirtEdition();
+        Task<ShirtEditionDetailsModel> GetShirtEditionDetailsById(int id);
 
-        Task<ShirtEdition> GetShirteditionDetailsById(int id);
+        Task<ShirtEditionModel> CreateShirtEdition(CreateShirtEditionRequest request, ClaimsPrincipal claims);
 
-        Task<ShirtEditionRequest> CreateShirtEdition(ShirtEditionRequest request, ClaimsPrincipal claims);
+        Task UpdateShirtEdition(int id, UpdateShirtEditionRequest request, ClaimsPrincipal claims);
 
-        Task UpdateShirtEdition(int id, ShirtEditionRequest request, ClaimsPrincipal claims);
+        Task DeleteShirtEdition(int shirtEditionId);
 
-        Task<bool> DeleteShirtEditionAsync(int seasonId);
-        /*Task<PagedResultResponse<GetSeasonModel>> GetPagedSeasons(QueryPagedSeasonRequest request);
-
-                Task<GetSeasonDetailsModel> GetSeasonDetailsById(int id);
-
-                Task<GetSeasonModel> CreateSeason(CreateSeasonRequest request, ClaimsPrincipal claims);
-
-                Task UpdateSeason(int id, UpdateSeasonRequest request, ClaimsPrincipal claims);
-
-                Task<bool> DeleteSeasonAsync(int seasonId);*/
     }
 }
