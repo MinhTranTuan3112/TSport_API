@@ -5,9 +5,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TSport.Api.Models.RequestModels.Order;
+using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Cart;
+using TSport.Api.Services.BusinessModels.Order;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
@@ -42,7 +45,7 @@ namespace TSport.Api.Services.Services
             }
 
             return order.Adapt<OrderCartResponse>();
-            
+
         }
 
         public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId)
@@ -59,7 +62,7 @@ namespace TSport.Api.Services.Services
             {
                 throw new UnauthorizedException("Account not found");
             }
-            
+
             // Check if the order exists
             var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
             if (order is null)
@@ -84,5 +87,21 @@ namespace TSport.Api.Services.Services
 
         }
 
+        public async Task<PagedResultResponse<OrderModel>> GetPagedOrders(QueryPagedOrderRequest request)
+        {
+            return (await _unitOfWork.OrderRepository.GetPagedOrders(request)).Adapt<PagedResultResponse<OrderModel>>();
+        }
+
+        public async Task<OrderDetailsInfoModel> GetOrderDetailsInfoById(int orderId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetOrderDetailsInfoById(orderId);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            return order.Adapt<OrderDetailsInfoModel>();
+        }
     }
 }

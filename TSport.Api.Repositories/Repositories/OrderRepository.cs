@@ -2,10 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
+using TSport.Api.Models.RequestModels.Order;
+using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
+using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Shared.Enums;
 
@@ -38,10 +42,47 @@ namespace TSport.Api.Repositories.Repositories
             return order;
         }
 
+        public async Task<PagedResultResponse<Order>> GetPagedOrders(QueryPagedOrderRequest request)
+        {
+            var query = _context.Orders.AsQueryable();
+
+
+            query = query.ApplyPagedOrdersFilter(request);
+
+
+            query = request.OrderByDesc ? query.OrderByDescending(GetSortProperty(request.SortColumn)) 
+                                        : query.OrderBy(GetSortProperty(request.SortColumn));
+
+
+            return await query.ToPagedResultResponseAsync(request.PageNumber, request.PageSize);
+        }
+
+        private Expression<Func<Order, object>> GetSortProperty(string sortColumn)
+        {
+            return sortColumn.ToLower() switch
+            {
+                "id" => o => o.Id,
+                "createddate" => o => o.CreatedDate,
+                "orderdate" => o => o.OrderDate,
+                _ => o => o.Id
+            };
+        }
+
         public void Update(Order order)
         {
             _context.Orders.Update(order);
         }
 
+        public async Task<Order?> GetOrderDetailsInfoById(int orderId)
+        {
+            return await _context.Orders.AsNoTracking()
+                                        .Where(o => o.Id == orderId)
+                                        .Include(o => o.CreatedAccount)
+                                        .Include(o => o.ModifiedAccount)
+                                        .Include(o => o.Payments)
+                                        .Include(o => o.OrderDetails)
+                                        .AsSplitQuery()
+                                        .SingleOrDefaultAsync();
+        }
     }
 }

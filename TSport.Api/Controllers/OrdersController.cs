@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels;
+using TSport.Api.Models.RequestModels.Order;
+using TSport.Api.Models.ResponseModels;
 using TSport.Api.Services.BusinessModels.Cart;
+using TSport.Api.Services.BusinessModels.Order;
 using TSport.Api.Services.Interfaces;
 
 namespace TSport.Api.Controllers
@@ -20,7 +23,21 @@ namespace TSport.Api.Controllers
         {
             _serviceFactory = serviceFactory;
         }
-        
+
+        [HttpGet]
+        [SupabaseAuthorize]
+        public async Task<ActionResult<PagedResultResponse<OrderModel>>> GetOrders([FromQuery] QueryPagedOrderRequest request)
+        {
+            return await _serviceFactory.OrderService.GetPagedOrders(request);
+        }
+
+        [HttpGet("{id}")]
+        [SupabaseAuthorize]
+        public async Task<ActionResult<OrderDetailsInfoModel>> GetOrderDetailsInfoById(int id)
+        {
+            return await _serviceFactory.OrderService.GetOrderDetailsInfoById(id);
+        }
+
         [HttpGet("get-cart")]
         [SupabaseAuthorize(Roles = ["Customer"])]
         public async Task<ActionResult<OrderCartResponse>> GetCartInfo()

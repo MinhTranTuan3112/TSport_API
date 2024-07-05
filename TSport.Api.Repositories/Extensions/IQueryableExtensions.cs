@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Models.RequestModels.Club;
+using TSport.Api.Models.RequestModels.Order;
 using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.RequestModels.ShirtEdition;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Repositories.Extensions
 {
@@ -178,6 +180,30 @@ namespace TSport.Api.Repositories.Extensions
 
             return query;
 
+        }
+
+        public static IQueryable<Order> ApplyPagedOrdersFilter(this IQueryable<Order> query, QueryPagedOrderRequest request)
+        {
+            query = query.Where(o => o.Status != OrderStatus.InCart.ToString());
+
+            if (request.StartDate.HasValue)
+            {
+                query = query.Where(o => o.OrderDate >= request.StartDate.Value);
+            }
+
+            if (request.EndDate.HasValue)
+            {
+                query = query.Where(o => o.OrderDate <= request.EndDate.Value);
+            }
+
+            if (request.CreatedAccountId.HasValue)
+            {
+                query = query.Where(o => o.CreatedAccountId == request.CreatedAccountId.Value);
+            }
+
+
+
+            return query;
         }
     }
 }
