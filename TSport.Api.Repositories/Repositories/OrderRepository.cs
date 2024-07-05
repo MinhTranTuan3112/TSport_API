@@ -27,8 +27,11 @@ namespace TSport.Api.Repositories.Repositories
                 .AsNoTracking()
                 .Where(o => o.CreatedAccountId == accountId && o.Status == OrderStatus.InCart.ToString())
                 .Include(o => o.OrderDetails)
-                .ThenInclude(b => b.Shirt)
-                .ThenInclude(b => b.ShirtEdition)
+                    .ThenInclude(od => od.Shirt)
+                        .ThenInclude(s => s.ShirtEdition)
+                .Include(o => o.OrderDetails)
+                        .ThenInclude(od => od.Shirt)
+                            .ThenInclude(s => s.Images) // Include Shirt Images
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 

@@ -20,6 +20,6 @@ namespace TSport.Api.Services.BusinessModels.OrderDetail
 
         public string? Status { get; set; }
 
-        public ShirtWithShirtEditionModel Shirt { get; set; } = null!;
+        public ShirtWithImagesAndShirtEditionModel Shirt { get; set; } = null!;
     }
 }

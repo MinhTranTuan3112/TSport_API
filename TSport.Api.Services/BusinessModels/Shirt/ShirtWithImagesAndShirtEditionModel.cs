@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TSport.Api.Services.BusinessModels.Shirt
 {
-    public class ShirtWithShirtEditionModel
+    public class ShirtWithImagesAndShirtEditionModel
     {
         public int Id { get; set; }
 
@@ -30,6 +30,8 @@ namespace TSport.Api.Services.BusinessModels.Shirt
         public DateTime? ModifiedDate { get; set; }
 
         public int? ModifiedAccountId { get; set; }
+
+        public ICollection<ImageModel> Images { get; set; } = [];
 
         public ShirtEditionModel ShirtEdition { get; set; } = null!;
     }
