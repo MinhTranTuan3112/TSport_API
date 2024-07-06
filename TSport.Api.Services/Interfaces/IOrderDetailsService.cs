@@ -10,7 +10,7 @@ namespace TSport.Api.Services.Interfaces
 {
     public interface IOrderDetailsService
     {
-         Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity);
+         Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity, string size);
 
     }
 }

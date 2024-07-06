@@ -14,6 +14,8 @@ namespace TSport.Api.Services.BusinessModels
 
         public string? Code { get; set; }
 
+        public string Size { get; set; } = null!;
+
         public decimal Subtotal { get; set; }
 
         public int Quantity { get; set; }

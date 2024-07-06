@@ -49,7 +49,7 @@ namespace TSport.Api.Controllers
         [SupabaseAuthorize(Roles = ["Customer"])]
         public async Task<ActionResult> AddtoCart([FromBody] AddToCartRequest request)
         {
-            await _serviceFactory.OrderDetailsService.AddToCart(HttpContext.User, request.ShirtId, request.Quantity);
+            await _serviceFactory.OrderDetailsService.AddToCart(HttpContext.User, request.ShirtId, request.Quantity, request.Size);
             return Ok();
         }
 

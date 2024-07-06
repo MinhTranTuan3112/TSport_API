@@ -22,7 +22,7 @@ namespace TSport.Api.Services.Services
         }
 
 
-        public async Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity)
+        public async Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity, string size)
         {
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (supabaseId is null)
@@ -61,11 +61,11 @@ namespace TSport.Api.Services.Services
                 throw new NotFoundException("Shirt not found");
             }
 
-            await UpsertCart(shirtId, quantity, order, shirt);
+            await UpsertCart(shirtId, quantity, size, order, shirt);
 
         }
 
-        private async Task UpsertCart(int shirtId, int quantity, Order order, Shirt shirt)
+        private async Task UpsertCart(int shirtId, int quantity, string size, Order order, Shirt shirt)
         {
             var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(od => od.OrderId == order.Id && od.ShirtId == shirtId);
 
@@ -78,6 +78,7 @@ namespace TSport.Api.Services.Services
                     ShirtId = shirtId,
                     Code = shirt.Code,
                     Quantity = quantity,
+                    Size = size,
                     Subtotal = (shirt.ShirtEdition is not null &&
                     shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : 0,
                     Status = OrderStatus.InCart.ToString()

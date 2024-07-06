@@ -15,6 +15,8 @@ public partial class OrderDetail
 
     public int Quantity { get; set; }
 
+    public string Size { get; set; } = null!;
+
     public string? Status { get; set; }
 
     public virtual Order Order { get; set; } = null!;

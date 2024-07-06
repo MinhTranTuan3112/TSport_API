@@ -201,6 +201,7 @@ create table OrderDetail
   Code nvarchar(255),
   Subtotal money not null default 0,
   Quantity int not null default 0,
+  Size nvarchar(100) not null,
   [Status] nvarchar(100),
 
   -- Keys

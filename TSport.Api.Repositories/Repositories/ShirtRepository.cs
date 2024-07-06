@@ -58,6 +58,8 @@ namespace TSport.Api.Repositories.Repositories
                 "code" => shirt => (shirt.Code == null) ? shirt.Id : shirt.Code,
                 "description" => shirt => (shirt.Description == null) ? shirt.Id : shirt.Description,
                 "status" => shirt => (shirt.Status == null) ? shirt.Id : shirt.Status,
+                "price" => shirt => (shirt.ShirtEdition != null && shirt.ShirtEdition.DiscountPrice != null)
+                ? shirt.ShirtEdition.DiscountPrice : shirt.Id,
                 "createddate" => shirt => shirt.CreatedDate,
                 _ => shirt => shirt.Id,
             };
