@@ -33,6 +33,8 @@ namespace TSport.Api.Repositories.Repositories
                                    .AsNoTracking()
                                    .Include(s => s.Images)
                                    .Include(s => s.ShirtEdition)
+                                   .Include(s => s.SeasonPlayer)
+                                       .ThenInclude(se => se.Season)
                                     .AsQueryable();
 
             //Filter

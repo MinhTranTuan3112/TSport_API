@@ -41,7 +41,7 @@ namespace TSport.Api.Services.Services
             var order = await _unitOfWork.OrderRepository.GetCustomerCartInfo(account.Id);
             if (order is null)
             {
-                throw new BadRequestException("Empty cart");
+                throw new NotFoundException("Empty cart");
             }
 
             return order.Adapt<OrderCartResponse>();
