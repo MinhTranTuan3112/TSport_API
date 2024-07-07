@@ -20,7 +20,7 @@ namespace TSport.Api.Services.Interfaces
         Task UpdateSeason(int id, UpdateSeasonRequest request, ClaimsPrincipal claims);
 
         Task<bool> DeleteSeasonAsync(int seasonId);
-        Task<List<ViewReponse>> GetAllSeason();
+        Task<List<ViewReponse>> GetAllSeasons();
 
     }
 }

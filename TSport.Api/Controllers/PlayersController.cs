@@ -27,12 +27,11 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.PlayerService.GetPagedPlayers(request);
         }
+
         [HttpGet]
-        [SupabaseAuthorize(Roles = ["Staff"])]
+        [Route("getall")]
 
-        [Route("api/getall")]
-
-        public async Task<ActionResult<List<ViewReponse>>> GetAllPlayer()
+        public async Task<ActionResult<List<ViewReponse>>> GetAllPlayers()
         {
             return await _serviceFactory.PlayerService.GetAllPlayers();
         }

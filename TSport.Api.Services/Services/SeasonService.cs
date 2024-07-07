@@ -124,7 +124,7 @@ namespace TSport.Api.Services.Services
             return true;
         }
 
-        public async Task<List<ViewReponse>> GetAllSeason()
+        public async Task<List<ViewReponse>> GetAllSeasons()
         {
             var Seasons = (await _unitOfWork.SeasonRepository.GetAll());
             if (Seasons == null)

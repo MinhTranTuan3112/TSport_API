@@ -20,9 +20,7 @@ namespace TSport.Api.Controllers
             _serviceFactory = serviceFactory;
         }
         [HttpGet]
-       //[SupabaseAuthorize(Roles = ["Staff"])]
-
-        [Route("api/getall")]
+        [Route("getall")]
 
         public async Task<ActionResult<List<ViewReponse>>> GetAllClubs()
         {
