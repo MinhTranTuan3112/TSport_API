@@ -47,9 +47,12 @@ namespace TSport.Api.Controllers
 
         [HttpPost("add-to-cart")]
         [SupabaseAuthorize(Roles = ["Customer"])]
-        public async Task<ActionResult> AddtoCart([FromBody] AddToCartRequest request)
+        public async Task<ActionResult> AddtoCart([FromBody] List<AddToCartRequest> request)
         {
-            await _serviceFactory.OrderDetailsService.AddToCart(HttpContext.User, request.ShirtId, request.Quantity, request.Size);
+            foreach(var item in request)
+            {
+                await _serviceFactory.OrderDetailsService.AddToCart(HttpContext.User, item.ShirtId, item.Quantity, item.Size);
+            }
             return Ok();
         }
 

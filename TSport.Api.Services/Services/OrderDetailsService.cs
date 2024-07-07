@@ -25,12 +25,13 @@ namespace TSport.Api.Services.Services
         public async Task AddToCart(ClaimsPrincipal claims, int shirtId, int quantity, string size)
         {
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1";
             if (supabaseId is null)
             {
                 throw new UnauthorizedException("Unauthorized");
             }
 
-            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId.Equals(supabaseId));
             if (account is null)
             {
                 throw new NotFoundException("Account not found");
