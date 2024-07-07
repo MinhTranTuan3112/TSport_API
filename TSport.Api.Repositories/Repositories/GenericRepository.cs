@@ -19,10 +19,10 @@ namespace TSport.Api.Repositories.Repositories
 
         public IQueryable<T> Entities => _context.Set<T>();
 
-        public Task AddAsync(T TEntity)
+        public Task<T> AddAsync(T TEntity)
         {
             _context.Add(TEntity);
-            return Task.CompletedTask;
+            return Task.FromResult(TEntity);
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities)

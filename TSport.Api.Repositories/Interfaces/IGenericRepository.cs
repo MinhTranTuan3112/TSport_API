@@ -18,7 +18,7 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<List<T>> GetAllAsync();
 
-        Task AddAsync(T TEntity);
+        Task<T> AddAsync(T TEntity);
 
         Task UpdateAsync(T TEntity);
 
