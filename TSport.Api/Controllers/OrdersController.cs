@@ -58,9 +58,9 @@ namespace TSport.Api.Controllers
 
         [HttpPost("{orderId}")]
         [SupabaseAuthorize(Roles = ["Customer"])]
-        public async Task<IActionResult> CreateOrder(int orderId)
+        public async Task<IActionResult> CreateOrder(int orderId,[FromQuery] List<int> shirtIds)
         {
-            await _serviceFactory.OrderService.ConfirmOrder(HttpContext.User, orderId);
+            await _serviceFactory.OrderService.ConfirmOrder(HttpContext.User, orderId, shirtIds);
             return Ok();
         }
     }

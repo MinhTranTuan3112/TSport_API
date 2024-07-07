@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Order;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Order;
+using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.BusinessModels.Cart;
 using TSport.Api.Services.BusinessModels.Order;
@@ -48,9 +49,10 @@ namespace TSport.Api.Services.Services
 
         }
 
-        public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId)
+        public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<int> shirtIds)
         {
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1"; // data for testing
             if (supabaseId is null)
             {
                 throw new UnauthorizedException("Unauthorized");
@@ -83,6 +85,40 @@ namespace TSport.Api.Services.Services
 
             // Create the order
             order.Status = OrderStatus.Pending.ToString();
+
+            foreach (var shirtId in shirtIds)
+            {
+                var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(o => o.OrderId == orderId && o.ShirtId == shirtId);
+                if(orderDetail is null || (orderDetail.Status != null && orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
+                {
+                    continue;
+                }
+                orderDetail.Status = OrderStatus.Pending.ToString();
+            }
+            await _unitOfWork.SaveChangesAsync();
+
+            var remainOrderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.Status != null && o.Status.Equals(OrderStatus.InCart.ToString()));
+            if (remainOrderDetails is not null)
+            {
+                order = new Order
+                {
+                    Code = $"OD{Guid.NewGuid().ToString()}",
+                    CreatedAccountId = account.Id,
+                    Status = OrderStatus.InCart.ToString(),
+                    Total = 0,
+                    CreatedDate = DateTime.Now,
+                    OrderDate = DateTime.Now
+                };
+
+                await _unitOfWork.OrderRepository.AddAsync(order);
+                await _unitOfWork.SaveChangesAsync();
+
+                foreach (var item in remainOrderDetails)
+                {
+                    await _unitOfWork.OrderDetailsRepository.DeleteAsync(item);
+                }
+            }
+
             await _unitOfWork.SaveChangesAsync();
 
         }

@@ -21,6 +21,6 @@ namespace TSport.Api.Services.Interfaces
 
         Task<OrderCartResponse> GetCartInfo(ClaimsPrincipal claims);
         
-        Task ConfirmOrder(ClaimsPrincipal claims, int orderId);
+        Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<int>shirtIds);
     }
 }
