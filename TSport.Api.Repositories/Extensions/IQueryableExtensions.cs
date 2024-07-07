@@ -41,6 +41,14 @@ namespace TSport.Api.Repositories.Extensions
             {
                 query = query.Where(s => s.ShirtEdition != null && request.Sizes.Contains(s.ShirtEdition.Size.ToUpper()));
             }
+            if (request.SeasonPlayerIds is not [])
+            {
+                query = query.Where(s => request.SeasonPlayerIds.Contains(s.SeasonPlayerId));
+            }
+            if (request.ClubIds is not [])
+            {
+                query = query.Where(s => s.SeasonPlayer.Season.ClubId != null && request.ClubIds.Contains((int)s.SeasonPlayer.Season.ClubId));
+            }
 
 
             var filterProperties = typeof(QueryShirtRequest).GetProperties();
