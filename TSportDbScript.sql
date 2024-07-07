@@ -291,6 +291,16 @@ VALUES
   ('SRT007', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 7, 3, 1, 30),
   ('SRT008', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
 
+insert into dbo.[Image](ShirtId, [Url])
+values(1, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (2, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (3, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (4, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (5, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (6, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (7, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (8, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg')
+
 ---- Insert data into Order table
 --INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)
 --VALUES
