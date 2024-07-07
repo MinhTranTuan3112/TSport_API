@@ -141,5 +141,17 @@ namespace TSport.Api.BusinessLogic.Services
 
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<List<ViewReponse>> GetAllClubs()
+        {
+            var Clubs = (await _unitOfWork.ClubRepository.GetAll());
+            if (Clubs == null)
+            {
+                throw new NotFoundException("No player was found");
+
+
+            }
+            return Clubs.Adapt<List<ViewReponse>>();
+        }
     }
 }

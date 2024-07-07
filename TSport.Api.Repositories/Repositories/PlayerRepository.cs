@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.WebSockets;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TSport.Api.Models.RequestModels.Player;
@@ -18,6 +19,13 @@ namespace TSport.Api.Repositories.Repositories
         public PlayerRepository(TsportDbContext context) : base(context)
         {
             _context = context;
+        }
+
+        public async Task<List<Player>> GetAll()
+        {
+            /*return _context.Players.ToList().Ad;*/
+            return await _context.Players.ToListAsync();
+        
         }
 
         public async Task<PagedResultResponse<Player>> GetPagedPlayers(QueryPagedPlayersRequest request)

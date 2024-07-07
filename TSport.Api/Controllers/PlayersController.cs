@@ -27,6 +27,15 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.PlayerService.GetPagedPlayers(request);
         }
+        [HttpGet]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+
+        [Route("api/getall")]
+
+        public async Task<ActionResult<List<ViewReponse>>> GetAllPlayer()
+        {
+            return await _serviceFactory.PlayerService.GetAllPlayers();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetPlayerDetailsModel>> GetPlayerDetailsById(int id)

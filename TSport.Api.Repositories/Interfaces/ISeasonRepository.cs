@@ -15,5 +15,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<Season?> GetSeasonDetailsById(int id);
 
         void Update(Season season);
+        Task<List<Season>> GetAll();
+
     }
 }

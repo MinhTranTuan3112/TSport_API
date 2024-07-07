@@ -57,6 +57,20 @@ namespace TSport.Api.Services.Services
             return player.Adapt<GetPlayerModel>();
         }
 
+        public async Task<List<ViewReponse>> GetAllPlayers()
+        {
+            var players = (await _unitOfWork.PlayerRepository.GetAll());
+            if (players == null) {
+                throw new NotFoundException("No player was found");
+
+
+            }
+            return players.Adapt<List<ViewReponse>>();
+        }
+        public async Task<PagedResultResponse<GetPlayerModel>> GetPagedPlayers(QueryPagedPlayersRequest request)
+        {
+            return (await _unitOfWork.PlayerRepository.GetPagedPlayers(request)).Adapt<PagedResultResponse<GetPlayerModel>>();
+        }
         public async Task<PagedResultResponse<GetPlayerModel>> GetCachedPagedPlayers(QueryPagedPlayersRequest request)
         {
             return await _pagedResultCacheService.GetOrSetCacheAsync(
@@ -65,10 +79,7 @@ namespace TSport.Api.Services.Services
             ) ?? new PagedResultResponse<GetPlayerModel>();
         }
 
-        public async Task<PagedResultResponse<GetPlayerModel>> GetPagedPlayers(QueryPagedPlayersRequest request)
-        {
-            return (await _unitOfWork.PlayerRepository.GetPagedPlayers(request)).Adapt<PagedResultResponse<GetPlayerModel>>();
-        }
+      
 
         public async Task<GetPlayerDetailsModel> GetPlayerDetailsById(int id)
         {

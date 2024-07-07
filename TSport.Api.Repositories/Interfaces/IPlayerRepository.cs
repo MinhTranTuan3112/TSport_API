@@ -12,5 +12,6 @@ namespace TSport.Api.Repositories.Interfaces
     {
         Task<PagedResultResponse<Player>> GetPagedPlayers(QueryPagedPlayersRequest request);
         Task<Player?> GetPlayerDetailsById(int id);
+        Task<List<Player>> GetAll();
     }
 }

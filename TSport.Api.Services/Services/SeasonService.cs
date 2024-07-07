@@ -123,5 +123,17 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.SaveChangesAsync();
             return true;
         }
+
+        public async Task<List<ViewReponse>> GetAllSeason()
+        {
+            var Seasons = (await _unitOfWork.SeasonRepository.GetAll());
+            if (Seasons == null)
+            {
+                throw new NotFoundException("No Season was found");
+
+
+            }
+            return Seasons.Adapt<List<ViewReponse>>();
+        }
     }
 }

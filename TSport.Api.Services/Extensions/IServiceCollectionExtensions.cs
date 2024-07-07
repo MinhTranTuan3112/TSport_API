@@ -14,6 +14,7 @@ using TSport.Api.Models.RequestModels.Player;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.Shirt;
 using TSport.Api.Models.RequestModels.ShirtEdition;
+using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Services.Services;
@@ -64,6 +65,9 @@ namespace TSport.Api.Services.Extensions
             TypeAdapterConfig<UpdatePlayerRequest, Player>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdateSeasonRequest, Season>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdateShirtEditionRequest, ShirtEdition>.NewConfig().IgnoreNullValues(true);
+          //  TypeAdapterConfig<ViewReponse, Player>.NewConfig().IgnoreNullValues(true);
+
+
         }
     }
 }

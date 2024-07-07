@@ -27,6 +27,15 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.SeasonService.GetPagedSeasons(request);
         }
+        [HttpGet]
+       // [SupabaseAuthorize(Roles = ["Staff"])]
+
+        [Route("api/getall")]
+
+        public async Task<ActionResult<List<ViewReponse>>> GetAllSeason()
+        {
+            return await _serviceFactory.SeasonService.GetAllSeason();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<GetSeasonDetailsModel>> GetSeasonDetailsById(int id)

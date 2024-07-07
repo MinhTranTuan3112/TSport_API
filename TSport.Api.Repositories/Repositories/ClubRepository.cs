@@ -75,5 +75,12 @@ namespace TSport.Api.Repositories.Repositories
 
             return club;
         }
+
+        public async Task<List<Club>> GetAll()
+        {
+            /*return _context.Players.ToList().Ad;*/
+            return await _context.Clubs.ToListAsync();
+        
+        }
     }
 }

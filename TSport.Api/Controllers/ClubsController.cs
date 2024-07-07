@@ -19,6 +19,15 @@ namespace TSport.Api.Controllers
         {
             _serviceFactory = serviceFactory;
         }
+        [HttpGet]
+       //[SupabaseAuthorize(Roles = ["Staff"])]
+
+        [Route("api/getall")]
+
+        public async Task<ActionResult<List<ViewReponse>>> GetAllClubs()
+        {
+            return await _serviceFactory.ClubService.GetAllClubs();
+        }
 
         [HttpGet]
         public async Task<ActionResult<PagedResultResponse<GetClubModel>>> GetPagedClubs([FromQuery] QueryClubRequest query)

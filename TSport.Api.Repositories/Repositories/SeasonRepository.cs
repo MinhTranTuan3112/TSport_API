@@ -63,5 +63,10 @@ namespace TSport.Api.Repositories.Repositories
         {
             _context.Seasons.Update(season);
         }
+
+        public async Task<List<Season>> GetAll()
+        {
+            return await _context.Seasons.ToListAsync();
+        }
     }
 }

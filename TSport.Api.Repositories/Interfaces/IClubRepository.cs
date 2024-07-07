@@ -15,5 +15,7 @@ namespace TSport.Api.DataAccess.Interfaces
     {
         Task<PagedResultResponse<Club>> GetPagedClub(QueryClubRequest queryPagedClubDto);
         Task<Club?> GetClubDetailById(int id);
+        Task<List<Club>> GetAll();
+
     }
 }

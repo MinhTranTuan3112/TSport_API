@@ -20,5 +20,7 @@ namespace TSport.Api.Services.Interfaces
         Task<GetPlayerDetailsModel> GetPlayerDetailsById(int id);
 
         Task UpdatePlayer(int id, UpdatePlayerRequest request, ClaimsPrincipal user);
+
+        Task<List<ViewReponse>> GetAllPlayers();
     }
 }
