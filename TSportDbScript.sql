@@ -269,14 +269,14 @@ VALUES
 INSERT INTO ShirtEdition
   (Code, Size, HasSignature, StockPrice, DiscountPrice, Color, [Status], Origin, Material, SeasonId, CreatedAccountId, Quantity)
 VALUES
-  ('SE001', 'S', 0, 799.000,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 34),
-  ('SE002', 'M', 0, 799.000,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 45),
-  ('SE003', 'L', 0, 799.000,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 67),
-  ('SE004', 'XL', 0, 799.000,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 87),
-  ('SE005', 'S', 1, 999.000,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 76),
-  ('SE006', 'M', 1, 999.000,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 32),
-  ('SE007', 'L', 1, 999.000,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 15),
-  ('SE008', 'XL', 1, 999.000,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 54);
+  ('SE001', 'S', 0, 799000.00,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 34),
+  ('SE002', 'M', 0, 799000.00,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 45),
+  ('SE003', 'L', 0, 799000.00,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 67),
+  ('SE004', 'XL', 0, 799000.00,70, 'Red', 'Active', 'Made in China', 'Cotton', 1, 1, 87),
+  ('SE005', 'S', 1, 999000.00,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 76),
+  ('SE006', 'M', 1, 999000.00,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 32),
+  ('SE007', 'L', 1, 999000.00,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 15),
+  ('SE008', 'XL', 1, 999000.00,90, 'Blue', 'Active', 'Made in Italy', 'Cotton', 3, 1, 54);
 
 -- Insert data into Shirt table
 INSERT INTO Shirt

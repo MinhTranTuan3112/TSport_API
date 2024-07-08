@@ -49,7 +49,7 @@ namespace TSport.Api.Services.Services
 
         }
 
-        public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<int> shirtIds)
+        public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<AddToCartRequest> shirts)
         {
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1"; // data for testing
@@ -71,6 +71,8 @@ namespace TSport.Api.Services.Services
             {
                 throw new NotFoundException("Order not found");
             }
+            //reset order total price value to 0
+            order.Total = 0;
 
             if (order.CreatedAccountId != account.Id)
             {
@@ -83,24 +85,51 @@ namespace TSport.Api.Services.Services
                 throw new BadRequestException("The order status must be 'InCart'.");
             }
 
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.Status != null && o.Status.Equals(OrderStatus.InCart.ToString()));
+            if (orderDetails is null)
+            {
+                throw new NotFoundException("There are no items in cart.");
+            }
+            
             // Create the order
             order.Status = OrderStatus.Pending.ToString();
 
-            foreach (var shirtId in shirtIds)
+            foreach (var shirt in shirts)
             {
-                var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(o => o.OrderId == orderId && o.ShirtId == shirtId);
-                if(orderDetail is null || (orderDetail.Status != null && orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
+                var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(o => o.OrderId == orderId && o.ShirtId == shirt.ShirtId);
+                var shirtDetail = await _unitOfWork.ShirtRepository.GetShirtDetailById(shirt.ShirtId);
+                if(orderDetail is null || (orderDetail.Status != null && !orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
                 {
-                    continue;
+                    throw new BadRequestException("The shirt is not in cart.");
                 }
+                if(shirtDetail is null)
+                {
+                    throw new NotFoundException("Shirt not found.");
+                }
+                if(shirtDetail.Quantity < shirt.Quantity)
+                {
+                    throw new BadRequestException("There are not enough shirt in stock.");
+                }
+                // update order detail
+                orderDetail.Quantity = shirt.Quantity;
+                orderDetail.Size = shirt.Size;
+                if (shirtDetail.ShirtEdition.DiscountPrice != null)
+                {
+                    orderDetail.Subtotal = (decimal)(shirt.Quantity * shirtDetail.ShirtEdition.DiscountPrice);
+                }
+                orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
                 orderDetail.Status = OrderStatus.Pending.ToString();
+                orderDetails.Remove(orderDetail);
+                //reduce quantity from stock
+                shirtDetail.Quantity -= shirt.Quantity;
+                //recaculate total price
+                order.Total += orderDetail.Subtotal;
             }
             await _unitOfWork.SaveChangesAsync();
 
-            var remainOrderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.Status != null && o.Status.Equals(OrderStatus.InCart.ToString()));
-            if (remainOrderDetails is not null)
+            if (orderDetails is not null)
             {
-                order = new Order
+                order = await _unitOfWork.OrderRepository.AddAsync(new Order
                 {
                     Code = $"OD{Guid.NewGuid().ToString()}",
                     CreatedAccountId = account.Id,
@@ -108,14 +137,22 @@ namespace TSport.Api.Services.Services
                     Total = 0,
                     CreatedDate = DateTime.Now,
                     OrderDate = DateTime.Now
-                };
-
-                await _unitOfWork.OrderRepository.AddAsync(order);
+                });
                 await _unitOfWork.SaveChangesAsync();
 
-                foreach (var item in remainOrderDetails)
+                foreach (var item in orderDetails)
                 {
                     await _unitOfWork.OrderDetailsRepository.DeleteAsync(item);
+                    await _unitOfWork.OrderDetailsRepository.AddAsync(new OrderDetail
+                    {
+                        OrderId = order.Id,
+                        ShirtId = item.ShirtId,
+                        Code = item.Code,
+                        Subtotal = item.Subtotal,
+                        Quantity = item.Quantity,
+                        Size = item.Size,
+                        Status = OrderStatus.InCart.ToString()
+                    });
                 }
             }
 
