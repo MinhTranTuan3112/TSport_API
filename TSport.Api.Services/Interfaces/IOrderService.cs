@@ -24,5 +24,7 @@ namespace TSport.Api.Services.Interfaces
         Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<AddToCartRequest> shirts);
 
         Task CancelOrder(ClaimsPrincipal claims, int orderId);
+
+        Task UpdateOrderDetail(ClaimsPrincipal claims, int orderId, AddToCartRequest request);
     }
 }
