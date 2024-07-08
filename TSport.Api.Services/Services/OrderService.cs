@@ -179,8 +179,8 @@ namespace TSport.Api.Services.Services
 
         public async Task CancelOrder(ClaimsPrincipal claims, int orderId)
         {
-            //var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1"; // data for testing
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1"; // data for testing
             if (supabaseId is null)
             {
                 throw new UnauthorizedException("Unauthorized");
