@@ -268,5 +268,45 @@ namespace TSport.Api.Services.Services
 
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task DeleteShirtFromCart(ClaimsPrincipal claims, int orderId, int shirtId)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (supabaseId is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+            if (account is null)
+            {
+                throw new UnauthorizedException("Account not found");
+            }
+
+            // Check if the order exists
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            // Check if the order status is InCart
+            if (order.Status != OrderStatus.InCart.ToString())
+            {
+                throw new BadRequestException("The order status must be 'InCart'.");
+            }
+
+            // Check if the ShirtId exists in the order
+            var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(od => od.OrderId == orderId && od.ShirtId == shirtId);
+            if (orderDetail is null)
+            {
+                throw new NotFoundException("Shirt not found in the order.");
+            }
+
+            // Delete the Shirt from the Order
+            await _unitOfWork.OrderDetailsRepository.DeleteAsync(orderDetail);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
     }
 }

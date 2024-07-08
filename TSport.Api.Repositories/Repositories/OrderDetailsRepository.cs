@@ -77,5 +77,12 @@ namespace TSport.Api.Repositories.Repositories
         {
             return await _context.OrderDetails.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
+
+        public async Task DeleteAsync(OrderDetail orderDetail)
+        {
+            _context.OrderDetails.Remove(orderDetail);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }
