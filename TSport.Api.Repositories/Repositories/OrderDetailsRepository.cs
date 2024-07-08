@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Repositories.Entities;
@@ -72,8 +73,9 @@ namespace TSport.Api.Repositories.Repositories
             return ProductPrice.Shirt.ShirtEdition.DiscountPrice ?? 0;
         }
 
+        public async Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate)
+        {
+            return await _context.OrderDetails.AsNoTracking().FirstOrDefaultAsync(predicate);
+        }
     }
-
-
-
 }

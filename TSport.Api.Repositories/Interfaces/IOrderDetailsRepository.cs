@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Repositories.Entities;
@@ -14,5 +15,6 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<int> TotalOrderDetails();
         Task<decimal> GetDiscountPrice(int shirtId);
+        Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate);
     }
 }
