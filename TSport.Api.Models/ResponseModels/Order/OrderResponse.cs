@@ -9,9 +9,9 @@ namespace TSport.Api.Models.ResponseModels.Order
     public class OrderResponse
     {
         public int Id { get; set; }
-        public string Code { get; set; }
+        public string? Code { get; set; }
         public DateTime OrderDate { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public decimal Total { get; set; }
         public int CreatedAccountId { get; set; }
         public DateTime CreatedDate { get; set; }
