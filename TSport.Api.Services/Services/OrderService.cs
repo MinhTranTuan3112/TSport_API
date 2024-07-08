@@ -176,5 +176,56 @@ namespace TSport.Api.Services.Services
 
             return order.Adapt<OrderDetailsInfoModel>();
         }
+
+        public async Task CancelOrder(ClaimsPrincipal claims, int orderId)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1"; // data for testing
+            if (supabaseId is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Account not found");
+            }
+
+            // Check if the order exists
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            if (order.CreatedAccountId != account.Id)
+            {
+                throw new BadRequestException("The order does not belong to this account.");
+            }
+
+            // Check if the order status is InCart
+            if (order.Status != OrderStatus.Pending.ToString())
+            {
+                throw new BadRequestException("The order status must be 'Pending' to cancel.");
+            }
+            
+            // Cancel the order
+            order.Status = OrderStatus.Cancelled.ToString();
+            
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
+            if (orderDetails is not null)
+            {
+                foreach( var item in orderDetails)
+                {
+                    if(item.Status == OrderStatus.Pending.ToString())
+                    {
+                        item.Status = OrderStatus.Cancelled.ToString();
+                    }
+                }
+            }
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }
