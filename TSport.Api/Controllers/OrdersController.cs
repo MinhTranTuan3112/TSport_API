@@ -78,6 +78,14 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("{orderId}/shirts/{shirtId}")]
+        [SupabaseAuthorize(Roles = ["Customer"])]
+        public async Task<IActionResult> DeleteShirtFromCart(int orderId, int shirtId)
+        {
+            await _serviceFactory.OrderService.DeleteShirtFromCart(HttpContext.User, orderId, shirtId);
+            return Ok();
+        }
+
     }
 }
 
