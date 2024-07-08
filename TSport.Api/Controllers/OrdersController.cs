@@ -61,6 +61,14 @@ namespace TSport.Api.Controllers
             await _serviceFactory.OrderService.ConfirmOrder(HttpContext.User, orderId, shirts);
             return Ok();
         }
+
+        [HttpPatch("{orderId}")]
+        [SupabaseAuthorize(Roles = ["Staff", "Customer"])]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            await _serviceFactory.OrderService.CancelOrder(HttpContext.User, orderId);
+            return Ok();
+        }
     }
 }
 
