@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Models.ResponseModels;
+using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Services.Interfaces;
 
 namespace TSport.Api.Controllers
@@ -26,6 +28,12 @@ namespace TSport.Api.Controllers
         {
             await _serviceFactory.AccountService.UpdateCustomerInfo(HttpContext.User, request);   
             return NoContent();
+        }
+        [HttpGet]
+        [Route("info")]
+        public async Task<ActionResult<GetAccountWithOderReponse>> GetAll()
+        {
+            return await _serviceFactory.AccountService.GetAllAccountWithOrderDetailsCustomer();
         }
     }
 }
