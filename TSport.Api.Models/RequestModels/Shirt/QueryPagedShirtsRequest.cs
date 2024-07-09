@@ -37,8 +37,11 @@ namespace TSport.Api.Models.RequestModels.Shirt
         [FromQuery(Name = "shirtEditionId")]
         public int? ShirtEditionId { get; set; }
 
-        [FromQuery(Name = "seasonPlayerId")]
-        public List<int> SeasonPlayerIds { get; set; } = [];
+        [FromQuery(Name = "seasonId")]
+        public List<int> SeasonId { get; set; } = [];
+
+        [FromQuery(Name = "playerId")]
+        public List<int> PlayerId { get; set; } = [];
 
         [FromQuery(Name = "startPrice")]
         public decimal StartPrice { get; set; }
