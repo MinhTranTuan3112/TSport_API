@@ -329,32 +329,26 @@ namespace TSport.Api.Services.Services
                 throw new NotFoundException("Order not found");
             }
 
-            if (order.CreatedAccountId != account.Id)
-            {
-                throw new BadRequestException("The order does not belong to this account.");
-            }
-
-            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
-
-            if (account.Role.Equals("Staff"))
-            {
-
-            }
             if (account.Role.Equals("Customer"))
             {
-
+                if (order.CreatedAccountId != account.Id)
+                {
+                    throw new BadRequestException("The order does not belong to this account.");
+                }
             }
-
             
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);         
             if (orderDetails is not null)
             {
                 foreach (var item in orderDetails)
                 {
                     // Delete order details
-                    
+                    await _unitOfWork.OrderDetailsRepository.DeleteAsync(item);
                 }
             }
             // Delete order
+            await _unitOfWork.OrderRepository.DeleteAsync(order);
+
             await _unitOfWork.SaveChangesAsync();
         }
     }
