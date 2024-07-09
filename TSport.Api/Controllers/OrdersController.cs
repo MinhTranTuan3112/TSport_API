@@ -86,6 +86,13 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
+        [HttpDelete("{orderId}")]
+        [SupabaseAuthorize(Roles = ["Staff", "Customer"])]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            await _serviceFactory.OrderService.CancelOrder(HttpContext.User, orderId);
+            return Ok();
+        }
     }
 }
 

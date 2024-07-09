@@ -28,5 +28,8 @@ namespace TSport.Api.Services.Interfaces
         Task UpdateOrderDetail(ClaimsPrincipal claims, int orderId, AddToCartRequest request);
 
         Task DeleteShirtFromCart(ClaimsPrincipal claims, int orderId, int shirtId);
+
+        Task DeleteOrder(ClaimsPrincipal claims, int orderId);
+
     }
 }

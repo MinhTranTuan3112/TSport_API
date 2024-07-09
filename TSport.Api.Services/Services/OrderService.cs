@@ -307,6 +307,55 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.OrderDetailsRepository.DeleteAsync(orderDetail);
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task DeleteOrder(ClaimsPrincipal claims, int orderId)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (supabaseId is null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
 
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new UnauthorizedException("Account not found");
+            }
+
+            // Check if the order exists
+            var order = await _unitOfWork.OrderRepository.FindOneAsync(o => o.Id == orderId);
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            if (order.CreatedAccountId != account.Id)
+            {
+                throw new BadRequestException("The order does not belong to this account.");
+            }
+
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
+
+            if (account.Role.Equals("Staff"))
+            {
+
+            }
+            if (account.Role.Equals("Customer"))
+            {
+
+            }
+
+            
+            if (orderDetails is not null)
+            {
+                foreach (var item in orderDetails)
+                {
+                    // Delete order details
+                    
+                }
+            }
+            // Delete order
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 }
