@@ -33,8 +33,11 @@ namespace TSport.Api.Repositories.Extensions
         {
             if (request.StartPrice < request.EndPrice)
             {
-                query = query.Where(s => s.ShirtEdition != null && s.ShirtEdition.DiscountPrice >= request.StartPrice &&
-                                        s.ShirtEdition.DiscountPrice <= request.EndPrice);
+
+                query = query.Where(s => s.ShirtEdition != null && s.ShirtEdition.DiscountPrice != null &&
+                    s.ShirtEdition.DiscountPrice >= request.StartPrice && s.ShirtEdition.DiscountPrice <= request.EndPrice)
+                    .Union(query.Where(s => s.ShirtEdition.DiscountPrice == null && 
+                    s.ShirtEdition.StockPrice >= request.StartPrice && s.ShirtEdition.StockPrice <= request.EndPrice));
             }
 
             if (request.Sizes is not [])
