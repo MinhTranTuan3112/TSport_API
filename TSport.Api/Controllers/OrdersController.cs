@@ -91,7 +91,7 @@ namespace TSport.Api.Controllers
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
             await _serviceFactory.OrderService.DeleteOrder(HttpContext.User, orderId);
-            return Ok();
+            return NoContent();
         }
     }
 }

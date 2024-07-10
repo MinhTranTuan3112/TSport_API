@@ -72,17 +72,17 @@ namespace TSport.Api.Repositories.Repositories
 
             return ProductPrice.Shirt.ShirtEdition.DiscountPrice ?? 0;
         }
-
+        /*
         public async Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate)
         {
             return await _context.OrderDetails.AsNoTracking().FirstOrDefaultAsync(predicate);
         }
-
+        
         public async Task DeleteAsync(OrderDetail orderDetail)
         {
             _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
         }
-
+        */
     }
 }

@@ -86,11 +86,16 @@ namespace TSport.Api.Services.Services
             }
 
             var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.Status != null && o.Status.Equals(OrderStatus.InCart.ToString()));
-            if (orderDetails is null)
+            if (orderDetails is [])
             {
                 throw new NotFoundException("There are no items in cart.");
             }
-            
+
+            if (shirts is null || shirts is [])
+            {
+                throw new BadRequestException("There are no product confirmed for order.");
+            }
+
             // Create the order
             order.Status = OrderStatus.Pending.ToString();
 
@@ -119,7 +124,7 @@ namespace TSport.Api.Services.Services
                 }
                 orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
                 orderDetail.Status = OrderStatus.Pending.ToString();
-                orderDetails.Remove(orderDetail);
+                orderDetails.Remove(orderDetails.First(o => o.OrderId == orderDetail.OrderId && o.ShirtId == orderDetail.ShirtId));
                 //reduce quantity from stock
                 shirtDetail.Quantity -= shirt.Quantity;
                 //recaculate total price
@@ -127,7 +132,7 @@ namespace TSport.Api.Services.Services
             }
             await _unitOfWork.SaveChangesAsync();
 
-            if (orderDetails is not null)
+            if (orderDetails is not [])
             {
                 order = await _unitOfWork.OrderRepository.AddAsync(new Order
                 {
@@ -215,7 +220,7 @@ namespace TSport.Api.Services.Services
             order.Status = OrderStatus.Cancelled.ToString();
             
             var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
-            if (orderDetails is not null)
+            if (orderDetails is not [])
             {
                 foreach( var item in orderDetails)
                 {
@@ -338,7 +343,7 @@ namespace TSport.Api.Services.Services
             }
             
             var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);         
-            if (orderDetails is not null)
+            if (orderDetails is not [])
             {
                 foreach (var item in orderDetails)
                 {

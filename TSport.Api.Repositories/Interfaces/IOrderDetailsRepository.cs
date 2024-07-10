@@ -17,9 +17,9 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<decimal> GetDiscountPrice(int shirtId);
 
-        Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate);
+//        Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate);
 
-        Task DeleteAsync(OrderDetail orderDetail);
+//        Task DeleteAsync(OrderDetail orderDetail);
 
     }
 }
