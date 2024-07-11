@@ -125,6 +125,8 @@ namespace TSport.Api.Repositories.Repositories
                         .AsNoTracking()
                         .Where(o => o.CreatedAccountId == accountId && !(o.Status == OrderStatus.InCart.ToString()))
                         .Include(o => o.OrderDetails)
+                            .ThenInclude(or => or.Shirt)
+                                .ThenInclude(s => s.ShirtEdition)
                         .ToListAsync();
             return order;
         }

@@ -17,7 +17,7 @@ namespace TSport.Api.Models.ResponseModels.Account
         public int Quantity { get; set; }
         public string? Status { get; set; }
 
-        public ShirtResponseModel? Shirt { get; set; }
+        public ShirtResponseModel Shirt { get; set; } = null!;
 
     }
     public class ShirtResponseModel
@@ -26,7 +26,7 @@ namespace TSport.Api.Models.ResponseModels.Account
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
       //  public int? Quantity { get; set; }
-        public ShirtEditionResponseModel? ShirtEdition { get; set; }
+        public ShirtEditionResponseModel ShirtEdition { get; set; } = null!;
 
     }
     public class ShirtEditionResponseModel
