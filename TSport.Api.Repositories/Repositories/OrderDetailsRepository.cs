@@ -84,5 +84,10 @@ namespace TSport.Api.Repositories.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<OrderDetail?>> Getall()
+        {
+            return await _context.OrderDetails.ToListAsync();
+        }
+
     }
 }

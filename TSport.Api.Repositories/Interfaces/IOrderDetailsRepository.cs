@@ -20,6 +20,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<OrderDetail?> FindOneAsync(Expression<Func<OrderDetail, bool>> predicate);
 
         Task DeleteAsync(OrderDetail orderDetail);
+        Task<List<OrderDetail?>> Getall();
 
     }
 }

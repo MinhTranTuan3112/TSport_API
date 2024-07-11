@@ -84,5 +84,37 @@ namespace TSport.Api.Repositories.Repositories
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
+
+        public async Task<decimal> GetMonthlyRevenue(int year, int month)
+        {
+            var monthlyRevenue = await _context.Orders
+                .Where(o => o.OrderDate.Year == year && o.OrderDate.Month == month && o.Status != "InCart")
+            .SumAsync(o => o.Total);
+
+            return monthlyRevenue;
+        }
+
+        public async Task<int> GetTotalOrder()
+        {
+            var totalOrder = await _context.Orders
+                .Where(o => o.Status != "InCart")
+                .CountAsync();
+            return totalOrder;
+
+
+        }
+
+        public async Task<decimal> GetMonthlyRevenueNow()
+        {
+            var now = DateTime.Now;
+            var year = now.Year;
+            var month = now.Month;
+
+            var monthlyRevenue = await _context.Orders
+                .Where(o => o.OrderDate.Year == year && o.OrderDate.Month == month && o.Status != "InCart")
+                .SumAsync(o => o.Total);
+
+            return monthlyRevenue;
+        }
     }
 }

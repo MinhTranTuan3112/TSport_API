@@ -351,5 +351,21 @@ namespace TSport.Api.Services.Services
 
             await _unitOfWork.SaveChangesAsync();
         }
+        //dua vao nam, thang
+
+        public async Task<decimal> GetMonthlyRevenue(int year, int month)
+        {
+            return await _unitOfWork.OrderRepository.GetMonthlyRevenue( year,  month);
+        }
+
+        public async Task<int> GetTotalOrder()
+        {
+            return await _unitOfWork.OrderRepository.GetTotalOrder();
+        }
+
+        public async Task<decimal> GetMonthlyRevenueNow()
+        {
+            return await _unitOfWork.OrderRepository.GetMonthlyRevenueNow();
+        }
     }
 }

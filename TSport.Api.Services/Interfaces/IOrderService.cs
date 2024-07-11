@@ -31,5 +31,10 @@ namespace TSport.Api.Services.Interfaces
 
         Task DeleteOrder(ClaimsPrincipal claims, int orderId);
 
+        Task<decimal> GetMonthlyRevenue(int year, int month);
+        Task<int> GetTotalOrder();
+
+        Task<decimal> GetMonthlyRevenueNow();
+
     }
 }
