@@ -84,15 +84,6 @@ namespace TSport.Api.Repositories.Repositories
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
-        public async Task<List<Order>?> GetCustomerInfo(int accountId)
-        {
-
-            var order = await _context.Orders
-                .AsNoTracking()
-                .Where(o => o.CreatedAccountId == accountId && !(o.Status == OrderStatus.InCart.ToString()))
-                .Include(o => o.OrderDetails)
-                .ToListAsync();
-            return order;
 
         public async Task<decimal> GetMonthlyRevenue(int year, int month)
         {
@@ -124,6 +115,16 @@ namespace TSport.Api.Repositories.Repositories
                 .SumAsync(o => o.Total);
 
             return monthlyRevenue;
+        }
+
+        public async Task<List<Order>?> GetCustomerInfo(int accountId)
+        {
+            var order = await _context.Orders
+                        .AsNoTracking()
+                        .Where(o => o.CreatedAccountId == accountId && !(o.Status == OrderStatus.InCart.ToString()))
+                        .Include(o => o.OrderDetails)
+                        .ToListAsync();
+            return order;
         }
     }
 }
