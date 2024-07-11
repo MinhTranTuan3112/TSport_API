@@ -18,6 +18,8 @@ namespace TSport.Api.Services.Interfaces
         //Task<List<GetAccountWithOderReponse>> GetAllAccountWithOrderDetailsCustomer();
         Task<GetAccountWithOderReponse> GetAllAccountWithOrderDetailsCustomer();
 
+        Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims);
+
 
     }
 }

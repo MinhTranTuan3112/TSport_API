@@ -17,5 +17,7 @@ namespace TSport.Api.Repositories.Interfaces
         Task<Order?> GetCustomerCartInfo(int id);
 
         void Update(Order order);
+        Task<List<Order>?> GetCustomerInfo(int accountId);
+
     }
 }

@@ -12,6 +12,7 @@ using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
 
 namespace TSport.Api.Services.Services
@@ -102,7 +103,31 @@ namespace TSport.Api.Services.Services
             
             await _unitOfWork.SaveChangesAsync();
         }
+        public async Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-      
+            var customer = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+            if (customer is null)
+            {
+                throw new BadRequestException("Customer does not exist.");
+            }
+            var response = customer.Adapt<CustomerResponseModel>();
+
+            var orders = await _unitOfWork.OrderRepository.GetCustomerInfo(response.Id);
+
+            if (orders != null && orders.Count != 0)
+            {
+                var orderResponseModel = new OrderResponseModel();
+                foreach ( var order in orders)
+                {
+                    orderResponseModel = order.Adapt<OrderResponseModel>();
+                    response.Orders.Add(orderResponseModel);
+                }
+            }
+
+            return response;
+        }
+
     }
 }
