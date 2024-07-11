@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TSport.Api.Models.ResponseModels.Account;
+using TSport.Api.Services.BusinessModels.OrderDetail;
 using TSport.Api.Services.BusinessModels.Payment;
 
 namespace TSport.Api.Services.BusinessModels.Order
@@ -31,7 +32,7 @@ namespace TSport.Api.Services.BusinessModels.Order
 
         public GetAccountResponse? ModifiedAccount { get; set; }
 
-        public ICollection<OrderDetailModel> OrderDetails { get; set; } = [];
+        public ICollection<OrderDetailWithShirtAndShirtEditionModel> OrderDetails { get; set; } = [];
 
         public ICollection<PaymentModel> Payments { get; set; } = [];
     }

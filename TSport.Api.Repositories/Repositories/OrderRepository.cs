@@ -81,6 +81,8 @@ namespace TSport.Api.Repositories.Repositories
                                         .Include(o => o.ModifiedAccount)
                                         .Include(o => o.Payments)
                                         .Include(o => o.OrderDetails)
+                                        .ThenInclude(od => od.Shirt)
+                                        .ThenInclude(s => s.ShirtEdition)
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
