@@ -84,5 +84,15 @@ namespace TSport.Api.Repositories.Repositories
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
+        public async Task<List<Order>?> GetCustomerInfo(int accountId)
+        {
+
+            var order = await _context.Orders
+                .AsNoTracking()
+                .Where(o => o.CreatedAccountId == accountId && !(o.Status == OrderStatus.InCart.ToString()))
+                .Include(o => o.OrderDetails)
+                .ToListAsync();
+            return order;
+        }
     }
 }

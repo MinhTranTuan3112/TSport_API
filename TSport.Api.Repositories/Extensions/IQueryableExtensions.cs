@@ -216,6 +216,11 @@ namespace TSport.Api.Repositories.Extensions
                 query = query.Where(o => o.CreatedAccountId == request.CreatedAccountId.Value);
             }
 
+            if (request.Status != null)
+            {
+                query = query.Where(o => request.Status.Contains(o.Status));
+            }
+
 
 
             return query;

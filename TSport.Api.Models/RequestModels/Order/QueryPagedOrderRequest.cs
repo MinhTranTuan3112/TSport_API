@@ -29,5 +29,8 @@ namespace TSport.Api.Models.RequestModels.Order
 
         [FromQuery(Name = "createdAccountId")]
         public int? CreatedAccountId { get; set; }
+
+        [FromQuery(Name = "status")]
+        public string? Status { get; set; }
     }
 }

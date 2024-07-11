@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Account;
@@ -34,6 +35,13 @@ namespace TSport.Api.Controllers
         public async Task<ActionResult<GetAccountWithOderReponse>> GetAll()
         {
             return await _serviceFactory.AccountService.GetAllAccountWithOrderDetailsCustomer();
+        }
+        [HttpGet]
+        [Route("view-my-info")]
+        [SupabaseAuthorize(Roles = ["Customer"])]
+        public async Task<ActionResult<CustomerResponseModel>> ViewCustomerDetail()
+        {
+            return await _serviceFactory.AccountService.ViewMyInfo(HttpContext.User);
         }
     }
 }
