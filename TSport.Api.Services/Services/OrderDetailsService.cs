@@ -9,6 +9,8 @@ using TSport.Api.Repositories.Entities;
 using System.Security.Claims;
 using TSport.Api.Shared.Exceptions;
 using TSport.Api.Shared.Enums;
+using TSport.Api.Models.ResponseModels.Order;
+using Mapster;
 
 namespace TSport.Api.Services.Services
 {
@@ -64,6 +66,15 @@ namespace TSport.Api.Services.Services
 
             await UpsertCart(shirtId, quantity, size, order, shirt);
 
+        }
+
+        public async Task<List<OrderDetailsReponse>> GetList()
+        {
+            //return await _unitOfWork.OrderDetailsRepository.GetAllAsync().Adapt<List<OrderDetailsReponse>>();
+
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.GetAllAsync();
+            var orderDetailResponses = orderDetails.Adapt<List<OrderDetailsReponse>>();
+            return orderDetailResponses;
         }
 
         private async Task UpsertCart(int shirtId, int quantity, string size, Order order, Shirt shirt)

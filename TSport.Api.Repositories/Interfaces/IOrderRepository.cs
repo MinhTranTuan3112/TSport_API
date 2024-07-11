@@ -19,5 +19,11 @@ namespace TSport.Api.Repositories.Interfaces
         void Update(Order order);
         Task<List<Order>?> GetCustomerInfo(int accountId);
 
+        Task<Decimal> GetMonthlyRevenueNow();
+
+        Task<decimal> GetMonthlyRevenue(int year, int month);
+
+        Task<int> GetTotalOrder();
+
     }
 }
