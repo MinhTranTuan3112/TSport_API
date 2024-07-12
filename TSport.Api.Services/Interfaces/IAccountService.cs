@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Repositories.Entities;
+using TSport.Api.Services.BusinessModels.Account;
 
 namespace TSport.Api.Services.Interfaces
 {
@@ -15,11 +16,11 @@ namespace TSport.Api.Services.Interfaces
 
         Task<Account> GetAccountBySupabaseId(string supabaseId);
 
-        //Task<List<GetAccountWithOderReponse>> GetAllAccountWithOrderDetailsCustomer();
         Task<GetAccountWithOderReponse> GetAllAccountWithOrderDetailsCustomer();
 
         Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims);
 
+        Task<CustomerAccountWithOrderInfoModel> GetCustomerDetailsInfo(ClaimsPrincipal claims);
 
     }
 }

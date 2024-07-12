@@ -11,6 +11,7 @@ using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels.Account;
 using TSport.Api.Services.Interfaces;
 using TSport.Api.Shared.Enums;
 using TSport.Api.Shared.Exceptions;
@@ -32,7 +33,7 @@ namespace TSport.Api.Services.Services
 
             if (account is null)
             {
-                throw new ForbiddenMethodException("Account not found");                
+                throw new ForbiddenMethodException("Account not found");
             }
 
             return account;
@@ -47,7 +48,7 @@ namespace TSport.Api.Services.Services
              foreach (var customer in getAllCustomer)
              {
                  var orderDetails = await _unitOfWork.OrderRepository.GetCustomerCartInfo(customer.Id);
-                 //add vào responseList
+                 //add vï¿½o responseList
                  var accountWithOrderResponse = customer.Adapt<GetAccountWithOderReponse>();
                  var accountWithOrderResponse.
              }
@@ -58,13 +59,13 @@ namespace TSport.Api.Services.Services
          }*/
         public async Task<GetAccountWithOderReponse> GetAllAccountWithOrderDetailsCustomer()
         {
-            var getAllCustomers = await _unitOfWork.AccountRepository.getAllAcountCustomer();
+            var getAllCustomers = await _unitOfWork.AccountRepository.GetAllAcountCustomer();
             var response = new GetAccountWithOderReponse
             {
                 Customers = new List<CustomerResponseModel>()
             };
             foreach (var customer in getAllCustomers)
-            { 
+            {
                 //var customerResponseModel =  customer.Adapt<CustomerResponseModel>;
                 var customerResponseModel = customer.Adapt<CustomerResponseModel>();
 
@@ -81,6 +82,20 @@ namespace TSport.Api.Services.Services
             }
 
             return response;
+        }
+
+        public async Task<CustomerAccountWithOrderInfoModel> GetCustomerDetailsInfo(ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new BadRequestException("Account not found");
+            }
+
+            return account.Adapt<CustomerAccountWithOrderInfoModel>();
         }
 
         public async Task UpdateCustomerInfo(ClaimsPrincipal claims, UpdateCustomerInfoRequest request)
@@ -100,7 +115,7 @@ namespace TSport.Api.Services.Services
             }
 
             request.Adapt(account);
-            
+
             await _unitOfWork.SaveChangesAsync();
         }
         public async Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims)
@@ -119,7 +134,7 @@ namespace TSport.Api.Services.Services
             if (orders != null && orders.Count != 0)
             {
                 var orderResponseModel = new OrderResponseModel();
-                foreach ( var order in orders)
+                foreach (var order in orders)
                 {
                     orderResponseModel = order.Adapt<OrderResponseModel>();
                     response.Orders.Add(orderResponseModel);

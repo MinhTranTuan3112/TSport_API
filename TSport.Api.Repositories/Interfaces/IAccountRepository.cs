@@ -8,7 +8,9 @@ namespace TSport.Api.Repositories.Interfaces
 {
     public interface IAccountRepository : IGenericRepository<Account>
     {
-        Task<List<Account>> getAllAcountCustomer();
+        Task<List<Account>> GetAllAcountCustomer();
+
+        Task<Account?> GetCustomerDetailsInfo(int id);
 
     }
 }

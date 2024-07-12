@@ -19,10 +19,22 @@ namespace TSport.Api.Repositories.Repositories
 
         }
 
-        public async Task<List<Account>> getAllAcountCustomer()
+        public async Task<List<Account>> GetAllAcountCustomer()
         {
             var getAll = await _context.Accounts.AsNoTracking().Where(p => p.Role == "Customer").ToListAsync(); 
             return getAll;
+        }
+
+        public async Task<Account?> GetCustomerDetailsInfo(int id)
+        {
+            return await _context.Accounts
+                            .AsNoTracking()
+                            .Include(a => a.OrderCreatedAccounts)
+                            .ThenInclude(o => o.OrderDetails)
+                            .ThenInclude(od => od.Shirt)
+                            .ThenInclude(s => s.ShirtEdition)
+                            .AsSplitQuery()
+                            .SingleOrDefaultAsync(a => a.Id == id);
         }
     }
 }

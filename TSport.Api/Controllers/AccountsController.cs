@@ -8,6 +8,7 @@ using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Account;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Account;
+using TSport.Api.Services.BusinessModels.Account;
 using TSport.Api.Services.Interfaces;
 
 namespace TSport.Api.Controllers
@@ -30,18 +31,20 @@ namespace TSport.Api.Controllers
             await _serviceFactory.AccountService.UpdateCustomerInfo(HttpContext.User, request);   
             return NoContent();
         }
+        
         [HttpGet]
         [Route("info")]
         public async Task<ActionResult<GetAccountWithOderReponse>> GetAll()
         {
             return await _serviceFactory.AccountService.GetAllAccountWithOrderDetailsCustomer();
         }
+
         [HttpGet]
         [Route("view-my-info")]
         [SupabaseAuthorize(Roles = ["Customer"])]
-        public async Task<ActionResult<CustomerResponseModel>> ViewCustomerDetail()
+        public async Task<ActionResult<CustomerAccountWithOrderInfoModel>> ViewCustomerDetail()
         {
-            return await _serviceFactory.AccountService.ViewMyInfo(HttpContext.User);
+            return await _serviceFactory.AccountService.GetCustomerDetailsInfo(HttpContext.User);
         }
     }
 }
