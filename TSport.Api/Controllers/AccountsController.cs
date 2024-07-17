@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Attributes;
 using TSport.Api.Models.RequestModels.Account;
+using TSport.Api.Models.RequestModels.Order;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Account;
 using TSport.Api.Services.BusinessModels.Account;
@@ -28,23 +29,33 @@ namespace TSport.Api.Controllers
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult> UpdateCustomerAccountInfo([FromBody] UpdateCustomerInfoRequest request)
         {
-            await _serviceFactory.AccountService.UpdateCustomerInfo(HttpContext.User, request);   
+            await _serviceFactory.AccountService.UpdateCustomerInfo(HttpContext.User, request);
             return NoContent();
         }
-        
+
         [HttpGet]
         [Route("info")]
-        public async Task<ActionResult<GetAccountWithOderReponse>> GetAll()
+        public async Task<ActionResult<GetAccountWithOrderReponse>> GetAll()
         {
             return await _serviceFactory.AccountService.GetAllAccountWithOrderDetailsCustomer();
         }
 
-        [HttpGet]
-        [Route("view-my-info")]
+
+        [HttpGet("customer/details-info")]
         [SupabaseAuthorize(Roles = ["Customer"])]
-        public async Task<ActionResult<CustomerAccountWithOrderInfoModel>> ViewCustomerDetail()
+        public async Task<ActionResult<CustomerAccountWithOrderInfoModel>> GetCustomerDetailsInfo()
         {
-            return await _serviceFactory.AccountService.GetCustomerDetailsInfo(HttpContext.User);
+            return await _serviceFactory.AccountService.GetDetailsCutomerInfo(HttpContext.User);
         }
+        
+        [HttpGet]
+        [Route("customer/basic-info")]
+        [SupabaseAuthorize(Roles = ["Customer"])]
+        public async Task<ActionResult<GetAccountResponse>> GetCustomerBasicInfo()
+        {
+            return await _serviceFactory.AccountService.GetCustomerInfo(HttpContext.User);
+        }
+
+
     }
 }

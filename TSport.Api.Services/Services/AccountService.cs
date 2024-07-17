@@ -57,10 +57,10 @@ namespace TSport.Api.Services.Services
 
 
          }*/
-        public async Task<GetAccountWithOderReponse> GetAllAccountWithOrderDetailsCustomer()
+        public async Task<GetAccountWithOrderReponse> GetAllAccountWithOrderDetailsCustomer()
         {
             var getAllCustomers = await _unitOfWork.AccountRepository.GetAllAcountCustomer();
-            var response = new GetAccountWithOderReponse
+            var response = new GetAccountWithOrderReponse
             {
                 Customers = new List<CustomerResponseModel>()
             };
@@ -84,11 +84,25 @@ namespace TSport.Api.Services.Services
             return response;
         }
 
-        public async Task<CustomerAccountWithOrderInfoModel> GetCustomerDetailsInfo(ClaimsPrincipal claims)
+        public async Task<GetAccountResponse> GetCustomerInfo(ClaimsPrincipal claims)
         {
             var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+
+            if (account is null)
+            {
+                throw new BadRequestException("Account not found");
+            }
+
+            return account.Adapt<GetAccountResponse>();
+        }
+
+        public async Task<CustomerAccountWithOrderInfoModel> GetDetailsCutomerInfo(ClaimsPrincipal claims)
+        {
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var account = await _unitOfWork.AccountRepository.GetCustomerAccountWithOrderInfo(supabaseId!);
 
             if (account is null)
             {
@@ -117,31 +131,6 @@ namespace TSport.Api.Services.Services
             request.Adapt(account);
 
             await _unitOfWork.SaveChangesAsync();
-        }
-        public async Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims)
-        {
-            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            var customer = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
-            if (customer is null)
-            {
-                throw new BadRequestException("Customer does not exist.");
-            }
-            var response = customer.Adapt<CustomerResponseModel>();
-
-            var orders = await _unitOfWork.OrderRepository.GetCustomerInfo(response.Id);
-
-            if (orders != null && orders.Count != 0)
-            {
-                var orderResponseModel = new OrderResponseModel();
-                foreach (var order in orders)
-                {
-                    orderResponseModel = order.Adapt<OrderResponseModel>();
-                    response.Orders.Add(orderResponseModel);
-                }
-            }
-
-            return response;
         }
 
     }

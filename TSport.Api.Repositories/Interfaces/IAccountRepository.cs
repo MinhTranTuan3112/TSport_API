@@ -12,5 +12,7 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<Account?> GetCustomerDetailsInfo(int id);
 
+        Task<Account?> GetCustomerAccountWithOrderInfo(string supabaseId);
+
     }
 }

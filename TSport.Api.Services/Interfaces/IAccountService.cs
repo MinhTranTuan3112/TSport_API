@@ -16,11 +16,11 @@ namespace TSport.Api.Services.Interfaces
 
         Task<Account> GetAccountBySupabaseId(string supabaseId);
 
-        Task<GetAccountWithOderReponse> GetAllAccountWithOrderDetailsCustomer();
+        Task<GetAccountWithOrderReponse> GetAllAccountWithOrderDetailsCustomer();
 
-        Task<CustomerResponseModel> ViewMyInfo(ClaimsPrincipal claims);
+        Task<CustomerAccountWithOrderInfoModel> GetDetailsCutomerInfo(ClaimsPrincipal claims);
 
-        Task<CustomerAccountWithOrderInfoModel> GetCustomerDetailsInfo(ClaimsPrincipal claims);
+        Task<GetAccountResponse> GetCustomerInfo(ClaimsPrincipal claims);
 
     }
 }

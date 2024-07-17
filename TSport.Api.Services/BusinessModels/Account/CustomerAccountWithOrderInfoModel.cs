@@ -35,6 +35,6 @@ namespace TSport.Api.Services.BusinessModels.Account
 
         public string? Status { get; set; }
 
-        public virtual ICollection<OrderDetailsInfoModel> OrderCreatedAccounts { get; set; } = [];
+        public ICollection<CustomerOrderInfoModel> OrderCreatedAccounts { get; set; } = [];
     }
 }

@@ -67,7 +67,7 @@ namespace TSport.Api.Models.ResponseModels.Account
         public string? Status { get; set; }
         public List<OrderResponseModel> Orders { get; set; } = new List<OrderResponseModel>();
     }
-    public class GetAccountWithOderReponse
+    public class GetAccountWithOrderReponse
     {
         public List<CustomerResponseModel> Customers { get; set; } = new List<CustomerResponseModel>();
 

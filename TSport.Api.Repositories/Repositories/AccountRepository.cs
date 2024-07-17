@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -23,6 +24,19 @@ namespace TSport.Api.Repositories.Repositories
         {
             var getAll = await _context.Accounts.AsNoTracking().Where(p => p.Role == "Customer").ToListAsync(); 
             return getAll;
+        }
+
+        public async Task<Account?> GetCustomerAccountWithOrderInfo(string supabaseId)
+        {
+           return await _context.Accounts
+                            .AsNoTracking()
+                            .Include(a => a.OrderCreatedAccounts)
+                            .ThenInclude(o => o.OrderDetails)
+                            .ThenInclude(od => od.Shirt)
+                            .ThenInclude(s => s.ShirtEdition)
+                            .Where(a => a.OrderCreatedAccounts.All(o => o.Status != OrderStatus.InCart.ToString()))
+                            .AsSplitQuery()
+                            .FirstOrDefaultAsync(a => a.SupabaseId == supabaseId);
         }
 
         public async Task<Account?> GetCustomerDetailsInfo(int id)
