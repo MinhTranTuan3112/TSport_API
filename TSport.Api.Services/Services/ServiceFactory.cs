@@ -1,4 +1,6 @@
+using FluentEmail.Core;
 using Microsoft.Extensions.Configuration;
+using Razor.Templating.Core;
 using TSport.Api.BusinessLogic.Interfaces;
 using TSport.Api.BusinessLogic.Services;
 using TSport.Api.Models.ResponseModels;
@@ -25,11 +27,13 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<ISupabaseStorageService> _supabaseStorageService;
         private readonly Lazy<IShirtEditionService> _shirtEditionService;
 
+        private readonly Lazy<IEmailService> _emailService;
+
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration,
             IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetPlayerModel>> playerPagedResultCacheService,
-            Supabase.Client client)
+            Supabase.Client client, IFluentEmailFactory fluentEmailFactory, IRazorTemplateEngine razorTemplateEngine)
         {
             _authService = new Lazy<IAuthService>(() => new AuthService(unitOfWork, this));
             _tokenService = new Lazy<ITokenService>(() => new TokenService(configuration));
@@ -42,8 +46,7 @@ namespace TSport.Api.Services.Services
             _orderdetailsService = new Lazy<IOrderDetailsService>(() => new OrderDetailsService(unitOfWork));
             _supabaseStorageService = new Lazy<ISupabaseStorageService>(() => new SupabaseStorageService(client, configuration));
             _shirtEditionService = new Lazy<IShirtEditionService>(() => new ShirtEditionService(unitOfWork));
-
-
+            _emailService = new Lazy<IEmailService>(() => new EmailService(fluentEmailFactory, razorTemplateEngine));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -58,5 +61,6 @@ namespace TSport.Api.Services.Services
         public ISupabaseStorageService SupabaseStorageService => _supabaseStorageService.Value;
         public IShirtEditionService ShirtEditionService => _shirtEditionService.Value;
 
+        public IEmailService EmailService => _emailService.Value;
     }
 }

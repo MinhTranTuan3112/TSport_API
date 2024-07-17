@@ -36,5 +36,7 @@ namespace TSport.Api.Services.Interfaces
 
         Task<decimal> GetMonthlyRevenueNow();
 
+        Task QueryAndSendOrderConfirmationEmail(int orderId);
+
     }
 }

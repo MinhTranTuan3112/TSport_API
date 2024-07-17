@@ -25,5 +25,7 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<int> GetTotalOrder();
 
+        Task<Order?> GetFullOrderInfo(int orderId);
+
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -27,6 +28,8 @@ namespace TSport.Api.Services.Extensions
         {
             services.AddMapsterConfigurations();
             services.AddSupabaseServiceConfiguartions(configuration);
+            services.AddFluentEmailConfigurations(configuration);
+            services.AddRazorTemplating();
             services.AddScoped<IServiceFactory, ServiceFactory>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ITokenService, TokenService>();
@@ -38,6 +41,7 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<ISeasonService, SeasonService>();
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<ISupabaseStorageService, SupabaseStorageService>();
+            services.AddScoped<IEmailService, EmailService>();
             return services;
         }
 
@@ -57,6 +61,20 @@ namespace TSport.Api.Services.Extensions
             return services;
         }
 
+        private static IServiceCollection AddFluentEmailConfigurations(this IServiceCollection services, IConfiguration configuration)
+        {
+            string defaultFromEmail = configuration["FluentEmail:DefaultFromEmail"]!;
+            string host = configuration["FluentEmail:Host"]!;
+            int port = int.Parse(configuration["FluentEmail:Port"]!);
+            string username = configuration["FluentEmail:Username"]!;
+            string password = configuration["FluentEmail:Password"]!;
+
+            services.AddFluentEmail(defaultFromEmail)
+                    .AddSmtpSender(host, port, username, password);
+            return services;
+        }
+
+
         private static void AddMapsterConfigurations(this IServiceCollection services)
         {
             TypeAdapterConfig<UpdateCustomerInfoRequest, Account>.NewConfig().IgnoreNullValues(true);
@@ -65,9 +83,7 @@ namespace TSport.Api.Services.Extensions
             TypeAdapterConfig<UpdatePlayerRequest, Player>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdateSeasonRequest, Season>.NewConfig().IgnoreNullValues(true);
             TypeAdapterConfig<UpdateShirtEditionRequest, ShirtEdition>.NewConfig().IgnoreNullValues(true);
-          //  TypeAdapterConfig<ViewReponse, Player>.NewConfig().IgnoreNullValues(true);
-
-
+            //  TypeAdapterConfig<ViewReponse, Player>.NewConfig().IgnoreNullValues(true);
         }
     }
 }

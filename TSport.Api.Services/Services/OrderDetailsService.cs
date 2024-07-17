@@ -92,7 +92,9 @@ namespace TSport.Api.Services.Services
                     Quantity = quantity,
                     Size = size,
                     Subtotal = (shirt.ShirtEdition is not null &&
-                    shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : 0,
+                    shirt.ShirtEdition.DiscountPrice.HasValue) ?
+                    shirt.ShirtEdition.DiscountPrice.Value * quantity :
+                    shirt.ShirtEdition!.StockPrice * quantity,
                     Status = OrderStatus.InCart.ToString()
                 };
 
@@ -102,7 +104,7 @@ namespace TSport.Api.Services.Services
             {
                 orderDetail.Quantity += quantity;
                 orderDetail.Subtotal += (shirt.ShirtEdition is not null &&
-                    shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : 0;
+                    shirt.ShirtEdition.DiscountPrice.HasValue) ? shirt.ShirtEdition.DiscountPrice.Value * quantity : shirt.ShirtEdition!.StockPrice * quantity;
 
             }
 

@@ -130,5 +130,19 @@ namespace TSport.Api.Repositories.Repositories
                         .ToListAsync();
             return order;
         }
+
+        public async Task<Order?> GetFullOrderInfo(int orderId)
+        {
+            return await _context.Orders.AsNoTracking()
+                                        .Where(o => o.Id == orderId)
+                                        .Include(o => o.CreatedAccount)
+                                        .Include(o => o.OrderDetails)
+                                        .ThenInclude(od => od.Shirt)
+                                        .ThenInclude(s => s.ShirtEdition)
+                                        .ThenInclude(se => se.Season)
+                                        .ThenInclude(s => s.Club)
+                                        .AsSplitQuery()
+                                        .SingleOrDefaultAsync();
+        }
     }
 }

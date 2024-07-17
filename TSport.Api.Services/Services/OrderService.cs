@@ -48,6 +48,7 @@ namespace TSport.Api.Services.Services
             return order.Adapt<OrderCartResponse>();
 
         }
+        
 
         public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<AddToCartRequest> shirts)
         {
@@ -103,15 +104,15 @@ namespace TSport.Api.Services.Services
             {
                 var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(o => o.OrderId == orderId && o.ShirtId == shirt.ShirtId);
                 var shirtDetail = await _unitOfWork.ShirtRepository.GetShirtDetailById(shirt.ShirtId);
-                if(orderDetail is null || (orderDetail.Status != null && !orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
+                if (orderDetail is null || (orderDetail.Status != null && !orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
                 {
                     throw new BadRequestException("The shirt is not in cart.");
                 }
-                if(shirtDetail is null)
+                if (shirtDetail is null)
                 {
                     throw new NotFoundException("Shirt not found.");
                 }
-                if(shirtDetail.Quantity < shirt.Quantity)
+                if (shirtDetail.Quantity < shirt.Quantity)
                 {
                     throw new BadRequestException("There are not enough shirt in stock.");
                 }
@@ -163,6 +164,7 @@ namespace TSport.Api.Services.Services
 
             await _unitOfWork.SaveChangesAsync();
 
+            await QueryAndSendOrderConfirmationEmail(order.Id);
         }
 
         public async Task<PagedResultResponse<OrderModel>> GetPagedOrders(QueryPagedOrderRequest request)
@@ -215,16 +217,16 @@ namespace TSport.Api.Services.Services
             {
                 throw new BadRequestException("The order status must be 'Pending' to cancel.");
             }
-            
+
             // Cancel the order
             order.Status = OrderStatus.Cancelled.ToString();
-            
+
             var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
             if (orderDetails is not [])
             {
-                foreach( var item in orderDetails)
+                foreach (var item in orderDetails)
                 {
-                    if(item.Status == OrderStatus.Pending.ToString())
+                    if (item.Status == OrderStatus.Pending.ToString())
                     {
                         item.Status = OrderStatus.Cancelled.ToString();
                     }
@@ -341,8 +343,8 @@ namespace TSport.Api.Services.Services
                     throw new BadRequestException("The order does not belong to this account.");
                 }
             }
-            
-            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);         
+
+            var orderDetails = await _unitOfWork.OrderDetailsRepository.FindAsync(o => o.OrderId == order.Id);
             if (orderDetails is not [])
             {
                 foreach (var item in orderDetails)
@@ -360,7 +362,7 @@ namespace TSport.Api.Services.Services
 
         public async Task<decimal> GetMonthlyRevenue(int year, int month)
         {
-            return await _unitOfWork.OrderRepository.GetMonthlyRevenue( year,  month);
+            return await _unitOfWork.OrderRepository.GetMonthlyRevenue(year, month);
         }
 
         public async Task<int> GetTotalOrder()
@@ -371,6 +373,19 @@ namespace TSport.Api.Services.Services
         public async Task<decimal> GetMonthlyRevenueNow()
         {
             return await _unitOfWork.OrderRepository.GetMonthlyRevenueNow();
+        }
+
+        public async Task QueryAndSendOrderConfirmationEmail(int orderId)
+        {
+            var order = await _unitOfWork.OrderRepository.GetFullOrderInfo(orderId);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            // Send email
+            await _serviceFactory.EmailService.SendOrderConfirmationEmail(order);
         }
     }
 }

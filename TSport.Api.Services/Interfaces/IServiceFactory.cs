@@ -27,5 +27,7 @@ namespace TSport.Api.Services.Interfaces
         IOrderDetailsService OrderDetailsService { get; }
          
         IShirtEditionService ShirtEditionService { get; }
+
+        IEmailService EmailService { get; }
     }
 }

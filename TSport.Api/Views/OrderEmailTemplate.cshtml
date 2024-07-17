@@ -1,0 +1,129 @@
+@model TSport.Api.Repositories.Entities.Order
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #002060;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 10px;
+        }
+
+        th {
+            color: black;
+            font-weight: bold;
+        }
+    </style>
+    <title>Order Email Template</title>
+</head>
+
+<body style="font-family: 'Roboto', sans-serif;">
+    <header style="background-color: #FFE5B4;padding: 20px;">
+        <a href="" class="" style="color: black;text-decoration: none;display: flex;gap: 4px;justify-content: center;">
+            <div class=""><img src="https://cdn-icons-png.flaticon.com/512/919/919437.png" height="30" width="30"
+                    alt=""></div>
+            <div class="" style="font-size: 20px;display: flex;align-items: center;font-weight: bold;">TSport</div>
+        </a>
+    </header>
+    <main style="display: flex;flex-direction: column;margin-inline: auto;
+    background-color: #f5efe6;
+    padding-inline: 10rem;">
+        <p>(Từ <strong>tsport301234@gmail.com</strong> của TSport Shop)</p>
+        <p class="intro">
+            Chân thành cảm ơn bạn <strong>@Model.CreatedAccount.Email</strong> đã mua hàng tại<strong> TSport
+                Shop</strong>,
+            dưới đây là thông tin chi tiết đơn hàng của bạn:
+        </p>
+        <table style="margin: 0 auto">
+            <thead>
+                <tr>
+                    <th style="background-color: #FFAAAA;color: black;">Mã đơn hàng</th>
+                    <th style="background-color: #FFAAAA;color: black;">Ngày đặt</th>
+                    <th style="background-color: #FFAAAA;color: black;">Tổng giá tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="white-space: nowrap">@Model.Code</td>
+
+                    <td>
+                        @Model.OrderDate
+                    </td>
+                    <td>
+                        @Model.Total VNĐ
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            <strong>Chi tiết đơn hàng:</strong>
+        </p>
+        <div class="info-table-wrapper" style="width: 100%;">
+            <table class="info-table" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th style="background-color: #FFAAAA;color: black;">Tên áo</th>
+                        <th style="background-color: #FFAAAA;color: black;">Câu lạc bộ</th>
+                        <th style="background-color: #FFAAAA;color: black;">Số lượng</th>
+                        <th style="background-color: #FFAAAA;color: black;">Đơn giá</th>
+                        <th style="background-color: #FFAAAA;color: black;">Tổng</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    @if (Model.OrderDetails is not null && Model.OrderDetails.Count > 0)
+                    {
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <tr>
+                                <td>@item.Shirt.Name</td>
+                                <td>@item.Shirt.ShirtEdition.Season.Club?.Name</td>
+                                <td>@item.Quantity</td>
+                                @if (item.Shirt.ShirtEdition.DiscountPrice is not null)
+                                {
+                                    <td>@item.Shirt.ShirtEdition.DiscountPrice VNĐ</td>
+                                }
+                                else
+                                {
+                                    <td>@item.Shirt.ShirtEdition.StockPrice VNĐ</td>
+                                }
+                                <td>@item.Subtotal VNĐ</td>
+                            </tr>
+                        }
+                    }
+                    @* <tr>
+                    <td>Áo đấu ABC</td>
+                    <td>Câu lạc bộ ABC</td>
+                    <td>3</td>
+                    <td>300000</td>
+                    <td>3000000</td>
+                    </tr> *@
+                </tbody>
+            </table>
+        </div>
+
+        <p>
+            Nếu bạn có bất kì thắc mắc về đơn hàng hãy liên hệ ngay với TSport Shop để được giải đáp kịp thời
+        </p>
+        <p>Số điện thoại nhân viên: <strong>123456789</strong></p>
+    </main>
+</body>
+
+</html>
