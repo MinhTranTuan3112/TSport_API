@@ -226,7 +226,8 @@ INSERT INTO Account
 VALUES
   ('staff@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Staff', 'Active', '49ab1ee8-4b75-41da-b831-cea19d171406'),
   ('admin@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Admin', 'Active', '85f1eb98-25ed-4adc-a226-2846e06a5a7d'),
-  ('minh@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Customer', 'Active', '580b1b9e-c395-467c-a4e8-ce48c0ec09d1');
+  ('minh@gmail.com', '548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Customer', 'Active', '580b1b9e-c395-467c-a4e8-ce48c0ec09d1'),
+  ('kiritominhswordartonline@gmail.com','548d8cf86e2d301f6e1f5dc621cba2e409e8e814ba35ca1feeff6b0b995d848f', 'Customer', 'Active', 'b5910ce2-7c6a-4d4b-aaa0-357e32033ff3');
 
 -- Insert data into Club table
 INSERT INTO Club
@@ -243,7 +244,7 @@ VALUES
   ('PLY001', 'Lionel Messi', 'Active', 2, 1),
   ('PLY002', 'Cristiano Ronaldo', 'Active', 1, 1),
   ('PLY003', 'Neymar', 'Active', 2, 1),
-  ('PLY004', 'Kylian Mbapp�', 'Active', 2, 1),
+  ('PLY004', 'Kylian Mbappe', 'Active', 2, 1),
   ('PLY005', 'Robert Lewandowski', 'Active', 2, 1);
 
 -- Insert data into Season table
@@ -292,10 +293,10 @@ VALUES
   ('SRT008', 'Barcelona Home Jersey','Barcelona Home Jersey', 'Active', 8, 3, 1, 32);
 
 insert into dbo.[Image](ShirtId, [Url])
-values(1, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+values(1, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/TSport/shirt.jpg'),
 	 (2, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
 	 (3, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
-	 (4, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
+	 (4, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/TSport/shirt.jpg'),
 	 (5, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
 	 (6, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
 	 (7, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),

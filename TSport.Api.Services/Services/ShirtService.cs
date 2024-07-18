@@ -101,7 +101,8 @@ namespace TSport.Api.Services.Services
 
             foreach (var image in createShirtRequest.Images)
             {
-                var imageUrl = await _serviceFactory.SupabaseStorageService.UploadImageAsync(image, _bucketName);
+                var imageUrl = await _serviceFactory.SupabaseStorageService.UploadImageAsync(image, _bucketName,
+                    $"{shirt.Code}_{Guid.NewGuid()}.jpg");
                 await _unitOfWork.ImageRepository.AddAsync(new Image
                 {
                     //                    Id = imageConut,

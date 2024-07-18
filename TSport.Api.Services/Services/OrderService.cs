@@ -48,7 +48,7 @@ namespace TSport.Api.Services.Services
             return order.Adapt<OrderCartResponse>();
 
         }
-        
+
 
         public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<AddToCartRequest> shirts)
         {
@@ -123,7 +123,10 @@ namespace TSport.Api.Services.Services
                 {
                     orderDetail.Subtotal = (decimal)(shirt.Quantity * shirtDetail.ShirtEdition.DiscountPrice);
                 }
-                orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
+                else
+                {
+                    orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
+                }
                 orderDetail.Status = OrderStatus.Pending.ToString();
                 orderDetails.Remove(orderDetails.First(o => o.OrderId == orderDetail.OrderId && o.ShirtId == orderDetail.ShirtId));
                 //reduce quantity from stock
