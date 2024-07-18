@@ -22,6 +22,12 @@ namespace TSport.Api.Controllers
             _serviceFactory = serviceFactory;
         }
 
+        [HttpGet("getall")]
+        public async Task<ActionResult<List<GetShirtEdtionModel>>> GetShirtEditions()
+        {
+            return await _serviceFactory.ShirtEditionService.GetShirtEditions();
+        }
+
         [HttpGet]
         public async Task<ActionResult<PagedResultResponse<GetShirtEdtionModel>>> GetPagedShirtEditions([FromQuery] QueryPagedShirtEditionRequest request)
         {

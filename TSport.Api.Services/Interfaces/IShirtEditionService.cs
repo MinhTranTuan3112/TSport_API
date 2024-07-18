@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using TSport.Api.Models.RequestModels.Season;
 using TSport.Api.Models.RequestModels.ShirtEdition;
 using TSport.Api.Models.ResponseModels;
@@ -25,6 +26,6 @@ namespace TSport.Api.Services.Interfaces
         Task UpdateShirtEdition(int id, UpdateShirtEditionRequest request, ClaimsPrincipal claims);
 
         Task DeleteShirtEdition(int shirtEditionId);
-
+        Task<List<GetShirtEdtionModel>> GetShirtEditions();
     }
 }

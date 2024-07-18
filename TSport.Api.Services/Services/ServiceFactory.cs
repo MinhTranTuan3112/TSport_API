@@ -29,6 +29,8 @@ namespace TSport.Api.Services.Services
 
         private readonly Lazy<IEmailService> _emailService;
 
+        private readonly Lazy<ISeasonPlayerService> _seasonPlayerService;
+
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration,
             IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService,
@@ -47,6 +49,7 @@ namespace TSport.Api.Services.Services
             _supabaseStorageService = new Lazy<ISupabaseStorageService>(() => new SupabaseStorageService(client, configuration));
             _shirtEditionService = new Lazy<IShirtEditionService>(() => new ShirtEditionService(unitOfWork));
             _emailService = new Lazy<IEmailService>(() => new EmailService(fluentEmailFactory, razorTemplateEngine));
+            _seasonPlayerService = new Lazy<ISeasonPlayerService>(() => new SeasonPlayerService(unitOfWork));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -62,5 +65,7 @@ namespace TSport.Api.Services.Services
         public IShirtEditionService ShirtEditionService => _shirtEditionService.Value;
 
         public IEmailService EmailService => _emailService.Value;
+
+        public ISeasonPlayerService SeasonPlayerService => _seasonPlayerService.Value;
     }
 }

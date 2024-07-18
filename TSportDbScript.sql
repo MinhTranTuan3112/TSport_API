@@ -302,6 +302,8 @@ values(1, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/TSp
 	 (7, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg'),
 	 (8, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/Shirts/shirts_02.jpg')
 
+insert into dbo.[Order](Code,OrderDate,[Status],Total,CreatedAccountId)
+values('OD8d29677b-f8b9-429e-b0b6-0cee511aeef1','2024-07-18 12:45:42.067','Pending','777000.00','2024-07-18 12:45:42.067',4);
 ---- Insert data into Order table
 --INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)
 --VALUES
