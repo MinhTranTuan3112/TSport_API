@@ -23,24 +23,33 @@ namespace TSport.Api.Services.Services
             _serviceFactory = serviceFactory;
         }
 
-        public async Task AddtoPayment(ClaimsPrincipal claims, PaymentResponseModel payment)
+        public async Task AddtoPayment(PaymentResponseModel payment)
         {
 
-            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1";
-            if (supabaseId is null)
+            /* var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+             //var supabaseId = "580b1b9e-c395-467c-a4e8-ce48c0ec09d1";
+             if (supabaseId is null)
+             {
+                 throw new UnauthorizedException("Unauthorized");
+             }
+
+             var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId.Equals(supabaseId));
+             if (account is null)
+             {
+                 throw new NotFoundException("Account not found");
+             }*/
+            //   var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
+            string[] splitString = payment.OrderDescription.Split(' ');
+            string number = splitString[1];
+
+            int getACcountId;
+            if (int.TryParse(number, out int accountId))
             {
-                throw new UnauthorizedException("Unauthorized");
+                // Gán giá trị của accountId cho getACcountId
+                getACcountId = accountId;
             }
 
-            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId.Equals(supabaseId));
-            if (account is null)
-            {
-                throw new NotFoundException("Account not found");
-            }
-         //   var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
-
-            var getCart = await _unitOfWork.OrderRepository.GetCustomerCartInfo(account.Id);
+            var getCart = await _unitOfWork.OrderRepository.GetCustomerCartInfo(accountId);
             var getAmmountPayment = await _unitOfWork.PaymentRepository.getAmmountPayment()+1;
             var getStatus = payment.Success;
             var statusReponse ="";
@@ -55,10 +64,7 @@ namespace TSport.Api.Services.Services
                 statusReponse = "Fail";
 
             }
-            if (account is null)
-            {
-                throw new UnauthorizedException("Unauthorized");
-            }
+         
             var newPayment = new Payment
             {
                 Amount = getCart.Total,
@@ -67,7 +73,7 @@ namespace TSport.Api.Services.Services
                 PaymentMethod = "VNpay",
                 CreatedDate = DateTime.Now,
                 Status = statusReponse,
-                CreatedAccountId = account.Id,
+                CreatedAccountId = accountId,
 
             };
             await _unitOfWork.PaymentRepository.AddAsync(newPayment);
@@ -75,5 +81,7 @@ namespace TSport.Api.Services.Services
 
 
         }
+
+     
     }
 }

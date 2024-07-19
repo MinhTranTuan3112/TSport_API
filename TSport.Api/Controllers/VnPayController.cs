@@ -41,7 +41,7 @@ namespace TSport.Api.Controllers
                 var claims = HttpContext.User;
 
                 // Call AddtoPayment with the extracted claims
-                //    await _serviceFactory.PaymentService.AddtoPayment(claims, paymentResponseModel);
+                    await _serviceFactory.PaymentService.AddtoPayment(paymentResponseModel);
           /*  }
             else
             {
