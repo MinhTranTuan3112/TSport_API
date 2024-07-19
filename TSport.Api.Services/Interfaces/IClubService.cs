@@ -22,7 +22,7 @@ namespace TSport.Api.BusinessLogic.Interfaces
         Task<GetClubDetailsModel> GetClubDetailsById(int clubId);
         Task<GetClubResponse> AddClub(CreateClubRequest shirt, ClaimsPrincipal user);
         Task DeleteClub(int id);
-        Task UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal user);
+        Task UpdateClub(int id, UpdateClubRequest updateClubRequest, ClaimsPrincipal user);
         Task<List<ViewReponse>> GetAllClubs();
 
     }

@@ -49,7 +49,7 @@ namespace TSport.Api.Controllers
             return Created(nameof(CreateClub), result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         [SupabaseAuthorize(Roles = ["Staff"])]
         public async Task<ActionResult> DeleteClub(int id)
         {
@@ -57,11 +57,11 @@ namespace TSport.Api.Controllers
             return Ok();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [SupabaseAuthorize(Roles = ["Staff"])]
-        public async Task<ActionResult> UpdateClub([FromQuery] UpdateClubRequest updateClub)
+        public async Task<ActionResult> UpdateClub(int id, [FromQuery] UpdateClubRequest updateClub)
         {
-            await _serviceFactory.ClubService.UpdateClub(updateClub, HttpContext.User);
+            await _serviceFactory.ClubService.UpdateClub(id, updateClub, HttpContext.User);
             return NoContent();
         }
 

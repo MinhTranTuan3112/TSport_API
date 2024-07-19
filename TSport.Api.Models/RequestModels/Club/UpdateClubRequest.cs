@@ -12,7 +12,7 @@ namespace TSport.Api.Models.RequestModels.Club
     public class UpdateClubRequest
     {
         [Required]      
-        [RegularExpression("^\\d{3}$", ErrorMessage = "Invalid shirt code")]
+        [RegularExpression("^CLB\\d{3}$", ErrorMessage = "Invalid shirt code")]
         public string? Code { get; set; }
         
         [Required]

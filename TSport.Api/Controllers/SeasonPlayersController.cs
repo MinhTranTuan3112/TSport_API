@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using TSport.Api.Models.RequestModels.SeasonPLayer;
 using TSport.Api.Services.BusinessModels.SeasonPlayer;
 using TSport.Api.Services.Interfaces;
+using TSport.Api.Services.Services;
 
 namespace TSport.Api.Controllers
 {
@@ -24,6 +26,20 @@ namespace TSport.Api.Controllers
         {
             return await _serviceFactory.SeasonPlayerService.GetSeasonPlayers();
         }
-        
+
+        [HttpPost]
+        public async Task<ActionResult> AddSeasonPLayer(SeasonPlayerRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest("Request cannot be null");
+            }
+
+            await _serviceFactory.SeasonPlayerService.AddSeasonPlayer(request);
+
+            return NoContent();
+        }
+
+
     }
 }

@@ -8,6 +8,7 @@ namespace TSport.Api.Repositories.Interfaces
 {
     public interface ISeasonPlayerRepository : IGenericRepository<SeasonPlayer>
     {
-
+        //Task<SeasonPlayer> Get
+        Task<List<Player>> getPlayerName();
     }
 }

@@ -55,9 +55,12 @@ namespace TSport.Api.Services.Services
         public PaymentResponseModel PaymentExecute(IQueryCollection collections)
         {
             var pay = new VnPayLibrary();
-            var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"]);
+            var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"] );
 
             return response;
         }
+
+
+
     }
 }
