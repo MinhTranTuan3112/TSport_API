@@ -9,6 +9,7 @@ using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Shared.Enums;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -31,6 +32,7 @@ namespace TSport.Api.Repositories.Repositories
             //Query
             var query = _context.Shirts
                                    .AsNoTracking()
+                                   .Where(s => s.Status != ShirtStatus.Deleted.ToString())
                                    .Include(s => s.Images)
                                    .Include(s => s.ShirtEdition)
                                    .Include(s => s.SeasonPlayer)
@@ -70,6 +72,7 @@ namespace TSport.Api.Repositories.Repositories
         public async Task<Shirt?> GetShirtDetailById(int id)
         {
             var shirt = await _context.Shirts
+                .Where(s => s.Status != ShirtStatus.Deleted.ToString())
                 .AsNoTracking()
                 .Where(s => s.Id == id)
                 .Include(s => s.ShirtEdition)
@@ -89,7 +92,7 @@ namespace TSport.Api.Repositories.Repositories
 
         public async Task<Shirt?> GetShirtWithShirtEditionById(int id)
         {
-            return await _context.Shirts.Where(s => s.Id == id)
+            return await _context.Shirts.Where(s => s.Id == id && s.Status != ShirtStatus.Deleted.ToString())
                  .Include(s => s.ShirtEdition)
                  .SingleOrDefaultAsync();
         }

@@ -42,7 +42,7 @@ public partial class TsportDbContext : DbContext
     {
         modelBuilder.Entity<Account>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC07F2E17E28");
+            entity.HasKey(e => e.Id).HasName("PK__Account__3214EC0770447F11");
 
             entity.ToTable("Account");
 
@@ -59,7 +59,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Club>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC074B26E74E");
+            entity.HasKey(e => e.Id).HasName("PK__Club__3214EC07A693A486");
 
             entity.ToTable("Club");
 
@@ -83,7 +83,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Image>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC072A085A70");
+            entity.HasKey(e => e.Id).HasName("PK__Image__3214EC0710A0FCAC");
 
             entity.ToTable("Image");
 
@@ -95,7 +95,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC07386518C9");
+            entity.HasKey(e => e.Id).HasName("PK__Order__3214EC0728491D19");
 
             entity.ToTable("Order");
 
@@ -122,7 +122,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9E784595CF");
+            entity.HasKey(e => new { e.OrderId, e.ShirtId }).HasName("PK__OrderDet__63098A9E67A8899C");
 
             entity.ToTable("OrderDetail");
 
@@ -144,10 +144,11 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07D31004F3");
+            entity.HasKey(e => e.Id).HasName("PK__Payment__3214EC07575C7002");
 
             entity.ToTable("Payment");
 
+            entity.Property(e => e.Amount).HasColumnType("money");
             entity.Property(e => e.Code).HasMaxLength(255);
             entity.Property(e => e.CreatedDate)
                 .HasDefaultValueSql("(getdate())")
@@ -173,7 +174,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Player>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC074CFE3242");
+            entity.HasKey(e => e.Id).HasName("PK__Player__3214EC0758A793B4");
 
             entity.ToTable("Player");
 
@@ -201,7 +202,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Season>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC075C886DB3");
+            entity.HasKey(e => e.Id).HasName("PK__Season__3214EC0709A51F33");
 
             entity.ToTable("Season");
 
@@ -229,7 +230,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<SeasonPlayer>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC07D935CF96");
+            entity.HasKey(e => e.Id).HasName("PK__SeasonPl__3214EC072603C516");
 
             entity.ToTable("SeasonPlayer");
 
@@ -246,7 +247,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<Shirt>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC079706FE7A");
+            entity.HasKey(e => e.Id).HasName("PK__Shirt__3214EC076D4A401D");
 
             entity.ToTable("Shirt");
 
@@ -281,7 +282,7 @@ public partial class TsportDbContext : DbContext
 
         modelBuilder.Entity<ShirtEdition>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC07EF55A495");
+            entity.HasKey(e => e.Id).HasName("PK__ShirtEdi__3214EC078127535B");
 
             entity.ToTable("ShirtEdition");
 

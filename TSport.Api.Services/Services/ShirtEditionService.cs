@@ -89,6 +89,10 @@ namespace TSport.Api.Services.Services
             return shirtEdition.Adapt<ShirtEditionDetailsModel>();
         }
 
+        public async Task<List<GetShirtEdtionModel>> GetShirtEditions()
+        {
+            return (await _unitOfWork.ShirtEditionRepository.GetAllAsync()).Adapt<List<GetShirtEdtionModel>>();
+        }
 
         public async Task UpdateShirtEdition(int id, UpdateShirtEditionRequest request, ClaimsPrincipal claims)
         {

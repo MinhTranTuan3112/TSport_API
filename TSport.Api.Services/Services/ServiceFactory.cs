@@ -31,6 +31,8 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IVnPayService> _vnpayService;
 
 
+        private readonly Lazy<ISeasonPlayerService> _seasonPlayerService;
+
         public ServiceFactory(IUnitOfWork unitOfWork, IConfiguration configuration,
             IRedisCacheService<PagedResultResponse<GetShirtInPagingResultModel>> pagedResultCacheService,
             IRedisCacheService<PagedResultResponse<GetClubModel>> clubPagedResultCacheService,
@@ -51,6 +53,7 @@ namespace TSport.Api.Services.Services
             _emailService = new Lazy<IEmailService>(() => new EmailService(fluentEmailFactory, razorTemplateEngine));
             _vnpayService = new Lazy<IVnPayService>(() => new VnPayService(configuration));
 
+            _seasonPlayerService = new Lazy<ISeasonPlayerService>(() => new SeasonPlayerService(unitOfWork));
         }
 
         public IAuthService AuthService => _authService.Value;
@@ -68,5 +71,6 @@ namespace TSport.Api.Services.Services
         public IEmailService EmailService => _emailService.Value;
 
         public IVnPayService VnPayService => _vnpayService.Value;
+        public ISeasonPlayerService SeasonPlayerService => _seasonPlayerService.Value;
     }
 }

@@ -130,6 +130,13 @@ namespace TSport.Api.Controllers
             await _serviceFactory.OrderService.DeleteOrder(HttpContext.User, orderId);
             return NoContent();
         }
+        [HttpPatch("change-status/{orderId}")]
+        [SupabaseAuthorize(Roles = ["Staff"])]
+        public async Task<IActionResult> ChangeOrderStatus(int orderId, string status)
+        {
+            await _serviceFactory.OrderService.ChangeOrderStatus(orderId, status);
+            return NoContent();
+        }
     }
 }
 

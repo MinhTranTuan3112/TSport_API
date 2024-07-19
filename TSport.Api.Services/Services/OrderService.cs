@@ -48,7 +48,7 @@ namespace TSport.Api.Services.Services
             return order.Adapt<OrderCartResponse>();
 
         }
-        
+
 
         public async Task ConfirmOrder(ClaimsPrincipal claims, int orderId, List<AddToCartRequest> shirts)
         {
@@ -104,6 +104,7 @@ namespace TSport.Api.Services.Services
             {
                 var orderDetail = await _unitOfWork.OrderDetailsRepository.FindOneAsync(o => o.OrderId == orderId && o.ShirtId == shirt.ShirtId);
                 var shirtDetail = await _unitOfWork.ShirtRepository.GetShirtDetailById(shirt.ShirtId);
+
                 if (orderDetail is null || (orderDetail.Status != null && !orderDetail.Status.Equals(OrderStatus.InCart.ToString())))
                 {
                     throw new BadRequestException("The shirt is not in cart.");
@@ -123,7 +124,10 @@ namespace TSport.Api.Services.Services
                 {
                     orderDetail.Subtotal = (decimal)(shirt.Quantity * shirtDetail.ShirtEdition.DiscountPrice);
                 }
-                orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
+                else
+                {
+                    orderDetail.Subtotal = shirt.Quantity * shirtDetail.ShirtEdition.StockPrice;
+                }
                 orderDetail.Status = OrderStatus.Pending.ToString();
                 orderDetails.Remove(orderDetails.First(o => o.OrderId == orderDetail.OrderId && o.ShirtId == orderDetail.ShirtId));
                 //reduce quantity from stock
@@ -206,13 +210,13 @@ namespace TSport.Api.Services.Services
             {
                 throw new NotFoundException("Order not found");
             }
-
-            if (order.CreatedAccountId != account.Id)
+            
+            if (order.CreatedAccountId != account.Id && account.Role != "Staff")
             {
                 throw new BadRequestException("The order does not belong to this account.");
             }
 
-            // Check if the order status is InCart
+            // Check if the order status is Pending
             if (order.Status != OrderStatus.Pending.ToString())
             {
                 throw new BadRequestException("The order status must be 'Pending' to cancel.");
@@ -386,6 +390,19 @@ namespace TSport.Api.Services.Services
 
             // Send email
             await _serviceFactory.EmailService.SendOrderConfirmationEmail(order);
+        }
+
+        public async Task ChangeOrderStatus(int orderId, string status)
+        {
+            var order = await _unitOfWork.OrderRepository.GetFullOrderInfo(orderId);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            order.Status = status;
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

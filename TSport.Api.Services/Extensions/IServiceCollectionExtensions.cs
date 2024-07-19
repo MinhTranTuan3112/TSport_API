@@ -42,6 +42,7 @@ namespace TSport.Api.Services.Extensions
             services.AddScoped<IPlayerService, PlayerService>();
             services.AddScoped<ISupabaseStorageService, SupabaseStorageService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ISeasonPlayerService, SeasonPlayerService>();
             return services;
         }
 

@@ -114,14 +114,9 @@ namespace TSport.Api.Services.Services
 
         public async Task UpdateCustomerInfo(ClaimsPrincipal claims, UpdateCustomerInfoRequest request)
         {
-            var accountId = claims.FindFirst(c => c.Type == "aid")?.Value;
-
-            if (accountId is null)
-            {
-                throw new UnauthorizedException("Unauthorized ");
-            }
-
-            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.Id == Convert.ToInt32(accountId));
+            var supabaseId = claims.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
+            var account = await _unitOfWork.AccountRepository.FindOneAsync(a => a.SupabaseId == supabaseId);
 
             if (account is null)
             {
