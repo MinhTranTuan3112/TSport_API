@@ -34,7 +34,13 @@ namespace TSport.Api.Controllers
             var accountIdClaim = claims.FirstOrDefault(c => c.Type == "AccountId");
             int accountId = 0;
 
-            if (accountIdClaim != null)
+                // Extract claims from the current user (you might use User.Claims or HttpContext.User.Claims)
+                var claims = HttpContext.User;
+
+                // Call AddtoPayment with the extracted claims
+                    await _serviceFactory.PaymentService.AddtoPayment(paymentResponseModel);}
+          /*  }
+            else
             {
                 int.TryParse(accountIdClaim.Value, out accountId);
             }

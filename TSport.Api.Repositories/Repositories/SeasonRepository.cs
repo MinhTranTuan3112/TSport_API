@@ -68,5 +68,12 @@ namespace TSport.Api.Repositories.Repositories
         {
             return await _context.Seasons.ToListAsync();
         }
+
+        public async Task<List<Season>> GetSeasonsByIdsAsync(List<int> seasonIds)
+        {
+            return await _context.Seasons
+            .Where(sn => seasonIds.Contains(sn.Id))
+            .ToListAsync();
+        }
     }
 }

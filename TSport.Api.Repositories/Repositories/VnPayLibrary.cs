@@ -42,12 +42,17 @@ namespace TSport.Api.Repositories.Repositories
                 return new PaymentResponseModel()
                 {
                     Success = false,
+                    OrderDescription = orderInfo,
+
+
                 };
             if (vnpResponseCode != "00")
             {
                 return new PaymentResponseModel()
                 {
-                    Success = false
+                    Success = false,
+                    OrderDescription = orderInfo,
+
                 };
             }
             else

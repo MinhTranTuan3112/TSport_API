@@ -11,7 +11,7 @@ namespace TSport.Api.Services.Interfaces
 {
     public interface IPaymentService
     {
-        Task AddtoPayment(ClaimsPrincipal user, PaymentResponseModel paymentResponseModel);
+        Task AddtoPayment(PaymentResponseModel paymentResponseModel);
 
     }
 }

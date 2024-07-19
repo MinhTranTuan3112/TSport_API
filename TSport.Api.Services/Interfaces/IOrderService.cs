@@ -38,5 +38,9 @@ namespace TSport.Api.Services.Interfaces
 
         Task QueryAndSendOrderConfirmationEmail(int orderId);
         Task ChangeOrderStatus(int orderId, string status);
+
+        Task<decimal> GetRevenueBasedOnClub(int clubId);
+        Task<int> CountOrdersByClubIdAsync(int clubId);
+
     }
 }

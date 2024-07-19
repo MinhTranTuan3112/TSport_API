@@ -90,5 +90,11 @@ namespace TSport.Api.Repositories.Repositories
             return await _context.OrderDetails.ToListAsync();
         }
 
+        public async Task<List<OrderDetail>> GetOrderDetailsByOrderIdsAsync(List<int> orderIds)
+        {
+            return await _context.OrderDetails
+          .Where(od => orderIds.Contains(od.OrderId))
+          .ToListAsync();
+        }
     }
 }

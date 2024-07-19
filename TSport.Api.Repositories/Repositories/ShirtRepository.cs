@@ -96,6 +96,23 @@ namespace TSport.Api.Repositories.Repositories
                  .Include(s => s.ShirtEdition)
                  .SingleOrDefaultAsync();
         }
+
+        public async Task<List<Shirt>> getListShirtbaseOrderId(int id)
+        {
+            var shirtEditions = await _context.Shirts
+                                         .Where(se => se.Id == id)
+                                         .ToListAsync();
+
+            return shirtEditions;
+
+        }
+
+        public async Task<List<Shirt>> GetShirtDetailsByShirtIdsAsync(List<int> shirtIds)
+        {
+            return await _context.Shirts
+              .Where(s => shirtIds.Contains(s.Id))
+              .ToListAsync();
+        }
     }
 }
 
