@@ -147,12 +147,12 @@ namespace TSport.Api.Repositories.Repositories
                                         .SingleOrDefaultAsync();
         }
 
-        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds, DateTime? startDate, DateTime? endDate)
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate)
         {
             // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart" và nằm trong khoảng thời gian được chỉ định
             var validOrdersQuery = _context.Orders
                                            .AsNoTracking()
-                                           .Where(o => o.Status != OrderStatus.InCart.ToString());
+                                           .Where(o => o.Status != OrderStatus.InCart.ToString() && o.Status != OrderStatus.Pending.ToString());
 
             if (startDate.HasValue)
             {
@@ -192,7 +192,7 @@ namespace TSport.Api.Repositories.Repositories
 
             // Step 6: Kiểm tra ClubId và lọc ra các đơn hàng có ClubId nằm trong danh sách clubIds
             var ordersWithClubIds = seasons
-                                    .Where(se => se.ClubId.HasValue && clubIds.Contains(se.ClubId.Value))
+                                    .Where(se => !clubId.HasValue || se.ClubId == clubId.Value)
                                     .Select(se => se.OrderId)
                                     .Distinct()
                                     .ToList();
@@ -231,5 +231,6 @@ namespace TSport.Api.Repositories.Repositories
                 Orders = orders.Adapt<List<OrderModel>>() // Ensure you have Mapster installed and imported
             };
         }
+
     }
 }
