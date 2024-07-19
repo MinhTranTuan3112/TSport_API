@@ -29,5 +29,6 @@ namespace TSport.Api.Services.Interfaces
         IShirtEditionService ShirtEditionService { get; }
 
         IEmailService EmailService { get; }
+        IVnPayService VnPayService { get; }
     }
 }
