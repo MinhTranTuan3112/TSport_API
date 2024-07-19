@@ -481,7 +481,18 @@ namespace TSport.Api.Services.Services
 
         public async Task<int> CountOrdersByClubIdAsync(int clubId)
         {
-           
+
+/*            var filteredSeasons = seasons.Where(se => se.ClubId == clubId).ToList();
+
+            // Bước 6: Tính toán doanh thu
+            var revenue = 0m;
+
+            // Lấy các ShirtEditionId thuộc về ClubId cụ thể
+            var clubShirtEditionIds = shirtEditions
+                .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId))
+                .Select(se => se.Id)
+                .ToList();*/
+
             // Step 1: Get all valid Order IDs (not in the "incart" state)
             var validOrderIds = await _unitOfWork.OrderRepository.GetValidOrderIdsAsync();
 
@@ -508,19 +519,27 @@ namespace TSport.Api.Services.Services
             var filteredSeasons = seasons.Where(se => se.ClubId == clubId).ToList();
 
             // Step 9: Get ShirtEdition IDs that belong to the filtered Seasons
+            /*       var clubShirtEditionIds = shirtEditions
+               .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId)) // Check if SeasonId matches any filtered Season
+               .Select(se => se.Id)
+               .ToList();*/
             var clubShirtEditionIds = shirtEditions
-        .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId)) // Check if SeasonId matches any filtered Season
-        .Select(se => se.Id)
-        .ToList();
+                      .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId))
+                      .Select(se => se.Id)
+                      .ToList();
 
             // Step 10: Count distinct Order IDs that are associated with the specific Club's ShirtEdition IDs
-            var orderCount = orderDetails
-                .Where(od => shirts.Any(s => s.Id == od.ShirtId && clubShirtEditionIds.Contains(s.ShirtEditionId)))
-                .Select(od => od.OrderId)
-                .Distinct()
-                .Count();
+            /*  var orderCount = orderDetails
+                  .Where(od => shirts.Any(s => s.Id == od.ShirtId && clubShirtEditionIds.Contains(s.ShirtEditionId)))
+                  .Select(od => od.OrderId)
+                  .Distinct()
+                  .Count();*/
+            var orderDetailCount = orderDetails
+         .Count(od => shirts.Any(s => s.Id == od.ShirtId && clubShirtEditionIds.Contains(s.ShirtEditionId)));
 
-            return orderCount;
+            return orderDetailCount;
+
+         
         }
     }
 }
