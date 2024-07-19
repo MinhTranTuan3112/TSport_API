@@ -481,32 +481,39 @@ namespace TSport.Api.Services.Services
 
         public async Task<int> CountOrdersByClubIdAsync(int clubId)
         {
-            // Bước 1: Lấy tất cả OrderId hợp lệ (không ở trạng thái "incart")
+           
+            // Step 1: Get all valid Order IDs (not in the "incart" state)
             var validOrderIds = await _unitOfWork.OrderRepository.GetValidOrderIdsAsync();
 
-            // Bước 2: Lấy tất cả các chi tiết đơn hàng từ bảng OrderDetail với OrderId từ validOrderIds
+            // Step 2: Get all order details for the valid orders
             var orderDetails = await _unitOfWork.OrderDetailsRepository.GetOrderDetailsByOrderIdsAsync(validOrderIds);
 
-            // Bước 3: Từ ShirtId trong bảng OrderDetail, tìm ra ShirtEditionId từ bảng Shirt
+            // Step 3: From the OrderDetails, get the Shirt IDs
             var shirtIds = orderDetails.Select(od => od.ShirtId).Distinct().ToList();
+
+            // Step 4: Get Shirt details using the Shirt IDs
             var shirts = await _unitOfWork.ShirtRepository.GetShirtDetailsByShirtIdsAsync(shirtIds);
+
+            // Step 5: Get ShirtEdition IDs from the Shirt details
             var shirtEditionIds = shirts.Select(s => s.ShirtEditionId).Distinct().ToList();
 
-            // Bước 4: Từ ShirtEditionId, tìm ra SeasonId từ bảng ShirtEdition
+            // Step 6: Get ShirtEdition details using the ShirtEdition IDs
             var shirtEditions = await _unitOfWork.ShirtEditionRepository.GetShirtEditionsByIdsAsync(shirtEditionIds);
+
+            // Step 7: Get Season IDs from the ShirtEdition details
             var seasonIds = shirtEditions.Select(se => se.SeasonId).Distinct().ToList();
 
-            // Bước 5: Từ SeasonId, tìm ra ClubId từ bảng Season và lọc theo clubId
+            // Step 8: Get Season details using the Season IDs and filter by clubId
             var seasons = await _unitOfWork.SeasonRepository.GetSeasonsByIdsAsync(seasonIds);
             var filteredSeasons = seasons.Where(se => se.ClubId == clubId).ToList();
 
-            // Lấy các ShirtEditionId thuộc về ClubId cụ thể
+            // Step 9: Get ShirtEdition IDs that belong to the filtered Seasons
             var clubShirtEditionIds = shirtEditions
-                .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId))
-                .Select(se => se.Id)
-                .ToList();
+        .Where(se => filteredSeasons.Any(fs => fs.Id == se.SeasonId)) // Check if SeasonId matches any filtered Season
+        .Select(se => se.Id)
+        .ToList();
 
-            // Bước 6: Tính tổng số lượng đơn hàng
+            // Step 10: Count distinct Order IDs that are associated with the specific Club's ShirtEdition IDs
             var orderCount = orderDetails
                 .Where(od => shirts.Any(s => s.Id == od.ShirtId && clubShirtEditionIds.Contains(s.ShirtEditionId)))
                 .Select(od => od.OrderId)

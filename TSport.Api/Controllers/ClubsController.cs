@@ -85,7 +85,7 @@ namespace TSport.Api.Controllers
             }
         }
 
-       /* [HttpGet("TotalOrder/{clubId}")]
+        [HttpGet("TotalOrder/{clubId}")]
         public async Task<IActionResult> GetTotalBasedOnClub(int clubId)
         {
             if (clubId <= 0)
@@ -103,7 +103,7 @@ namespace TSport.Api.Controllers
                 // You may want to log the exception or handle it accordingly
                 return StatusCode(500, new { Error = ex.Message });
             }
-        }*/
+        }
 
     }
 }
