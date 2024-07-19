@@ -10,8 +10,10 @@ namespace TSport.Api.Models.RequestModels.ShirtEdition
     public class UpdateShirtEditionRequest
     {
         [Required]
+        public string? Code { get; set; }
+        [Required]
         public string Size { get; set; } = null!;
-
+        
         public bool? HasSignature { get; set; }
 
         public decimal? StockPrice { get; set; }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.Payment;
 using System.Security.Claims;
+using Microsoft.Identity.Client;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -17,9 +18,8 @@ namespace TSport.Api.Repositories.Repositories
     {
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
-        public PaymentResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret)
+        public PaymentResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret, int accountId)
         {
-
             var vnPay = new VnPayLibrary();
 
             foreach (var (key, value) in collection)
@@ -33,18 +33,15 @@ namespace TSport.Api.Repositories.Repositories
             var orderId = Convert.ToInt64(vnPay.GetResponseData("vnp_TxnRef"));
             var vnPayTranId = Convert.ToInt64(vnPay.GetResponseData("vnp_TransactionNo"));
             var vnpResponseCode = vnPay.GetResponseData("vnp_ResponseCode");
-            var vnpSecureHash =
-                collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value; //hash của dữ liệu trả về
+            var vnpSecureHash = collection.FirstOrDefault(k => k.Key == "vnp_SecureHash").Value; //hash của dữ liệu trả về
             var orderInfo = vnPay.GetResponseData("vnp_OrderInfo");
 
-            var checkSignature =
-                vnPay.ValidateSignature(vnpSecureHash, hashSecret); //check Signature
+            var checkSignature = vnPay.ValidateSignature(vnpSecureHash, hashSecret); //check Signature
 
             if (!checkSignature)
                 return new PaymentResponseModel()
                 {
                     Success = false,
-                    
                 };
             if (vnpResponseCode != "00")
             {
@@ -53,21 +50,24 @@ namespace TSport.Api.Repositories.Repositories
                     Success = false
                 };
             }
-            else { 
-            return new PaymentResponseModel()
+            else
             {
-                Success = true,
-                PaymentMethod = "VnPay",
-                OrderDescription = orderInfo,
-                OrderId = orderId.ToString(),
-                PaymentId = vnPayTranId.ToString(),
-                TransactionId = vnPayTranId.ToString(),
-                Token = vnpSecureHash,
-                VnPayResponseCode = vnpResponseCode,
-                
-            };
+                return new PaymentResponseModel()
+                {
+                    Success = true,
+                    PaymentMethod = "VnPay",
+                    OrderDescription = orderInfo,
+                    OrderId = orderId.ToString(),
+                    PaymentId = vnPayTranId.ToString(),
+                    TransactionId = vnPayTranId.ToString(),
+                    Token = vnpSecureHash,
+                    VnPayResponseCode = vnpResponseCode,
+                    AccountId = accountId // Set the AccountId
+                };
             }
         }
+
+
         public string GetIpAddress(HttpContext context)
         {
             var ipAddress = string.Empty;

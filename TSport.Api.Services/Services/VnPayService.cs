@@ -52,12 +52,15 @@ namespace TSport.Api.Services.Services
             return paymentUrl;
         }
 
-        public PaymentResponseModel PaymentExecute(IQueryCollection collections)
+        public PaymentResponseModel PaymentExecute(IQueryCollection collections, int accountId)
         {
             var pay = new VnPayLibrary();
-            var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"]);
+            var response = pay.GetFullResponseData(collections, _configuration["Vnpay:HashSecret"], accountId);
 
             return response;
         }
+
+
+
     }
 }
