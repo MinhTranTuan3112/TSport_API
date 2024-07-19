@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -38,7 +39,7 @@ namespace TSport.Api.Services.Interfaces
 
         Task QueryAndSendOrderConfirmationEmail(int orderId);
         Task ChangeOrderStatus(int orderId, string status);
-        Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds);
+        Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate);
 
     }
 }

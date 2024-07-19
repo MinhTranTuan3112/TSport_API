@@ -4,6 +4,7 @@ namespace TSport.Api.Shared.Enums
     {
         InCart,
         Pending,
+        Paid,
         OnDelivery,
         Finished,
         Cancelled

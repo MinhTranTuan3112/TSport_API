@@ -28,7 +28,7 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<Order?> GetFullOrderInfo(int orderId);
 
-        Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds);
+        Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate);
 
     }
 }

@@ -13,6 +13,7 @@ using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Shared.Enums;
 using Mapster;
+using TSport.Api.Models.RequestModels.Shirt;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -146,14 +147,26 @@ namespace TSport.Api.Repositories.Repositories
                                         .SingleOrDefaultAsync();
         }
 
-        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds)
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate)
         {
-            // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart"
-            var validOrders = await _context.Orders
-                                            .AsNoTracking()
-                                            .Where(o => o.Status != OrderStatus.InCart.ToString())
-                                            .Select(o => o.Id)
-                                            .ToListAsync();
+            // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart" và nằm trong khoảng thời gian được chỉ định
+            var validOrdersQuery = _context.Orders
+                                           .AsNoTracking()
+                                           .Where(o => o.Status != OrderStatus.InCart.ToString()/* && o.Status != OrderStatus.Pending.ToString()*/);
+
+            if (startDate.HasValue)
+            {
+                validOrdersQuery = validOrdersQuery.Where(o => o.OrderDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                validOrdersQuery = validOrdersQuery.Where(o => o.OrderDate <= endDate.Value);
+            }
+
+            var validOrders = await validOrdersQuery
+                                .Select(o => o.Id)
+                                .ToListAsync();
 
             // Step 2: Lấy tất cả các chi tiết đơn hàng từ bảng OrderDetail với OrderId từ ValidOrders
             var orderDetails = await _context.OrderDetails
@@ -179,7 +192,7 @@ namespace TSport.Api.Repositories.Repositories
 
             // Step 6: Kiểm tra ClubId và lọc ra các đơn hàng có ClubId nằm trong danh sách clubIds
             var ordersWithClubIds = seasons
-                                    .Where(se => se.ClubId.HasValue && clubIds.Contains(se.ClubId.Value))
+                                    .Where(se => !clubId.HasValue || se.ClubId == clubId.Value)
                                     .Select(se => se.OrderId)
                                     .Distinct()
                                     .ToList();
@@ -192,13 +205,32 @@ namespace TSport.Api.Repositories.Repositories
             // Tính tổng doanh thu
             var totalRevenue = orders.Sum(o => o.Total);
 
+            // Đếm tổng số lượng đơn hàng
+            var totalOrderCount = orders.Count;
+
+            // Đếm tổng số lượng áo trong các đơn hàng và phân loại theo size
+            var shirtQuantities = orderDetails
+                                  .Where(od => ordersWithClubIds.Contains(od.OrderId))
+                                  .GroupBy(od => od.Size)
+                                  .Select(g => new ShirtQuantityBySize
+                                  {
+                                      Size = g.Key,
+                                      Quantity = g.Sum(od => od.Quantity)
+                                  })
+                                  .ToList();
+
+            // Tính tổng số lượng áo
+            var totalShirtQuantity = shirtQuantities.Sum(sq => sq.Quantity);
+
             return new ClubOrderReportResponse
             {
+                TotalOrderCount = totalOrderCount,
+                TotalShirtQuantity = totalShirtQuantity,
                 TotalRevenue = totalRevenue,
+                ShirtQuantitiesBySize = shirtQuantities,
                 Orders = orders.Adapt<List<OrderModel>>() // Ensure you have Mapster installed and imported
             };
         }
-
 
     }
 }

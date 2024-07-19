@@ -140,12 +140,11 @@ namespace TSport.Api.Controllers
 
         [HttpGet]
         [Route("club-order-report")]
-        [SupabaseAuthorize]
-        public async Task<ActionResult<ClubOrderReportResponse>> GetClubOrderReport([FromQuery] List<int> clubIds)
+        //[SupabaseAuthorize]
+        public async Task<ActionResult<ClubOrderReportResponse>> GetClubOrderReport([FromQuery] int? clubId, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {
-            return await _serviceFactory.OrderService.GetClubOrderReport(clubIds);
+            return await _serviceFactory.OrderService.GetClubOrderReport(clubId, startDate, endDate);
         }
-
 
     }
 }

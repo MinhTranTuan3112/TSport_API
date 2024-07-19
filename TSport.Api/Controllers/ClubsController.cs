@@ -65,45 +65,45 @@ namespace TSport.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("revenue/{clubId}")]
-        public async Task<IActionResult> GetRevenueBasedOnClub(int clubId)
-        {
-            if (clubId <= 0)
-            {
-                return BadRequest("Invalid club ID.");
-            }
+        //[HttpGet("revenue/{clubId}")]
+        //public async Task<IActionResult> GetRevenueBasedOnClub(int clubId)
+        //{
+        //    if (clubId <= 0)
+        //    {
+        //        return BadRequest("Invalid club ID.");
+        //    }
 
-            try
-            {
-                var revenue = await _serviceFactory.OrderService.GetRevenueBasedOnClub(clubId);
-                return Ok(new { ClubId = clubId, Revenue = revenue });
-            }
-            catch (Exception ex)
-            {
-                // You may want to log the exception or handle it accordingly
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
+        //    try
+        //    {
+        //        var revenue = await _serviceFactory.OrderService.GetRevenueBasedOnClub(clubId);
+        //        return Ok(new { ClubId = clubId, Revenue = revenue });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // You may want to log the exception or handle it accordingly
+        //        return StatusCode(500, new { Error = ex.Message });
+        //    }
+        //}
 
-        [HttpGet("TotalOrder/{clubId}")]
-        public async Task<IActionResult> GetTotalBasedOnClub(int clubId)
-        {
-            if (clubId <= 0)
-            {
-                return BadRequest("Invalid club ID.");
-            }
+        //[HttpGet("TotalOrder/{clubId}")]
+        //public async Task<IActionResult> GetTotalBasedOnClub(int clubId)
+        //{
+        //    if (clubId <= 0)
+        //    {
+        //        return BadRequest("Invalid club ID.");
+        //    }
 
-            try
-            {
-                var totalOrder = await _serviceFactory.OrderService.CountOrdersByClubIdAsync(clubId);
-                return Ok(new { ClubId = clubId, TotalOrder = totalOrder });
-            }
-            catch (Exception ex)
-            {
-                // You may want to log the exception or handle it accordingly
-                return StatusCode(500, new { Error = ex.Message });
-            }
-        }
+        //    try
+        //    {
+        //        var totalOrder = await _serviceFactory.OrderService.CountOrdersByClubIdAsync(clubId);
+        //        return Ok(new { ClubId = clubId, TotalOrder = totalOrder });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // You may want to log the exception or handle it accordingly
+        //        return StatusCode(500, new { Error = ex.Message });
+        //    }
+        //}
 
     }
 }
