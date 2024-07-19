@@ -112,13 +112,13 @@ namespace TSport.Api.BusinessLogic.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task UpdateClub(UpdateClubRequest updateClubRequest, ClaimsPrincipal user)
+        public async Task UpdateClub(int id, UpdateClubRequest updateClubRequest, ClaimsPrincipal user)
         {
             var supabaseId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var account = await _serviceFactory.AccountService.GetAccountBySupabaseId(supabaseId!);
 
-            var club = await _unitOfWork.ClubRepository.FindOneAsync(s => s.Code == updateClubRequest.Code);
+            var club = await _unitOfWork.ClubRepository.FindOneAsync(s => s.Id == id);
 
             if (club is null)
             {
