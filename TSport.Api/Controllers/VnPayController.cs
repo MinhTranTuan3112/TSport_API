@@ -27,27 +27,20 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet("payment-callback")]
-
         public async Task<IActionResult> PaymentCallback()
         {
-            var response = _serviceFactory.VnPayService.PaymentExecute(Request.Query);
-            // If the response is successful, proceed with adding the payment
-       /*     if (response.Success)
-            {*/
-                // Extract necessary data from the response
-                var paymentResponseModel = response;
+            // Extract claims from the current user
+            var claims = HttpContext.User.Claims;
+            var accountIdClaim = claims.FirstOrDefault(c => c.Type == "AccountId");
+            int accountId = 0;
 
-                // Extract claims from the current user (you might use User.Claims or HttpContext.User.Claims)
-                var claims = HttpContext.User;
-
-                // Call AddtoPayment with the extracted claims
-                //    await _serviceFactory.PaymentService.AddtoPayment(claims, paymentResponseModel);
-          /*  }
-            else
+            if (accountIdClaim != null)
             {
-                // Handle the failure case as needed
-                return BadRequest("Payment failed");
-            }*/
+                int.TryParse(accountIdClaim.Value, out accountId);
+            }
+
+            var response = _serviceFactory.VnPayService.PaymentExecute(Request.Query, accountId);
+
             return Ok(new JsonResponse<PaymentResponseModel>(response));
         }
     }
