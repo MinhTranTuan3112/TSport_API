@@ -14,6 +14,10 @@ namespace TSport.Api.Repositories.Interfaces
         Task<Shirt?> GetShirtDetailById(int id);
 
         Task<Shirt?> GetShirtWithShirtEditionById(int id);
+
+        Task<List<Shirt>> getListShirtbaseOrderId(int id);
+        Task<List<Shirt>> GetShirtDetailsByShirtIdsAsync(List<int> shirtIds);
+
     }
 }
   

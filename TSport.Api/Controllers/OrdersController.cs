@@ -69,7 +69,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        [SupabaseAuthorize]
+        //[SupabaseAuthorize]
         public async Task<ActionResult<OrderDetailsInfoModel>> GetOrderDetailsInfoById(int id)
         {
             return await _serviceFactory.OrderService.GetOrderDetailsInfoById(id);
