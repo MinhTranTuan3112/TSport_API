@@ -22,6 +22,8 @@ namespace TSport.Api.Repositories.Interfaces
 //        Task DeleteAsync(OrderDetail orderDetail);
    
         Task<List<OrderDetail?>> Getall();
+        Task<List<OrderDetail>> GetOrderDetailsByOrderIdsAsync(List<int> orderIds);
+
 
     }
 }

@@ -144,5 +144,20 @@ namespace TSport.Api.Repositories.Repositories
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
+
+        public async Task<List<int>> GetValidOrderIdsAsync()
+        {
+            return await _context.Orders
+        .Where(o => o.Status != "InCart")
+        .Select(o => o.Id)
+        .ToListAsync();
+        }
+
+        /*    public Task<int> getRevenuebaseClub()
+            {
+
+
+
+            }*/
     }
 }
