@@ -152,7 +152,7 @@ namespace TSport.Api.Repositories.Repositories
             // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart" và nằm trong khoảng thời gian được chỉ định
             var validOrdersQuery = _context.Orders
                                            .AsNoTracking()
-                                           .Where(o => o.Status != OrderStatus.InCart.ToString() && o.Status != OrderStatus.Pending.ToString());
+                                           .Where(o => o.Status != OrderStatus.InCart.ToString()/* && o.Status != OrderStatus.Pending.ToString()*/);
 
             if (startDate.HasValue)
             {
