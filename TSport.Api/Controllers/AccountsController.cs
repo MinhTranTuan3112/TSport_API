@@ -26,7 +26,7 @@ namespace TSport.Api.Controllers
         }
 
         [HttpPut("customers")]
-        [Authorize(Roles = "Customer")]
+        [SupabaseAuthorize(Roles = ["Customer"])]
         public async Task<ActionResult> UpdateCustomerAccountInfo([FromBody] UpdateCustomerInfoRequest request)
         {
             await _serviceFactory.AccountService.UpdateCustomerInfo(HttpContext.User, request);
