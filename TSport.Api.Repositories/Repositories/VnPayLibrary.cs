@@ -18,7 +18,7 @@ namespace TSport.Api.Repositories.Repositories
     {
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
-        public PaymentResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret, int accountId)
+        public PaymentResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret)
         {
             var vnPay = new VnPayLibrary();
 
@@ -67,7 +67,7 @@ namespace TSport.Api.Repositories.Repositories
                     TransactionId = vnPayTranId.ToString(),
                     Token = vnpSecureHash,
                     VnPayResponseCode = vnpResponseCode,
-                    AccountId = accountId // Set the AccountId
+                     // Set the AccountId
                 };
             }
         }
