@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using TSport.Api.Repositories.Entities;
 
-namespace TSport.Api.Repositories.Entities;
+namespace TSport.Api.Repositories;
 
 public partial class TsportDbContext : DbContext
 {
