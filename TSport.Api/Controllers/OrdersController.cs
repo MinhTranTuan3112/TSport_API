@@ -137,6 +137,16 @@ namespace TSport.Api.Controllers
             await _serviceFactory.OrderService.ChangeOrderStatus(orderId, status);
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("club-order-report")]
+        [SupabaseAuthorize]
+        public async Task<ActionResult<ClubOrderReportResponse>> GetClubOrderReport([FromQuery] List<int> clubIds)
+        {
+            return await _serviceFactory.OrderService.GetClubOrderReport(clubIds);
+        }
+
+
     }
 }
 

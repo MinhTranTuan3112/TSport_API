@@ -10,6 +10,7 @@ using TSport.Api.Models.ResponseModels;
 using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Interfaces;
+using TSport.Api.Services.BusinessModels;
 using TSport.Api.Services.BusinessModels.Cart;
 using TSport.Api.Services.BusinessModels.Order;
 using TSport.Api.Services.Interfaces;
@@ -404,5 +405,11 @@ namespace TSport.Api.Services.Services
             order.Status = status;
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds)
+        {
+            return await _unitOfWork.OrderRepository.GetClubOrderReport(clubIds);
+        }
+
     }
 }

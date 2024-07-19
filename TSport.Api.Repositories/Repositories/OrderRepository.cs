@@ -12,6 +12,7 @@ using TSport.Api.Repositories.Entities;
 using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Shared.Enums;
+using Mapster;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -50,7 +51,7 @@ namespace TSport.Api.Repositories.Repositories
             query = query.ApplyPagedOrdersFilter(request);
 
 
-            query = request.OrderByDesc ? query.OrderByDescending(GetSortProperty(request.SortColumn)) 
+            query = request.OrderByDesc ? query.OrderByDescending(GetSortProperty(request.SortColumn))
                                         : query.OrderBy(GetSortProperty(request.SortColumn));
 
 
@@ -144,5 +145,60 @@ namespace TSport.Api.Repositories.Repositories
                                         .AsSplitQuery()
                                         .SingleOrDefaultAsync();
         }
+
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds)
+        {
+            // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart"
+            var validOrders = await _context.Orders
+                                            .AsNoTracking()
+                                            .Where(o => o.Status != OrderStatus.InCart.ToString())
+                                            .Select(o => o.Id)
+                                            .ToListAsync();
+
+            // Step 2: Lấy tất cả các chi tiết đơn hàng từ bảng OrderDetail với OrderId từ ValidOrders
+            var orderDetails = await _context.OrderDetails
+                                             .AsNoTracking()
+                                             .Where(od => validOrders.Contains(od.OrderId))
+                                             .ToListAsync();
+
+            // Step 3-5: Kết hợp các truy vấn để tìm ClubId từ OrderDetails
+            var seasonsQuery = from od in _context.OrderDetails.AsNoTracking()
+                               join s in _context.Shirts.AsNoTracking() on od.ShirtId equals s.Id
+                               join se in _context.ShirtEditions.AsNoTracking() on s.ShirtEditionId equals se.Id
+                               join sn in _context.Seasons.AsNoTracking() on se.SeasonId equals sn.Id
+                               where validOrders.Contains(od.OrderId)
+                               select new
+                               {
+                                   od.OrderId,
+                                   od.Quantity,
+                                   od.Size,
+                                   ClubId = (int?)sn.ClubId // Ensure ClubId is nullable
+                               };
+
+            var seasons = await seasonsQuery.ToListAsync();
+
+            // Step 6: Kiểm tra ClubId và lọc ra các đơn hàng có ClubId nằm trong danh sách clubIds
+            var ordersWithClubIds = seasons
+                                    .Where(se => se.ClubId.HasValue && clubIds.Contains(se.ClubId.Value))
+                                    .Select(se => se.OrderId)
+                                    .Distinct()
+                                    .ToList();
+
+            var orders = await _context.Orders
+                                       .AsNoTracking()
+                                       .Where(o => ordersWithClubIds.Contains(o.Id))
+                                       .ToListAsync();
+
+            // Tính tổng doanh thu
+            var totalRevenue = orders.Sum(o => o.Total);
+
+            return new ClubOrderReportResponse
+            {
+                TotalRevenue = totalRevenue,
+                Orders = orders.Adapt<List<OrderModel>>() // Ensure you have Mapster installed and imported
+            };
+        }
+
+
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Order;
 using TSport.Api.Models.ResponseModels;
 using TSport.Api.Repositories.Entities;
+using static TSport.Api.Repositories.Repositories.OrderRepository;
 
 namespace TSport.Api.Repositories.Interfaces
 {
@@ -26,6 +27,8 @@ namespace TSport.Api.Repositories.Interfaces
         Task<int> GetTotalOrder();
 
         Task<Order?> GetFullOrderInfo(int orderId);
+
+        Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds);
 
     }
 }
