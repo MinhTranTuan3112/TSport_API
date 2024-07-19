@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Supabase.Gotrue;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.Payment;
@@ -14,6 +16,8 @@ namespace TSport.Api.Services.Services
     public class VnPayService : IVnPayService
     {
         private readonly IConfiguration _configuration;
+
+        private readonly IServiceFactory serviceFactory;
 
         public VnPayService(IConfiguration configuration)
         {
@@ -40,7 +44,6 @@ namespace TSport.Api.Services.Services
             pay.AddRequestData("vnp_OrderType", model.OrderType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", tick);
-
             var paymentUrl =
                 pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);
 

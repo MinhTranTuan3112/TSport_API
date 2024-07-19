@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.Payment;
+using System.Security.Claims;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -16,9 +17,9 @@ namespace TSport.Api.Repositories.Repositories
     {
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
-
         public PaymentResponseModel GetFullResponseData(IQueryCollection collection, string hashSecret)
         {
+
             var vnPay = new VnPayLibrary();
 
             foreach (var (key, value) in collection)
@@ -42,7 +43,8 @@ namespace TSport.Api.Repositories.Repositories
             if (!checkSignature)
                 return new PaymentResponseModel()
                 {
-                    Success = false
+                    Success = false,
+                    
                 };
             if (vnpResponseCode != "00")
             {
@@ -61,7 +63,8 @@ namespace TSport.Api.Repositories.Repositories
                 PaymentId = vnPayTranId.ToString(),
                 TransactionId = vnPayTranId.ToString(),
                 Token = vnpSecureHash,
-                VnPayResponseCode = vnpResponseCode
+                VnPayResponseCode = vnpResponseCode,
+                
             };
             }
         }

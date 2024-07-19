@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ using TSport.Api.Models.Payment;
 
 namespace TSport.Api.Services.Interfaces
 {
-    public interface IVnPayService
+    public interface IPaymentService
     {
-        string CreatePaymentUrl(PaymentInformationModel model, HttpContext context);
-        PaymentResponseModel PaymentExecute(IQueryCollection collections);
+        Task AddtoPayment(ClaimsPrincipal user, PaymentResponseModel paymentResponseModel);
+
     }
 }

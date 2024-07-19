@@ -305,12 +305,12 @@ values(1, 'https://iptnrpnttdzsfgozjmum.supabase.co/storage/v1/object/public/TSp
 
 insert into dbo.[Order](Code,OrderDate,[Status],Total,CreatedAccountId)
 values('OD8d29677b-f8b9-429e-b0b6-0cee511aeef1','2024-07-18 12:45:42.067','Pending',777000.00,4);
----- Insert data into Order table
---INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)
---VALUES
---  (1, 'ORD001', '2023-04-01 10:30:00', 'Processed', 159.98, 2),
---  (2, 'ORD002', '2023-04-15 15:45:00', 'Shipped', 199.98, 2),
---  (3, 'ORD003', '2023-05-01 12:00:00', 'Pending', 99.99, 1);
+Insert data into Order table
+INSERT INTO [Order] (Id, Code, OrderDate, [Status], Total, CreatedAccountId)
+VALUES
+  (1, 'ORD001', '2023-04-01 10:30:00', 'Processed', 159.98, 2),
+  (2, 'ORD002', '2023-04-15 15:45:00', 'Shipped', 199.98, 2),
+  (3, 'ORD003', '2023-05-01 12:00:00', 'Pending', 99.99, 1);
 
 ---- Insert data into Payment table
 --INSERT INTO Payment (Id, Code, PaymentMethod, PaymentName, [Status], OrderId, CreatedAccountId)

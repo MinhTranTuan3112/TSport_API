@@ -30,6 +30,7 @@ namespace TSport.Api.Services.Interfaces
 
         IEmailService EmailService { get; }
         IVnPayService VnPayService { get; }
+        IPaymentService PaymentService { get; }
 
         ISeasonPlayerService SeasonPlayerService { get; }
     }
