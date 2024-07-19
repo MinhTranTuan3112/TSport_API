@@ -13,6 +13,7 @@ using TSport.Api.Repositories.Extensions;
 using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Shared.Enums;
 using Mapster;
+using TSport.Api.Models.RequestModels.Shirt;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -192,13 +193,31 @@ namespace TSport.Api.Repositories.Repositories
             // Tính tổng doanh thu
             var totalRevenue = orders.Sum(o => o.Total);
 
+            // Đếm tổng số lượng đơn hàng
+            var totalOrderCount = orders.Count;
+
+            // Đếm tổng số lượng áo trong các đơn hàng và phân loại theo size
+            var shirtQuantities = orderDetails
+                                  .Where(od => ordersWithClubIds.Contains(od.OrderId))
+                                  .GroupBy(od => od.Size)
+                                  .Select(g => new ShirtQuantityBySize
+                                  {
+                                      Size = g.Key,
+                                      Quantity = g.Sum(od => od.Quantity)
+                                  })
+                                  .ToList();
+
+            // Tính tổng số lượng áo
+            var totalShirtQuantity = shirtQuantities.Sum(sq => sq.Quantity);
+
             return new ClubOrderReportResponse
             {
+                TotalOrderCount = totalOrderCount,
+                TotalShirtQuantity = totalShirtQuantity,
                 TotalRevenue = totalRevenue,
+                ShirtQuantitiesBySize = shirtQuantities,
                 Orders = orders.Adapt<List<OrderModel>>() // Ensure you have Mapster installed and imported
             };
         }
-
-
     }
 }
