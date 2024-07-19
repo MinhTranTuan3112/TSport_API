@@ -15,6 +15,8 @@ namespace TSport.Api.Services.BusinessModels.Payment
 
         public string? PaymentName { get; set; }
 
+        public decimal Amount { get; set; }
+
         public string Status { get; set; } = null!;
 
         public int? OrderId { get; set; }
