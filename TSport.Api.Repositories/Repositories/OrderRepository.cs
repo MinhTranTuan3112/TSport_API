@@ -147,14 +147,26 @@ namespace TSport.Api.Repositories.Repositories
                                         .SingleOrDefaultAsync();
         }
 
-        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds)
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds, DateTime? startDate, DateTime? endDate)
         {
-            // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart"
-            var validOrders = await _context.Orders
-                                            .AsNoTracking()
-                                            .Where(o => o.Status != OrderStatus.InCart.ToString())
-                                            .Select(o => o.Id)
-                                            .ToListAsync();
+            // Step 1: Lấy tất cả các OrderId từ bảng Order với trạng thái khác "InCart" và nằm trong khoảng thời gian được chỉ định
+            var validOrdersQuery = _context.Orders
+                                           .AsNoTracking()
+                                           .Where(o => o.Status != OrderStatus.InCart.ToString());
+
+            if (startDate.HasValue)
+            {
+                validOrdersQuery = validOrdersQuery.Where(o => o.OrderDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                validOrdersQuery = validOrdersQuery.Where(o => o.OrderDate <= endDate.Value);
+            }
+
+            var validOrders = await validOrdersQuery
+                                .Select(o => o.Id)
+                                .ToListAsync();
 
             // Step 2: Lấy tất cả các chi tiết đơn hàng từ bảng OrderDetail với OrderId từ ValidOrders
             var orderDetails = await _context.OrderDetails

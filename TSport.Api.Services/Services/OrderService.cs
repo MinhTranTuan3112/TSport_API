@@ -407,9 +407,9 @@ namespace TSport.Api.Services.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds)
+        public async Task<ClubOrderReportResponse> GetClubOrderReport(List<int> clubIds, DateTime? startDate, DateTime? endDate)
         {
-            return await _unitOfWork.OrderRepository.GetClubOrderReport(clubIds);
+            return await _unitOfWork.OrderRepository.GetClubOrderReport(clubIds, startDate, endDate);
         }
 
     }
