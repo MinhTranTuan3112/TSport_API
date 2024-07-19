@@ -28,6 +28,9 @@ namespace TSport.Api.Services.Services
         private readonly Lazy<IShirtEditionService> _shirtEditionService;
 
         private readonly Lazy<IEmailService> _emailService;
+        private readonly Lazy<IVnPayService> _vnpayService;
+        private readonly Lazy<IPaymentService> _paymentService;
+
 
         private readonly Lazy<ISeasonPlayerService> _seasonPlayerService;
 
@@ -49,6 +52,10 @@ namespace TSport.Api.Services.Services
             _supabaseStorageService = new Lazy<ISupabaseStorageService>(() => new SupabaseStorageService(client, configuration));
             _shirtEditionService = new Lazy<IShirtEditionService>(() => new ShirtEditionService(unitOfWork));
             _emailService = new Lazy<IEmailService>(() => new EmailService(fluentEmailFactory, razorTemplateEngine));
+            _vnpayService = new Lazy<IVnPayService>(() => new VnPayService(configuration));
+            _paymentService = new Lazy<IPaymentService>(() => new PaymentService(unitOfWork,this));
+
+
             _seasonPlayerService = new Lazy<ISeasonPlayerService>(() => new SeasonPlayerService(unitOfWork));
         }
 
@@ -66,6 +73,9 @@ namespace TSport.Api.Services.Services
 
         public IEmailService EmailService => _emailService.Value;
 
+        public IVnPayService VnPayService => _vnpayService.Value;
         public ISeasonPlayerService SeasonPlayerService => _seasonPlayerService.Value;
+
+        public IPaymentService PaymentService => _paymentService.Value; 
     }
 }
