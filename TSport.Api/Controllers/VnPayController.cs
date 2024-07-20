@@ -42,12 +42,14 @@ namespace TSport.Api.Controllers
 
                 // Call AddtoPayment with the extracted claims
                     await _serviceFactory.PaymentService.AddtoPayment(paymentResponseModel);
-          /*  }
-            else
-            {
-                // Handle the failure case as needed
-                return BadRequest("Payment failed");
-            }*/
+           
+
+            /*  }
+              else
+              {
+                  // Handle the failure case as needed
+                  return BadRequest("Payment failed");
+              }*/
             return Ok(new JsonResponse<PaymentResponseModel>(response));
         }
     }
