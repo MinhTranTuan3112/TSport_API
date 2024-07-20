@@ -412,6 +412,10 @@ namespace TSport.Api.Services.Services
             return await _unitOfWork.OrderRepository.GetClubOrderReport(clubId, startDate, endDate);
         }
 
+        public async Task<OrderSummaryResponse> GetOrderSummary(DateTime? startDate, DateTime? endDate)
+        {
+            return await _unitOfWork.OrderRepository.GetOrderSummary(startDate, endDate);
+        }
 
     }
 }

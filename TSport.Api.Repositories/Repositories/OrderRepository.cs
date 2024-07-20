@@ -14,6 +14,7 @@ using TSport.Api.Repositories.Interfaces;
 using TSport.Api.Shared.Enums;
 using Mapster;
 using TSport.Api.Models.RequestModels.Shirt;
+using TSport.Api.Models.ResponseModels.Order;
 
 namespace TSport.Api.Repositories.Repositories
 {
@@ -229,6 +230,43 @@ namespace TSport.Api.Repositories.Repositories
                 TotalRevenue = totalRevenue,
                 ShirtQuantitiesBySize = shirtQuantities,
                 Orders = orders.Adapt<List<OrderModel>>() // Ensure you have Mapster installed and imported
+            };
+        }
+
+        public async Task<OrderSummaryResponse> GetOrderSummary(DateTime? startDate, DateTime? endDate)
+        {
+            // Lấy tất cả các Order trong khoảng thời gian được chỉ định
+            var ordersQuery = _context.Orders.AsNoTracking().Where(o => o.Status != OrderStatus.InCart.ToString());
+
+            if (startDate.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                ordersQuery = ordersQuery.Where(o => o.OrderDate <= endDate.Value);
+            }
+
+            var orders = await ordersQuery.ToListAsync();
+
+            // Tính tổng số lượng đơn hàng
+            var totalOrders = orders.Count;
+
+            // Lấy số lượng đơn hàng theo từng trạng thái
+            var ordersByStatus = orders
+                                 .GroupBy(o => o.Status)
+                                 .Select(g => new OrderStatusSummary
+                                 {
+                                     Status = g.Key,
+                                     Count = g.Count()
+                                 })
+                                 .ToList();
+
+            return new OrderSummaryResponse
+            {
+                TotalOrders = totalOrders,
+                OrdersByStatus = ordersByStatus
             };
         }
 

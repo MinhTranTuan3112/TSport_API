@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TSport.Api.Models.RequestModels.Order;
 using TSport.Api.Models.ResponseModels;
+using TSport.Api.Models.ResponseModels.Order;
 using TSport.Api.Repositories.Entities;
 using static TSport.Api.Repositories.Repositories.OrderRepository;
 
@@ -30,5 +31,6 @@ namespace TSport.Api.Repositories.Interfaces
 
         Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate);
 
+        Task<OrderSummaryResponse> GetOrderSummary(DateTime? startDate, DateTime? endDate);
     }
 }

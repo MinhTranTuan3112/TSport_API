@@ -32,14 +32,14 @@ namespace TSport.Api.Controllers
             return await _serviceFactory.OrderService.GetPagedOrders(request);
         }
 
-        [HttpGet]
-      //  [SupabaseAuthorize]
-        [Route("get-total-order")]
+      //  [HttpGet]
+      ////  [SupabaseAuthorize]
+      //  [Route("get-total-order")]
 
-        public async Task<ActionResult<int>> GetTotalOrder()
-        {
-            return await _serviceFactory.OrderService.GetTotalOrder();
-        }
+      //  public async Task<ActionResult<int>> GetTotalOrder()
+      //  {
+      //      return await _serviceFactory.OrderService.GetTotalOrder();
+      //  }
 
         [HttpGet]
       //  [SupabaseAuthorize]
@@ -146,6 +146,13 @@ namespace TSport.Api.Controllers
             return await _serviceFactory.OrderService.GetClubOrderReport(clubId, startDate, endDate);
         }
 
+        [HttpGet]
+        [Route("order-summary")]
+        //[SupabaseAuthorize]
+        public async Task<ActionResult<OrderSummaryResponse>> GetOrderSummary([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
+        {
+            return await _serviceFactory.OrderService.GetOrderSummary(startDate, endDate);
+        }
     }
 }
 

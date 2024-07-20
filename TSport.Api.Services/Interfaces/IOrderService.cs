@@ -41,5 +41,6 @@ namespace TSport.Api.Services.Interfaces
         Task ChangeOrderStatus(int orderId, string status);
         Task<ClubOrderReportResponse> GetClubOrderReport(int? clubId, DateTime? startDate, DateTime? endDate);
 
+        Task<OrderSummaryResponse> GetOrderSummary(DateTime? startDate, DateTime? endDate);
     }
 }
