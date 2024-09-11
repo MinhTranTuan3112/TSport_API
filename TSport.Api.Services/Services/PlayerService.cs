@@ -119,6 +119,7 @@ namespace TSport.Api.Services.Services
                 throw new NotFoundException("Player not found");
             }
 
+          
             request.Adapt(player);
             
             await _unitOfWork.SaveChangesAsync();
